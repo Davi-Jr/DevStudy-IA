@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/assets/jpeg/FtjJ5oLL.jpeg" width="100" />
+  <img src="/assets/jpeg/FtjJ5oLL.jpeg" width: 80%;" />
 </div>
 
 <h1 align="center">🤖 DevStudy IA</h1>
@@ -33,7 +33,6 @@
   - [🛠️ Tecnologias](#️-tecnologias)
   - [📸 Screenshots](#-screenshots)
   - [🤝 Como Contribuir](#-como-contribuir)
-
 - [🌎 English Version](#english-version)
   - [About the Project](#about-the-project)
   - [✨ How Does It Work?](#-how-does-it-work)
@@ -48,7 +47,9 @@
 # 🇧🇷 Versão em Português
 </div>
 
-### 📖 Sobre o Projeto
+
+### 📖 Sobre o Projeto <a id="sobre-o-projeto"></a>
+
 
 O **DevStudy IA** é uma plataforma inteligente feita para orientar e impulsionar desenvolvedores iniciantes e intermediários que querem evoluir de forma estruturada e sem perder tempo.
 
@@ -66,7 +67,7 @@ O **DevStudy IA** é uma plataforma inteligente feita para orientar e impulsiona
 
 ### 🛠️ Tecnologias
 
-<div align="center">
+<div align="left">
   
 | Categoria | Tecnologias |
 |-----------|-------------|
@@ -80,7 +81,7 @@ O **DevStudy IA** é uma plataforma inteligente feita para orientar e impulsiona
 
 ### 📸 Screenshots
 
-<div align="center">
+<div align="left">
   
 | Funcionalidade | Preview |
 |----------------|---------|
@@ -116,8 +117,7 @@ Contribuições são sempre bem-vindas! Sinta-se livre para contribuir de vária
 
 </div>
 
-
-### 📖 About the Project
+### 📖 About the Project  <a id= "about-the-project"></a>
 
 **DevStudy IA** is an intelligent platform designed to guide and empower junior and intermediate developers looking for clear direction in their career.
 
@@ -135,7 +135,7 @@ Contribuições são sempre bem-vindas! Sinta-se livre para contribuir de vária
 
 ### 🛠️ Technologies
 
-<div align="center">
+<div align="left">
   
 | Category | Technologies |
 |----------|--------------|
@@ -149,7 +149,7 @@ Contribuições são sempre bem-vindas! Sinta-se livre para contribuir de vária
 
 ### 📸 Screenshots
 
-<div align="center">
+<div align="left">
   
 | Feature | Preview |
 |---------|---------|
