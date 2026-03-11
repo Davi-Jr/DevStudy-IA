@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="/assets/jpeg/FtjJ5oLL.jpeg" width: 80%;" />
+  <img src="/assets/jpeg/DevStudy AI(1).png" width: 80%;" />
 </div>
 
 <h1 align="center">🤖 DevStudy IA</h1>
