@@ -257,7 +257,7 @@ function RecentActivity() {
 // ==================== MAIN DASHBOARD PAGE ====================
 export default function DashBoardPage() {
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-950">
+    <div className="flex h-screen overflow-hidden bg-[#0f172a]">
       <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden">
         <TopBar />
