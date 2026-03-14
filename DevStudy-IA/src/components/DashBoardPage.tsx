@@ -7,7 +7,7 @@ function Sidebar() {
   
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '#' },
-    { id: 'roadmaps', icon: 'map', label: 'My Roadmaps', href: '#' },
+    { id: 'roadmaps', icon: 'map', label: 'My Roadmaps', href: '/roadmaps' },
     { id: 'sessions', icon: 'history_edu', label: 'Study Sessions', href: '#' },
     { id: 'community', icon: 'groups', label: 'Community', href: '#' },
     { id: 'settings', icon: 'settings', label: 'Settings', href: '#' },
@@ -29,7 +29,7 @@ function Sidebar() {
         {menuItems.map((item) => (
           <Link
             key={item.id}
-            to="#"
+            to={item.href}
             onClick={() => setActiveItem(item.id)}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors group ${
               activeItem === item.id
@@ -43,10 +43,10 @@ function Sidebar() {
         ))}
       </nav>
       <div className="p-4 mt-auto">
-        <button className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl py-3 px-4 transition-all shadow-lg shadow-primary/20">
+        <Link to="/roadmaps" className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl py-3 px-4 transition-all shadow-lg shadow-primary/20">
           <span className="material-symbols-outlined text-sm">add_circle</span>
           <span className="text-sm font-bold">New Roadmap</span>
-        </button>
+        </Link>
       </div>
     </aside>
   );
@@ -54,6 +54,8 @@ function Sidebar() {
 
 // ==================== TOP BAR COMPONENT ====================
 function TopBar() {
+  const [language, setLanguage] = useState<'PT' | 'EN'>('PT');
+  
   return (
     <header className="h-16 flex items-center justify-between px-8 bg-transparent border-b border-white/5">
       <div className="flex items-center gap-4 flex-1">
@@ -69,13 +71,30 @@ function TopBar() {
         </div>
       </div>
       <div className="flex items-center gap-6">
+        {/* Language Selector */}
+        <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10">
+          <span className="material-symbols-outlined text-sm text-slate-400 ml-1">language</span>
+          <button
+            onClick={() => setLanguage('PT')}
+            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
+              language === 'PT' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            PT
+          </button>
+          <button
+            onClick={() => setLanguage('EN')}
+            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
+              language === 'EN' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            EN
+          </button>
+        </div>
         <div className="flex items-center gap-2">
           <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg relative">
             <span className="material-symbols-outlined">notifications</span>
             <span className="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
-          </button>
-          <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg">
-            <span className="material-symbols-outlined">chat_bubble</span>
           </button>
         </div>
         <div className="h-8 w-px bg-white/10"></div>
@@ -102,7 +121,6 @@ function StudyStats() {
   const stats = [
     { icon: 'timer', value: '128.5', label: 'Hours Studied', color: 'accent-blue' },
     { icon: 'task_alt', value: '24', label: 'Projects Completed', color: 'accent-purple' },
-    { icon: 'military_tech', value: '8', label: 'Certificates Earned', color: 'primary' },
   ];
 
   const weeklyData = [30, 45, 80, 60, 90, 55, 70];
@@ -151,7 +169,23 @@ function NextTasks() {
     { icon: 'data_object', title: 'Master Redux Toolkit', time: '2.5 hours', level: 'Advanced', locked: false },
     { icon: 'security', title: 'Implement JWT Authentication', time: '4 hours', level: 'Intermediate', locked: false },
     { icon: 'cloud_upload', title: 'CI/CD Pipeline with GitHub Actions', time: '3 hours', level: 'Devops', locked: true },
+    { icon: 'code', title: 'Learn React Basics', time: '2 hours', level: 'Beginner', locked: false },
   ];
+
+  const getLevelColor = (level: string) => {
+    switch (level) {
+      case 'Beginner':
+        return 'bg-green-400/20 text-green-400 border-green-400/30';
+      case 'Intermediate':
+        return 'bg-blue-400/20 text-blue-400 border-blue-400/30';
+      case 'Advanced':
+        return 'bg-red-400/20 text-red-400 border-red-400/30';
+      case 'Devops':
+        return 'bg-purple-400/20 text-purple-400 border-purple-400/30';
+      default:
+        return 'bg-slate-400/20 text-slate-400 border-slate-400/30';
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -168,16 +202,22 @@ function NextTasks() {
               </div>
               <div>
                 <p className="text-sm font-bold text-white">{task.title}</p>
-                <p className="text-xs text-slate-400">Estimated: {task.time} • {task.level}</p>
+                <p className="text-xs text-slate-400">Estimated: {task.time}</p>
               </div>
             </div>
-            {task.locked ? (
-              <span className="material-symbols-outlined text-slate-400">lock</span>
-            ) : (
-              <button className="size-8 rounded-full border border-slate-700 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all">
-                <span className="material-symbols-outlined text-sm">play_arrow</span>
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              {/* Level Badge */}
+              <span className={`text-[10px] font-bold px-2 py-1 rounded-lg border ${getLevelColor(task.level)}`}>
+                {task.level}
+              </span>
+              {task.locked ? (
+                <span className="material-symbols-outlined text-slate-400">lock</span>
+              ) : (
+                <button className="size-8 rounded-full border border-slate-700 flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all">
+                  <span className="material-symbols-outlined text-sm">play_arrow</span>
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -247,7 +287,32 @@ export default function DashBoardPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Progress Widget */}
             <div className="lg:col-span-2 space-y-8">
-              <StudyStats />
+              {/* Progress Widget - Circular Progress with Roadmap */}
+              <div className="glass-effect rounded-xl p-6 shadow-sm overflow-hidden relative group">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+                <div className="relative flex flex-col md:flex-row items-center gap-8">
+                  {/* Circular Progress */}
+                  <div className="relative size-40 shrink-0">
+                    <svg className="size-full" viewBox="0 0 100 100">
+                      <circle className="text-white/10 stroke-current" cx="50" cy="50" fill="transparent" r="40" strokeWidth="8"></circle>
+                      <circle className="text-primary stroke-current" cx="50" cy="50" fill="transparent" r="40" strokeDasharray="251.2" strokeDashoffset="62.8" strokeLinecap="round" strokeWidth="8"></circle>
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-3xl font-black text-white">75%</span>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Done</span>
+                    </div>
+                  </div>
+                  {/* Roadmap Info */}
+                  <div className="flex-1 text-center md:text-left">
+                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider">Current Roadmap</span>
+                    <h3 className="text-2xl font-bold text-white mt-2">Fullstack React Engineer</h3>
+                    <p className="text-slate-400 mt-2 text-sm leading-relaxed">Mastering modern web development from UI components to scalable backend architectures.</p>
+                    <div className="mt-6 flex flex-wrap gap-4 justify-center md:justify-start">
+                      <button className="bg-white/5 text-slate-300 text-sm font-bold px-6 py-2.5 rounded-xl hover:bg-white/10 transition-colors border border-white/10">View Details</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <NextTasks />
             </div>
 
