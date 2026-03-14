@@ -3,6 +3,7 @@ import LoginPage from './components/LoginPage';
 import HomePage from './components/HomePage';
 import DashBoardPage from './components/DashBoardPage';
 import RoadmapPage from './components/RoadmapPage';
+import ProfilePage from './components/ProfilePage';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/dashboard" element={<DashBoardPage />} />
         <Route path="/roadmaps" element={<RoadmapPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </Router>
   );
