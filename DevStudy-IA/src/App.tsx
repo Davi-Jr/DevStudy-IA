@@ -4,6 +4,7 @@ import HomePage from './components/HomePage';
 import DashBoardPage from './components/DashBoardPage';
 import RoadmapPage from './components/RoadmapPage';
 import ProfilePage from './components/ProfilePage';
+import StudySessionPage from './components/StudySessionPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/dashboard" element={<DashBoardPage />} />
         <Route path="/roadmaps" element={<RoadmapPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/study-session" element={<StudySessionPage />} />
       </Routes>
     </Router>
   );
