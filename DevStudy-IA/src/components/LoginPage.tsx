@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useNavigate } from 'react-router-dom';
 
 // ==================== HEADER COMPONENT ====================
 function Header() {
@@ -66,9 +68,12 @@ function FeatureCard({ icon, title }: FeatureCardProps) {
 }
 
 // ==================== GOOGLE BUTTON COMPONENT ====================
-function GoogleLoginButton() {
+function GoogleLoginButton({ onClick }: { onClick: () => void }) {
   return (
-    <button className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-blue-600 hover:shadow-lg hover:shadow-primary/25 text-white transition-all py-4 px-6 rounded-twelve font-bold shadow-sm">
+    <button 
+      onClick={onClick}
+      className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-blue-600 hover:shadow-lg hover:shadow-primary/25 text-white transition-all py-4 px-6 rounded-twelve font-bold shadow-sm"
+    >
       <svg className="w-5 h-5 bg-white rounded-full p-0.5" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
         <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
@@ -82,6 +87,32 @@ function GoogleLoginButton() {
 
 // ==================== LOGIN CARD COMPONENT ====================
 function LoginCard() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError('Erro ao fazer login com Google');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="glass-effect p-8 rounded-[24px] shadow-2xl space-y-8">
       <div className="flex flex-col items-center gap-4 text-center">
@@ -99,7 +130,12 @@ function LoginCard() {
         </div>
       </div>
       <div className="space-y-4">
-        <GoogleLoginButton />
+        {error && (
+          <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm text-center">
+            {error}
+          </div>
+        )}
+        <GoogleLoginButton onClick={handleGoogleLogin} />
         
         <div className="relative py-4">
           <div className="absolute inset-0 flex items-center">
@@ -114,7 +150,7 @@ function LoginCard() {
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Novo por aqui?{' '}
             <a className="text-primary font-semibold hover:underline" href="#">
-              Saiba mais
+             Saiba mais
             </a>
           </p>
         </div>
