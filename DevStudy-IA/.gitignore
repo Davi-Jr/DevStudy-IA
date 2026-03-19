@@ -24,3 +24,10 @@ dist-ssr
 *.sw?
 package-lock.json
 yarn.lock
+*.env
+*.env.local
+*.env.development
+.env.example
+.package-lock.json
+.yarn.lock
+.pnpm-lock.yaml
