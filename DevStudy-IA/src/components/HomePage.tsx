@@ -44,10 +44,10 @@ function Navigation() {
             </div>
            <Link 
               to="/dashboard" 
-              className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
+              className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
             >
-              <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
-                <span className="material-symbols-outlined text-white text-lg">person</span>
+              <div className="w-11 h-11 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
+                <span className="material-symbols-outlined text-white text-xl">person</span>
               </div>
             </Link>
           </div>
