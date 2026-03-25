@@ -8,29 +8,31 @@ function Header() {
   const { t, setLanguage, language } = useLanguage();
   
   return (
-    <header className="flex items-center justify-between px-6 py-6 md:px-20 lg:px-40">
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-          </svg>
-        </div>
-        <span className="font-bold text-xl tracking-tight text-white">
-          {t('header.devStudy')} <span className="text-primary">AI</span>
-        </span>
-      </div>
-      <div className="flex items-center">
-        <div className="relative group">
-          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2">
-            <span className="material-symbols-outlined text-lg">language</span>
-            {language === 'PT' ? 'PT-BR' : 'English'}
-            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+    <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
+      <div className="flex items-center justify-between px-6 py-6 md:px-20 lg:px-40">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
             </svg>
-          </button>
-          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
-            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+          </div>
+          <span className="font-bold text-xl tracking-tight text-white">
+            {t('header.devStudy')} <span className="text-primary">AI</span>
+          </span>
+        </div>
+        <div className="flex items-center">
+          <div className="relative group">
+            <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2">
+              <span className="material-symbols-outlined text-lg">language</span>
+              {language === 'PT' ? 'PT-BR' : 'English'}
+              <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+              </svg>
+            </button>
+            <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+              <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+            </div>
           </div>
         </div>
       </div>
@@ -105,9 +107,9 @@ function LoginCard() {
   return (
     <div className="glass-effect p-8 rounded-[24px] shadow-2xl space-y-8">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative group flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105">
-          <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
-            <span className="material-symbols-outlined text-white text-lg">person</span>
+        <div className="relative group flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105">
+          <div className="w-11 h-11 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
+            <span className="material-symbols-outlined text-white text-xl">person</span>
           </div>
         </div>
         <div className="space-y-1">
@@ -134,7 +136,7 @@ function Footer() {
   const { t } = useLanguage();
   
   return (
-    <footer className="w-full px-6 py-8 md:px-20 lg:px-40 border-t border-slate-200 dark:border-white/10">
+    <footer className="w-full px-6 py-8 md:px-20 lg:px-40 border-t border-white/5 mt-auto">
       <div className="flex flex-col md:flex-row justify-center items-center gap-4">
         <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
           {t('footer.copyright')}
@@ -156,10 +158,9 @@ export default function LoginPage() {
 
   return (
     <div className="bg-darkBg text-slate-100 font-sans min-h-screen">
-      <div className="layout-container flex h-full grow flex-col">
-        <Header />
-        
-        <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+      <Header />
+      
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-24">
           <div className="max-w-md w-full space-y-8">
             <div className="text-center space-y-3">
               <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
@@ -182,9 +183,6 @@ export default function LoginPage() {
             </div>
           </div>
         </main>
-        
-        <Footer />
-      </div>
     </div>
   );
 }
