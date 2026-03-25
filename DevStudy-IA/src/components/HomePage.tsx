@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/lib/i18n';
 import "../index.css";
 
 // ==================== COMPONENTS ====================
 
 // Navigation Component
 function Navigation() {
+  const { t, setLanguage, language } = useLanguage();
+  
   return (
     <nav className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,31 +19,37 @@ function Navigation() {
                 <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
               </svg>
             </div>
-            <span className="font-bold text-xl tracking-tight">DevStudy <span className="text-primary">AI</span></span>
+            <span className="font-bold text-xl tracking-tight">{t('header.devStudy')} <span className="text-primary">AI</span></span>
           </div>
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
-            <a className="hover:text-primary transition-colors" href="#features">Features</a>
-            <a className="hover:text-primary transition-colors" href="#how-it-works">Como Funciona</a>
-            <Link to="/login" className="hover:text-primary transition-colors">Login</Link>
-            <a className="hover:text-primary transition-colors" href="#about">Sobre</a>
+            <a className="hover:text-primary transition-colors" href="#how-it-works">{t('header.howItWorks')}</a>
+            <Link to="/login" className="hover:text-primary transition-colors">{t('header.login')}</Link>
+            <a className="hover:text-primary transition-colors" href="#about">{t('header.about')}</a>
 
-            {<Link to="/dashboard" className="hover:text-primary transition-colors">Dashboard</Link>}
+            {<Link to="/dashboard" className="hover:text-primary transition-colors">{t('header.dashboard')}</Link>}
             
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2">
                 <span className="material-symbols-outlined text-lg">language</span>
-                PT-BR
+                {language === 'PT' ? 'PT-BR' : 'English'}
                 <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                 </svg>
               </button>
               <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <a className="block px-4 py-2 text-sm hover:bg-primary/20 transition-colors" href="#">PT-BR</a>
-                <a className="block px-4 py-2 text-sm hover:bg-primary/20 transition-colors" href="#">English (EN)</a>
+                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
               </div>
             </div>
-            <button className="bg-primary hover:bg-blue-600 px-5 py-2 rounded-twelve transition-all font-semibold">Gerar Roadmap</button>
+           <Link 
+              to="/dashboard" 
+              className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
+            >
+              <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
+                <span className="material-symbols-outlined text-white text-lg">person</span>
+              </div>
+            </Link>
           </div>
           {/* Mobile Toggle */}
           <div className="md:hidden">
@@ -58,6 +67,8 @@ function Navigation() {
 
 // Hero Section Component
 function HeroSection() {
+  const { t } = useLanguage();
+  
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
       {/* Background Gradients */}
@@ -68,17 +79,17 @@ function HeroSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
         <div className="text-center lg:text-left">
           <h1 className="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
-            Seu <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">Roadmap Dev</span> com IA
+            <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">{t('hero.title.pt')}</span> {t('hero.title.end')}
           </h1>
           <p className="text-lg lg:text-xl text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0">
-            Crie planos personalizados e acompanhe sua evolução com nossa inteligência artificial feita para desenvolvedores.
+            {t('hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
             <Link to="/dashboard" className="bg-gradient-to-r from-primary to-blue-600 hover:shadow-lg hover:shadow-primary/25 px-8 py-4 rounded-twelve font-bold text-lg transition-all">
-              Gerar Meu Roadmap
+            {t('hero.cta')}
             </Link>
             <button className="glass-effect hover:bg-white/10 px-8 py-4 rounded-twelve font-bold text-lg transition-all">
-              Saiba Mais
+               {t('hero.learnMore')}
             </button>
           </div>
         </div>
@@ -143,6 +154,8 @@ function HeroSection() {
 
 // Features Section Component
 function FeaturesSection() {
+  const { t } = useLanguage();
+  
   const features = [
     {
       icon: (
@@ -150,8 +163,8 @@ function FeaturesSection() {
           <path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
         </svg>
       ),
-      title: "Roadmaps Personalizados",
-      description: "Algoritmos inteligentes que mapeiam exatamente o que você precisa aprender para sua vaga dos sonhos."
+      title: t('features.personalized'),
+      description: t('features.personalizedDesc')
     },
     {
       icon: (
@@ -159,8 +172,8 @@ function FeaturesSection() {
           <path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
         </svg>
       ),
-      title: "Progresso Mensurável",
-      description: "Visualize sua evolução em tempo real com métricas detalhadas de cada tecnologia dominada."
+      title: t('features.progress'),
+      description: t('features.progressDesc')
     },
     {
       icon: (
@@ -168,8 +181,8 @@ function FeaturesSection() {
           <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
         </svg>
       ),
-      title: "Sugestão de Projetos",
-      description: "Aplique o conhecimento com projetos práticos sugeridos pela IA baseados no seu nível atual."
+      title: t('features.projects'),
+      description: t('features.projectsDesc')
     }
   ]
 
@@ -177,7 +190,7 @@ function FeaturesSection() {
     <section className="py-24 relative" id="features">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-20">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-4">Você se sente perdido nos estudos?</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold mb-4">{t('features.title')}</h2>
           <div className="w-20 h-1 bg-primary mx-auto rounded-full"></div>
         </div>
         <div className="grid md:grid-cols-3 gap-8">
@@ -198,21 +211,23 @@ function FeaturesSection() {
 
 // How It Works Section Component
 function HowItWorksSection() {
+  const { t } = useLanguage();
+  
   const steps = [
     {
       number: 1,
-      title: "Defina seu objetivo",
-      description: "Frontend, Backend, Mobile? Diga-nos onde quer chegar."
+      title: t('howItWorks.step1.title'),
+      description: t('howItWorks.step1.desc')
     },
     {
       number: 2,
-      title: "Receba seu roadmap",
-      description: "Nossa IA processa milhares de dados para criar seu plano ideal."
+      title: t('howItWorks.step2.title'),
+      description: t('howItWorks.step2.desc')
     },
     {
       number: 3,
-      title: "Acompanhe e evolua",
-      description: "Marque seu progresso e suba de nível profissional."
+      title: t('howItWorks.step3.title'),
+      description: t('howItWorks.step3.desc')
     }
   ]
 
@@ -220,7 +235,7 @@ function HowItWorksSection() {
     <section className="py-24 bg-slate-900/50" id="how-it-works">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold">Como funciona?</h2>
+          <h2 className="text-3xl font-bold" >{t('howItWorks.title')}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-12 relative">
           {/* Connecting Line (Desktop) */}
@@ -289,7 +304,7 @@ function ProductShowcaseSection() {
                       </div>
                     </div>
                     <p className="text-lg font-bold text-white">IA Processando Dados</p>
-                    <p className="text-slate-400 text-xs mt-2">Curando os melhores recursos para você...</p>
+                    <p className="text-slate-400 text-xs mt-2">Procurando os melhores recursos para você...</p>
                   </div>
                 </div>
                 {/* Stage 3: Results (The App Interface) */}
@@ -374,14 +389,16 @@ function ProductShowcaseSection() {
 
 // Final CTA Section Component
 function FinalCTASection() {
+  const { t } = useLanguage();
+  
   return (
     <section className="py-24 relative overflow-hidden">
       <div className="absolute inset-0 bg-primary/10 -z-10 blur-3xl opacity-50"></div>
       <div className="max-w-4xl mx-auto px-4 text-center">
-        <h2 className="text-4xl lg:text-5xl font-bold mb-6">Pronto para acelerar sua carreira?</h2>
-        <p className="text-lg text-slate-400 mb-10">Junte-se a milhares de desenvolvedores que já estão transformando seus estudos com o DevStudy AI.</p>
+        <h2 className="text-4xl lg:text-5xl font-bold mb-6">{t('cta.title')}</h2>
+        <p className="text-lg text-slate-400 mb-10">{t('cta.subtitle')}</p>
         <button className="bg-primary hover:bg-blue-600 px-10 py-5 rounded-twelve text-xl font-bold shadow-2xl shadow-primary/20 transition-all hover:-translate-y-1">
-          Começar Minha Jornada
+          {t('cta.button')}
         </button>
       </div>
     </section>
@@ -390,6 +407,8 @@ function FinalCTASection() {
 
 // Footer Component
 function Footer() {
+  const { t } = useLanguage();
+  
   return (
     <footer className="pt-20 pb-10 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -401,16 +420,15 @@ function Footer() {
                   <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                 </svg>
               </div>
-              <span className="font-bold text-lg">DevStudy <span className="text-primary">AI</span></span>
+              <span className="font-bold text-lg">{t('header.title')}</span>
             </div>
-            <p className="text-slate-400 max-w-sm">Elevando o patamar do ensino de tecnologia através de inteligência artificial generativa e personalizada.</p>
+            <p className="text-slate-400 max-w-sm">{t('footer.description')}</p>
           </div>
           <div>
             <h5 className="font-bold mb-6">Links</h5>
             <ul className="space-y-4 text-slate-400">
-              <li><a className="hover:text-primary transition-colors" href="#">Sobre Nós</a></li>
-              <li><a className="hover:text-primary transition-colors" href="#">Funcionalidades</a></li>
-              <li><a className="hover:text-primary transition-colors" href="#">Preços</a></li>
+              <li><a className="hover:text-primary transition-colors" href="#">{t('footer.about')}</a></li>
+              <li><a className="hover:text-primary transition-colors" href="#how-it-works">{t('footer.features')}</a></li>
             </ul>
           </div>
           <div>
@@ -429,12 +447,8 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
-          <p>© 2023 DevStudy AI. Todos os direitos reservados.</p>
-          <div className="flex gap-6">
-            <a className="hover:text-white transition-colors" href="#">Privacidade</a>
-            <a className="hover:text-white transition-colors" href="#">Termos</a>
-          </div>
+        <div className="border-t border-white/5 pt-8 text-center">
+          <p className="text-slate-400 text-sm">{t('footer.copyright')}</p>
         </div>
       </div>
     </footer>
