@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '@/lib/i18n';
 
 // ==================== HEADER COMPONENT ====================
 function Header() {
-  const [language, setLanguage] = useState<'PT' | 'EN'>('PT');
-  const [darkMode, setDarkMode] = useState(true);
-
+  const { t, setLanguage, language } = useLanguage();
+  
   return (
     <header className="flex items-center justify-between px-6 py-6 md:px-20 lg:px-40">
       <div className="flex items-center gap-2">
@@ -16,37 +16,23 @@ function Header() {
           </svg>
         </div>
         <span className="font-bold text-xl tracking-tight text-white">
-          DevStudy <span className="text-primary">AI</span>
+          {t('header.devStudy')} <span className="text-primary">AI</span>
         </span>
       </div>
       <div className="flex items-center">
-        <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10 mr-2">
-          <span className="material-symbols-outlined text-sm text-slate-400 ml-1">language</span>
-          <button
-            onClick={() => setLanguage('PT')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
-              language === 'PT' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            PT
+        <div className="relative group">
+          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2">
+            <span className="material-symbols-outlined text-lg">language</span>
+            {language === 'PT' ? 'PT-BR' : 'English'}
+            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+            </svg>
           </button>
-          <button
-            onClick={() => setLanguage('EN')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
-              language === 'EN' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            EN
-          </button>
+          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+          </div>
         </div>
-        <button
-          onClick={() => setDarkMode(!darkMode)}
-          className="p-2 rounded-full hover:bg-white/10 transition-colors"
-        >
-          <span className="material-symbols-outlined dark:text-white">
-            {darkMode ? 'dark_mode' : 'light_mode'}
-          </span>
-        </button>
       </div>
     </header>
   );
@@ -69,6 +55,8 @@ function FeatureCard({ icon, title }: FeatureCardProps) {
 
 // ==================== GOOGLE BUTTON COMPONENT ====================
 function GoogleLoginButton({ onClick }: { onClick: () => void }) {
+  const { t } = useLanguage();
+  
   return (
     <button 
       onClick={onClick}
@@ -80,13 +68,14 @@ function GoogleLoginButton({ onClick }: { onClick: () => void }) {
         <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
         <path d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12.16-4.53z" fill="#EA4335"></path>
       </svg>
-      Login com Google
+      {t('login.google')}
     </button>
   );
 }
 
 // ==================== LOGIN CARD COMPONENT ====================
 function LoginCard() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -107,7 +96,7 @@ function LoginCard() {
         setError(error.message);
       }
     } catch (err) {
-      setError('Erro ao fazer login com Google');
+      setError(t('login.errorGoogle'));
     } finally {
       setLoading(false);
     }
@@ -116,16 +105,15 @@ function LoginCard() {
   return (
     <div className="glass-effect p-8 rounded-[24px] shadow-2xl space-y-8">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-          <div className="relative size-24 bg-slate-200 dark:bg-white/10 rounded-full flex items-center justify-center overflow-hidden border-2 border-white/10">
-            <span className="material-symbols-outlined text-5xl text-slate-400 dark:text-slate-500">account_circle</span>
+        <div className="relative group flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105">
+          <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
+            <span className="material-symbols-outlined text-white text-lg">person</span>
           </div>
         </div>
         <div className="space-y-1">
-          <h3 className="text-xl font-bold dark:text-white">Pronto para começar?</h3>
+          <h3 className="text-xl font-bold dark:text-white">{t('login.ready')}</h3>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Entre com sua conta Google para continuar
+            {t('login.continue')}
           </p>
         </div>
       </div>
@@ -136,24 +124,6 @@ function LoginCard() {
           </div>
         )}
         <GoogleLoginButton onClick={handleGoogleLogin} />
-        
-        <div className="relative py-4">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200 dark:border-white/10"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-slate-900 px-2 text-slate-500">ou</span>
-          </div>
-        </div>
-        
-        <div className="text-center">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Novo por aqui?{' '}
-            <a className="text-primary font-semibold hover:underline" href="#">
-             Saiba mais
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   );
@@ -161,20 +131,14 @@ function LoginCard() {
 
 // ==================== FOOTER COMPONENT ====================
 function Footer() {
+  const { t } = useLanguage();
+  
   return (
     <footer className="w-full px-6 py-8 md:px-20 lg:px-40 border-t border-slate-200 dark:border-white/10">
-      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          © 2024 DevStudy AI. Todos os direitos reservados.
+      <div className="flex flex-col md:flex-row justify-center items-center gap-4">
+        <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
+          {t('footer.copyright')}
         </p>
-        <div className="flex gap-6">
-          <a className="text-sm text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
-            Termos de Uso
-          </a>
-          <a className="text-sm text-slate-500 dark:text-slate-400 hover:text-primary transition-colors" href="#">
-            Privacidade
-          </a>
-        </div>
       </div>
     </footer>
   );
@@ -182,14 +146,16 @@ function Footer() {
 
 // ==================== MAIN LOGIN PAGE COMPONENT ====================
 export default function LoginPage() {
+  const { t } = useLanguage();
+  
   const features = [
-    { icon: 'route', title: 'Roadmaps Personalizados' },
-    { icon: 'psychology', title: 'IA Generativa' },
-    { icon: 'monitoring', title: 'Track de Evolução' },
+    { icon: 'route', title: t('feature.personalized') },
+    { icon: 'psychology', title: t('feature.generative') },
+    { icon: 'monitoring', title: t('feature.tracking') },
   ];
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-slate-950">
+    <div className="bg-darkBg text-slate-100 font-sans min-h-screen">
       <div className="layout-container flex h-full grow flex-col">
         <Header />
         
@@ -197,13 +163,13 @@ export default function LoginPage() {
           <div className="max-w-md w-full space-y-8">
             <div className="text-center space-y-3">
               <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-                Bem-vindo ao{' '}
+                {t('login.welcome')}{' '}
                 <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                  DevStudy AI
+                  {t('hero.title.pt')}
                 </span>
               </h1>
               <p className="text-slate-400 text-lg">
-                Acelere seus estudos com roadmaps inteligentes
+                {t('login.subtitle')}
               </p>
             </div>
             
@@ -222,3 +188,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
