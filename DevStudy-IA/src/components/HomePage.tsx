@@ -25,7 +25,7 @@ function Navigation() {
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <a className="hover:text-primary transition-colors" href="#how-it-works">{t('header.howItWorks')}</a>
             <Link to="/login" className="hover:text-primary transition-colors">{t('header.login')}</Link>
-            <a className="hover:text-primary transition-colors" href="#about">{t('header.about')}</a>
+            <Link to="/about" className="hover:text-primary transition-colors">{t('header.about')}</Link>
 
             {<Link to="/dashboard" className="hover:text-primary transition-colors">{t('header.dashboard')}</Link>}
             

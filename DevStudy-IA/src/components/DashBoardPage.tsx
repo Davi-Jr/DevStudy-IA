@@ -10,7 +10,8 @@ function Sidebar() {
     { id: 'roadmaps', icon: 'map', label: 'My Roadmaps', href: '/roadmaps' },
     { id: 'sessions', icon: 'history_edu', label: 'Study Sessions', href: '#' },
     { id: 'community', icon: 'groups', label: 'Community', href: '#' },
-    { id: 'settings', icon: 'settings', label: 'Settings', href: '#' },
+    { id: 'about', icon: 'info', label: 'About', href: '/about' },
+    { id: 'settings', icon: 'settings', label: 'Settings', href: '/profile' },
   ];
 
   return (

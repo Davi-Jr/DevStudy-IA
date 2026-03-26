@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
 
 // ==================== HEADER COMPONENT ====================
@@ -62,7 +62,7 @@ function GoogleLoginButton({ onClick }: { onClick: () => void }) {
   return (
     <button 
       onClick={onClick}
-      className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-blue-600 hover:shadow-lg hover:shadow-primary/25 text-white transition-all py-4 px-6 rounded-twelve font-bold shadow-sm"
+      className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-blue-600 py-4 px-6 rounded-twelve font-bold shadow-sm cursor-pointer transition-all duration-100 hover:-translate-y-0.5 hover:scale-[1.01] hover:shadow-lg hover:shadow-primary/25 active:scale-[0.79]"
     >
       <svg className="w-5 h-5 bg-white rounded-full p-0.5" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
@@ -107,9 +107,9 @@ function LoginCard() {
   return (
     <div className="glass-effect p-8 rounded-[24px] shadow-2xl space-y-8">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative group flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105">
-          <div className="w-11 h-11 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
-            <span className="material-symbols-outlined text-white text-xl">person</span>
+        <div className="relative group flex items-center justify-center w-22 h-22 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105">
+          <div className="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
+            <span className="material-symbols-outlined text-white text-xl ">person</span>
           </div>
         </div>
         <div className="space-y-1">
@@ -160,9 +160,9 @@ export default function LoginPage() {
     <div className="bg-darkBg text-slate-100 font-sans min-h-screen">
       <Header />
       
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-24">
-          <div className="max-w-md w-full space-y-8">
-            <div className="text-center space-y-3">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-39">
+          <div className="max-w-md w-full space-y-10">
+            <div className="text-center space-y-10">
               <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
                 {t('login.welcome')}{' '}
                 <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">

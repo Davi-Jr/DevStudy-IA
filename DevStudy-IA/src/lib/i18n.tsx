@@ -94,6 +94,32 @@ const translations: Translations = {
   'feature.personalized': { PT: 'Roadmaps Personalizados', EN: 'Personalized Roadmaps' },
   'feature.generative': { PT: 'IA Generativa', EN: 'Generative AI' },
   'feature.tracking': { PT: 'Track de Evolução', EN: 'Progress Tracking' },
+  
+  // About Page
+  'about.title': { PT: 'Sobre o Projeto', EN: 'About the Project' },
+  'about.mission': { PT: 'Nossa Missão', EN: 'Our Mission' },
+  'about.purposeTitle': { PT: 'O', EN: 'The' },
+  'about.purposeHighlight': { PT: 'Propósito', EN: 'Purpose' },
+  'about.purposeDescription': { PT: 'O DevStudy AI nasceu da frustração comum a muitos desenvolvedores: o sentimento de estar perdido em um oceano infinito de tecnologias. Criamos um observatório digital onde a Inteligência Artificial mapeia o seu futuro.', EN: 'DevStudy AI was born from the common frustration of many developers: the feeling of being lost in an infinite ocean of technologies. We created a digital observatory where Artificial Intelligence maps your future.' },
+  'about.zeroToPro': { PT: 'Zero ao Pro', EN: 'Zero to Pro' },
+  'about.zeroToProDesc': { PT: 'Roadmaps gerados dinamicamente para cada nível de experiência.', EN: 'Dynamically generated roadmaps for each experience level.' },
+  'about.fullFocus': { PT: 'Foco Total', EN: 'Full Focus' },
+  'about.fullFocusDesc': { PT: 'Elimine o ruído e foque no que realmente importa para sua carreira.', EN: 'Eliminate noise and focus on what really matters for your career.' },
+  'about.generatedThisMonth': { PT: 'Gerados este mês', EN: 'Generated this month' },
+  'about.devTitle': { PT: 'Full Stack Developer & AI Enthusiast', EN: 'Full Stack Developer & AI Enthusiast' },
+  'about.helloDev': { PT: 'Olá, eu sou o Alex.', EN: 'Hello, I am Alex.' },
+  'about.devJourney1': { PT: 'Minha jornada na programação começou com uma tela preta e um cursor piscando. Como muitos de vocês, passei noites em claro tentando entender por onde começar entre centenas de frameworks e linguagens.', EN: 'My journey in programming started with a black screen and a blinking cursor. Like many of you, I spent nights trying to figure out where to start among hundreds of frameworks and languages.' },
+  'about.devJourney2': { PT: 'O DevStudy AI é a ferramenta que eu gostaria de ter tenido. Combinando minha paixão por arquitetura de software e as novas fronteiras da IA Generativa, desenvolvi este sistema para ser o mentor que nunca dorme, guiando cada desenvolvedor pelo caminho mais eficiente.', EN: 'DevStudy AI is the tool I wish I had had. Combining my passion for software architecture and the new frontiers of Generative AI, I developed this system to be the mentor that never sleeps, guiding each developer through the most efficient path.' },
+  'about.algorithmPrecision': { PT: 'Precisão Algorítmica', EN: 'Algorithmic Precision' },
+  'about.algorithmPrecisionDesc': { PT: 'Nossa IA analisa tendências de mercado em tempo real para sugerir o que é relevante.', EN: 'Our AI analyzes market trends in real-time to suggest what is relevant.' },
+  'about.adaptiveLearning': { PT: 'Aprendizado Adaptativo', EN: 'Adaptive Learning' },
+  'about.adaptiveLearningDesc': { PT: 'O sistema aprende com seu progresso e ajusta a dificuldade das sessões.', EN: 'The system learns from your progress and adjusts session difficulty.' },
+  'about.globalCommunity': { PT: 'Comunidade Global', EN: 'Global Community' },
+  'about.globalCommunityDesc': { PT: 'Conecte-se com outros alunos seguindo o mesmo roadmap que você.', EN: 'Connect with other students following the same roadmap as you.' },
+  'about.ctaTitle': { PT: 'Pronto para encontrar seu caminho?', EN: 'Ready to find your way?' },
+  'about.startNow': { PT: 'Começar Agora', EN: 'Start Now' },
+  'about.viewRoadmaps': { PT: 'Ver Roadmaps', EN: 'View Roadmaps' },
+  'about.copyright': { PT: '© 2024 DevStudy AI — Crafted with Passion by Alex Johnson', EN: '© 2024 DevStudy AI — Crafted with Passion by Alex Johnson' },
 };
 
 interface LanguageContextType {

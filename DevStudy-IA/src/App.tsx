@@ -6,6 +6,7 @@ import DashBoardPage from './components/DashBoardPage';
 import RoadmapPage from './components/RoadmapPage';
 import ProfilePage from './components/ProfilePage';
 import StudySessionPage from './components/StudySessionPage';
+import AboutPage from './components/AboutPage';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/roadmaps" element={<RoadmapPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/study-session" element={<StudySessionPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
       </Router>
     </LanguageProvider>
