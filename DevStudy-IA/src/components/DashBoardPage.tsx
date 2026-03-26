@@ -16,7 +16,7 @@ function Sidebar() {
 
   return (
     <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
-      <div className="p-6 flex items-center gap-2">
+      <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
         <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -25,7 +25,7 @@ function Sidebar() {
         <span className="font-bold text-xl tracking-tight text-white">
           DevStudy <span className="text-primary">AI</span>
         </span>
-      </div>
+      </Link>
       <nav className="flex-1 px-4 space-y-1 mt-4">
         {menuItems.map((item) => (
           <Link
@@ -77,7 +77,7 @@ function TopBar() {
           <span className="material-symbols-outlined text-sm text-slate-400 ml-1">language</span>
           <button
             onClick={() => setLanguage('PT')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
+            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
               language === 'PT' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -85,7 +85,7 @@ function TopBar() {
           </button>
           <button
             onClick={() => setLanguage('EN')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all ${
+            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
               language === 'EN' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
             }`}
           >
