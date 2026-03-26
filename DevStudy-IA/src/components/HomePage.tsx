@@ -13,14 +13,14 @@ function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
             <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
               </svg>
             </div>
             <span className="font-bold text-xl tracking-tight">{t('header.devStudy')} <span className="text-primary">AI</span></span>
-          </div>
+          </Link>
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
             <a className="hover:text-primary transition-colors" href="#how-it-works">{t('header.howItWorks')}</a>
@@ -30,7 +30,7 @@ function Navigation() {
             {<Link to="/dashboard" className="hover:text-primary transition-colors">{t('header.dashboard')}</Link>}
             
             <div className="relative group">
-              <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2">
+              <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
                 <span className="material-symbols-outlined text-lg">language</span>
                 {language === 'PT' ? 'PT-BR' : 'English'}
                 <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,8 +38,8 @@ function Navigation() {
                 </svg>
               </button>
               <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
-                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
               </div>
             </div>
            <Link 
