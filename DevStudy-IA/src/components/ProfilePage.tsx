@@ -9,6 +9,7 @@ function Sidebar() {
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
     { id: 'sessions', icon: 'auto_stories', label: 'Study Sessions', href: '#' },
     { id: 'roadmaps', icon: 'map', label: 'Roadmaps', href: '/roadmaps' },
+    { id: 'about', icon: 'info', label: 'About', href: '/about' },
     { id: 'settings', icon: 'settings', label: 'Settings', href: '/profile', active: true },
   ];
 

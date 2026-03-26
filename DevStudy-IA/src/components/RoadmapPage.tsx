@@ -1,15 +1,17 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
   const [activeItem, setActiveItem] = useState('roadmaps');
 
   const menuItems = [
-    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '#' },
+    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
     { id: 'roadmaps', icon: 'map', label: 'My Roadmaps', href: '#' },
     { id: 'sessions', icon: 'history_edu', label: 'Study Sessions', href: '#' },
     { id: 'community', icon: 'groups', label: 'Community', href: '#' },
-    { id: 'settings', icon: 'settings', label: 'Settings', href: '#' },
+    { id: 'about', icon: 'info', label: 'About', href: '/about' },
+    { id: 'settings', icon: 'settings', label: 'Settings', href: '/profile' },
   ];
 
   return (
@@ -26,9 +28,9 @@ function Sidebar() {
       </div>
       <nav className="flex-1 px-4 mt-4 space-y-1">
         {menuItems.map((item) => (
-          <a
+          <Link
             key={item.id}
-            href={item.href}
+            to={item.href}
             onClick={() => setActiveItem(item.id)}
             className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
               activeItem === item.id
@@ -38,7 +40,7 @@ function Sidebar() {
           >
             <span className="material-symbols-outlined">{item.icon}</span>
             <span className="text-sm font-semibold">{item.label}</span>
-          </a>
+          </Link>
         ))}
       </nav>
     </aside>
