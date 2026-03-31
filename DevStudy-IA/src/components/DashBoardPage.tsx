@@ -9,9 +9,9 @@ function Sidebar() {
   const { t } = useLanguage();
   
   const menuItems = [
-    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '#' },
-    { id: 'roadmaps', icon: 'alt_route', label: t('sidebar.roadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '#' },
+    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
+    { id: 'roadmaps', icon: 'map', label: t('sidebar.roadmaps'), href: '/roadmaps' },
+    { id: 'sessions', icon: 'auto_stories', label: t('sidebar.studySessions'), href: '#' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
@@ -57,49 +57,37 @@ function Sidebar() {
 
 // ==================== TOP BAR COMPONENT ====================
 function TopBar({ user }: { user: any }) {
-  const [language, setLanguage] = useState<'PT' | 'EN'>('PT');
-  const { t } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   
   return (
-    <header className="h-16 flex items-center justify-between px-8 bg-transparent border-b border-white/5">
-      <div className="flex items-center gap-4 flex-1">
-        <div className="relative w-full max-w-md">
+    <header className="grid h-16 grid-cols-[1fr_auto_1fr] items-center px-8 bg-transparent border-b border-white/5 gap-4">
+      <div></div>
+      <div className="flex justify-center">
+        <div className="relative w-full max-w-[130rem] min-w-[24rem]">
+
           <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg leading-none">
             search
           </span>
           <input
-            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 text-white placeholder:text-slate-500"
+            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary/30 focus:border-primary/30 text-white placeholder:text-slate-500 outline-none transition-colors"
             placeholder={t('dashboard.searchPlaceholder')}
             type="text"
           />
         </div>
       </div>
-      <div className="flex items-center gap-6">
-        {/* Language Selector */}
-        <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10">
-          <span className="material-symbols-outlined text-sm text-slate-400 ml-1">language</span>
-          <button
-            onClick={() => setLanguage('PT')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-              language === 'PT' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            PT
+      <div className="flex items-center justify-end gap-6">
+        <div className="relative group">
+          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
+            <span className="material-symbols-outlined text-lg">language</span>
+            {language === 'PT' ? 'PT-BR' : 'English'}
+            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+            </svg>
           </button>
-          <button
-            onClick={() => setLanguage('EN')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-              language === 'EN' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            EN
-          </button>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg relative">
-            <span className="material-symbols-outlined">notifications</span>
-            <span className="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
-          </button>
+          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+          </div>
         </div>
         <div className="h-8 w-px bg-white/10"></div>
         <div className="flex items-center gap-3 cursor-pointer group">

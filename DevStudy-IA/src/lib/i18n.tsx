@@ -158,6 +158,10 @@ const translations: Translations = {
   'sidebar.about': { PT: 'Sobre', EN: 'About' },
   'sidebar.settings': { PT: 'Configurações', EN: 'Settings' },
   'sidebar.newRoadmap': { PT: 'Novo Roadmap', EN: 'New Roadmap' },
+  'topbar.pages': { PT: 'Páginas', EN: 'Pages' },
+  'topbar.myRoadmaps': { PT: 'Meus Roadmaps', EN: 'My Roadmaps' },
+  'topbar.studySessions': { PT: 'Sessões de Estudo', EN: 'Study Sessions' },
+  'topbar.accountSettings': { PT: 'Configurações da Conta', EN: 'Account Settings' },
 };
 
 interface LanguageContextType {
