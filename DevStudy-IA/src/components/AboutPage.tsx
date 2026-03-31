@@ -1,6 +1,54 @@
 import { useLanguage } from '@/lib/i18n';
 import { Link } from 'react-router-dom';
 import profilePhoto from '@/assets/jpeg/1740177009224.jpeg';
+import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
+
+// ==================== SIDEBAR COMPONENT ====================
+function Sidebar() {
+  const [activeItem, setActiveItem] = useState('about');
+  const { t } = useLanguage();
+  
+  const menuItems = [
+    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
+    { id: 'roadmaps', icon: 'map', label: t('sidebar.roadmaps'), href: '/roadmaps' },
+    { id: 'sessions', icon: 'auto_stories', label: t('sidebar.studySessions'), href: '/study-sessions' },
+    { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
+    { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
+  ];
+
+  return (
+    <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
+      <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
+        <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
+          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+          </svg>
+        </div>
+        <span className="font-bold text-xl tracking-tight text-white">
+          DevStudy <span className="text-primary">AI</span>
+        </span>
+      </Link>
+      <nav className="flex-1 px-4 space-y-1 mt-4">
+        {menuItems.map((item) => (
+          <Link
+            key={item.id}
+            to={item.href}
+            onClick={() => setActiveItem(item.id)}
+            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors group ${
+              activeItem === item.id
+                ? 'bg-primary/10 text-primary'
+                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+            }`}
+          >
+            <span className="material-symbols-outlined">{item.icon}</span>
+            <span className="text-sm font-semibold">{item.label}</span>
+          </Link>
+        ))}
+      </nav>
+    </aside>
+  );
+}
 
 // ==================== HEADER COMPONENT ====================
 function Header() {
@@ -199,8 +247,10 @@ function DeveloperSection() {
 function TechStackSection() {
   const { t } = useLanguage();
   
-  const features = [
-    
+  const features: { icon: string; title: string; desc: string }[] = [
+    { icon: 'psychology', title: t('about.adaptiveLearning'), desc: t('about.adaptiveLearningDesc') },
+    { icon: 'map', title: t('about.personalizedRoadmaps'), desc: t('about.personalizedRoadmapsDesc') },
+    { icon: 'group', title: t('about.community'), desc: t('about.communityDesc') },
   ];
   
   return (
@@ -221,20 +271,47 @@ function TechStackSection() {
   );
 }
 
+// ==================== TOP BAR COMPONENT ====================
+function TopBar() {
+  const { t, language, setLanguage } = useLanguage();
+  
+  return (
+    <header className="h-16 flex items-center justify-between px-8 bg-transparent border-b border-white/5">
+      <div className="flex-1"></div>
+      <div className="flex items-center gap-6">
+        <div className="relative group">
+          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
+            <span className="material-symbols-outlined text-lg">language</span>
+            {language === 'PT' ? 'PT-BR' : 'English'}
+            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+            </svg>
+          </button>
+          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 // ==================== MAIN ABOUT PAGE ====================
 export default function AboutPage() {
   return (
-    <div className="bg-darkBg text-slate-100 min-h-screen">
-      <Header />
-      
-      <main className="pt-32 px-6 md:px-20 lg:px-40 pb-20 min-h-screen relative">
-        <div className="max-w-6xl mx-auto space-y-20">
-          <PurposeSection />
-          <DeveloperSection />
-          <TechStackSection />
+    <div className="flex h-screen overflow-hidden bg-[#0f172a]">
+      <Sidebar />
+      <main className="flex-1 flex flex-col overflow-hidden">
+        <TopBar />
+        <div className="flex-1 overflow-y-auto p-8">
+          <div className="max-w-6xl mx-auto space-y-20">
+            <PurposeSection />
+            <DeveloperSection />
+            <TechStackSection />
+          </div>
         </div>
       </main>
-     
     </div>
   );
 }

@@ -117,6 +117,12 @@ const translations: Translations = {
     PT: 'O DevStudy AI nasceu da frustração real que vivi — e que muitos devs ainda vivem: horas perdidas sem saber o que estudar, por onde começar ou como evoluir de verdade. Unindo minha paixão por arquitetura de software com as fronteiras da IA Generativa atuais, construí uma plataforma que age como um mentor digital, gerando roadmaps de estudo personalizados com base na sua stack e nível, recomendando fontes da comunidade dev de outros sites de roadmaps. Organizando seu aprendizado em etapas sequenciais com progresso mensurável. Mais do que gerar planos automáticos, o DevStudy AI transforma incerteza em clareza, guiando cada desenvolvedor pelo caminho mais eficiente rumo à sua próxima versão.',
     EN: 'DevStudy AI was born from the real frustration I experienced—and that many developers still experience: wasted hours not knowing what to study, where to start, or how to truly evolve. Combining my passion for software architecture with the current frontiers of Generative AI, I built a platform that acts as a digital mentor, generating personalized learning roadmaps based on your stack and level, recommending resources from the developer community and other roadmap websites. Organizing your learning into sequential steps with measurable progress. More than just generating automatic plans, DevStudy AI transforms uncertainty into clarity, guiding each developer along the most efficient path to their next version.',
   },
+  'about.adaptiveLearning': { PT: 'Aprendizado Adaptativo', EN: 'Adaptive Learning' },
+  'about.adaptiveLearningDesc': { PT: 'O sistema aprende com seu progresso e ajusta a dificuldade das sessões automaticamente.', EN: 'The system learns from your progress and automatically adjusts session difficulty.' },
+  'about.personalizedRoadmaps': { PT: 'Roadmaps Personalizados', EN: 'Personalized Roadmaps' },
+  'about.personalizedRoadmapsDesc': { PT: 'Roadmaps gerados dinamicamente para cada nível de experiência e área de interesse.', EN: 'Roadmaps dynamically generated for each experience level and area of interest.' },
+  'about.community': { PT: 'Comunidade Global', EN: 'Global Community' },
+  'about.communityDesc': { PT: 'Conecte-se com outros alunos seguindo o mesmo roadmap que você.', EN: 'Connect with other students following the same roadmap as you.' },
 
   // Dashboard translations
   'dashboard.loading': { PT: 'Carregando...', EN: 'Loading...' },
