@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/i18n';
 
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
@@ -7,8 +9,8 @@ function Sidebar() {
 
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
-    { id: 'roadmaps', icon: 'alt_route', label: 'My Roadmaps', href: '#' },
-    { id: 'sessions', icon: 'menu_book', label: 'Study Sessions', href: '#' },
+    { id: 'roadmaps', icon: 'map', label: 'My Roadmaps', href: '/roadmaps' },
+    { id: 'sessions', icon: 'auto_stories', label: 'Study Sessions', href: '#' },
     { id: 'about', icon: 'info', label: 'About', href: '/about' },
     { id: 'settings', icon: 'settings', label: 'Settings', href: '/profile' },
   ];
@@ -48,33 +50,37 @@ function Sidebar() {
 
 // ==================== TOP BAR COMPONENT ====================
 function TopBar() {
-  const [language, setLanguage] = useState<'PT' | 'EN'>('PT');
+  const { t, language, setLanguage } = useLanguage();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    }
+    getUser();
+  }, []);
 
   return (
     <header className="h-16 flex items-center justify-between px-8 border-b border-white/5 bg-[#0f172a]/50 backdrop-blur-md sticky top-0 z-10">
       <div className="flex items-center gap-2">
-        <span className="text-slate-400 text-sm">Pages</span>
+        <span className="text-slate-400 text-sm">{t('topbar.pages')}</span>
         <span className="text-slate-400 text-sm">/</span>
-        <span className="text-sm font-medium">Meus Roadmaps</span>
+        <span className="text-sm font-medium">{t('topbar.myRoadmaps')}</span>
       </div>
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/10">
-          <button
-            onClick={() => setLanguage('EN')}
-            className={`px-3 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-              language === 'EN' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            EN
+      <div className="flex items-center gap-6">
+        <div className="relative group">
+          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
+            <span className="material-symbols-outlined text-lg">language</span>
+            {language === 'PT' ? 'PT-BR' : 'English'}
+            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+            </svg>
           </button>
-          <button
-            onClick={() => setLanguage('PT')}
-            className={`px-3 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-              language === 'PT' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            PT
-          </button>
+          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+          </div>
         </div>
         <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg relative">
           <span className="material-symbols-outlined text-xl">notifications</span>
@@ -83,14 +89,14 @@ function TopBar() {
         <div className="h-8 w-px bg-white/10"></div>
         <div className="flex items-center gap-3 cursor-pointer group">
           <div className="text-right hidden sm:block">
-            <p className="text-sm font-bold text-white leading-none">Alex Rivera</p>
-            <p className="text-[10px] text-slate-400 mt-1">Free Tier</p>
+            <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || 'User'}</p>
+            <p className="text-[10px] text-slate-400 mt-1">{user?.email}</p>
           </div>
           <div className="size-9 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
             <img
               alt="User avatar"
               className="w-full h-full rounded-full"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOs0FPrt8NrXJjkcoF_owMSFGpSNPTjf_qjoBr4KFH8rXQkfkT5iAbKkn6nDJYXHD_H-lGvtViRek4pcYR41Iga6vqmIl0oEFg-Q7In-H7CqD2jnhMTkYU7m7r_NdV9JBmHV_G2NxNMseM5UFBgPPbAxdHmflfkhfIkQHitsLDvnMJyaVXQXUE7ALaPu_QozhONEu2RYJKImTjz826uHCD8mo0uvhUwhwQ2F0IZdoZE3aCl_YhvIBtMfcjKdlUTAr_VwfhNwU7zjs"
+              src={user?.user_metadata?.avatar_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAOs0FPrt8NrXJjkcoF_owMSFGpSNPTjf_qjoBr4KFH8rXQkfkT5iAbKkn6nDJYXHD_H-lGvtViRek4pcYR41Iga6vqmIl0oEFg-Q7In-H7CqD2jnhMTkYU7m7r_NdV9JBmHV_G2NxNMseM5UFBgPPbAxdHmflfkhfIkQHitsLDvnMJyaVXQXUE7ALaPu_QozhONEu2RYJKImTjz826uHCD8mo0uvhUwhwQ2F0IZdoZE3aCl_YhvIBtMfcjKdlUTAr_VwfhNwU7zjs'}
             />
           </div>
         </div>

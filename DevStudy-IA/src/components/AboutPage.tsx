@@ -4,7 +4,7 @@ import profilePhoto from '@/assets/jpeg/1740177009224.jpeg';
 
 // ==================== HEADER COMPONENT ====================
 function Header() {
-  const { t, setLanguage, language } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   
   return (
     <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">

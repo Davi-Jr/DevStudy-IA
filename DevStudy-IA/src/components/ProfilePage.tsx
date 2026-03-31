@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+import { useLanguage } from '@/lib/i18n';
 
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
@@ -7,8 +9,8 @@ function Sidebar() {
 
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
-    { id: 'sessions', icon: 'menu_book', label: 'Study Sessions', href: '#' },
-    { id: 'roadmaps', icon: 'alt_route', label: 'Roadmaps', href: '/roadmaps' },
+    { id: 'sessions', icon: 'auto_stories', label: 'Study Sessions', href: '/study-sessions' },
+    { id: 'roadmaps', icon: 'map', label: 'Roadmaps', href: '/roadmaps' },
     { id: 'about', icon: 'info', label: 'About', href: '/about' },
     { id: 'settings', icon: 'settings', label: 'Settings', href: '/profile', active: true },
   ];
@@ -61,33 +63,35 @@ function Sidebar() {
 
 // ==================== TOP BAR COMPONENT ====================
 function TopBar() {
-  const [language, setLanguage] = useState<'PT' | 'EN'>('PT');
+  const { t, language, setLanguage } = useLanguage();
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    }
+    getUser();
+  }, []);
 
   return (
     <header className="h-16 border-b border-slate-800 bg-[#0f172a]/80 backdrop-blur-md flex items-center justify-between px-8 shrink-0 z-10">
       <div className="flex items-center gap-4">
-        <h2 className="text-white text-lg font-bold">Account Settings</h2>
+        <h2 className="text-white text-lg font-bold">{t('topbar.accountSettings')}</h2>
       </div>
       <div className="flex items-center gap-6">
-        {/* Language Switcher - Same as other pages */}
-        <div className="flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/10">
-          <span className="material-symbols-outlined text-sm text-slate-400 ml-1">language</span>
-          <button
-            onClick={() => setLanguage('EN')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-              language === 'EN' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            EN
+        <div className="relative group">
+          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
+            <span className="material-symbols-outlined text-lg">language</span>
+            {language === 'PT' ? 'PT-BR' : 'English'}
+            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+            </svg>
           </button>
-          <button
-            onClick={() => setLanguage('PT')}
-            className={`px-2 py-1 text-[10px] font-bold rounded-full transition-all cursor-pointer ${
-              language === 'PT' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            PT
-          </button>
+          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <button className="p-2 rounded-xl bg-slate-800/50 text-slate-300 relative">
@@ -98,7 +102,7 @@ function TopBar() {
             <img
               alt="User"
               className="w-full h-full rounded-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW1P_k0fntkihM994C-jV0b-X1n5CcwWBIDd8IOtPpbNk1rzX8FjICMnJK1mrnmS7jLmx0TjQwCfAr_9eu__MnIsAsdPOvF2HRhfpgOL7ggcKTekrvI0pdcJgN8rQc3ggBJ5lX0Vfom0XDIcFEj_QGKDXdknl6XDjZYhWNOL7N4_HhBeVIhkH9pXW-_kZnnlP19yVejhjQh4IeovuGRYKj5hA_Z4c5HnEHl1rDq_BcMjINqGOinDrvm8hQCIXOeWhsMAh-Wyg1bDg"
+              src={user?.user_metadata?.avatar_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDW1P_k0fntkihM994C-jV0b-X1n5CcwWBIDd8IOtPpbNk1rzX8FjICMnJK1mrnmS7jLmx0TjQwCfAr_9eu__MnIsAsdPOvF2HRhfpgOL7ggcKTekrvI0pdcJgN8rQc3ggBJ5lX0Vfom0XDIcFEj_QGKDXdknl6XDjZYhWNOL7N4_HhBeVIhkH9pXW-_kZnnlP19yVejhjQh4IeovuGRYKj5hA_Z4c5HnEHl1rDq_BcMjINqGOinDrvm8hQCIXOeWhsMAh-Wyg1bDg'}
             />
           </div>
         </div>
