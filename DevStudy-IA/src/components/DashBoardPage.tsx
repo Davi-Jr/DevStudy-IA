@@ -74,10 +74,17 @@ function Sidebar() {
         ))}
       </nav>
       <div className="p-4 mt-auto">
-        <Link to="/roadmaps" className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl py-3 px-4 transition-all shadow-lg shadow-primary/20">
-          <span className="material-symbols-outlined text-sm">add_circle</span>
-          <span className="text-sm font-bold">{t('sidebar.newRoadmap')}</span>
-        </Link>
+<Link to="/roadmaps" className="relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 via-blue-400 to-purple-500 text-white rounded-xl py-3 px-4 cursor-pointer overflow-hidden font-bold bg-[length:200%_100%]">
+            {/* Onda suave - azul + amarelo claro */}
+            <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-amber-300 bg-[length:900%_100%] opacity-100 animate-[gradient-wave_5s_ease-in-out_infinite]"></span>
+            {/* Borda suave */}
+            <span className="absolute inset-0 rounded-xl ring-1 ring-white/10"></span>
+            {/* Conteúdo */}
+            <span className="relative z-10 flex items-center gap-2">
+              <span className="material-symbols-outlined text-lg">add_circle</span>
+              <span>{t('sidebar.newRoadmap')}</span>
+            </span>
+          </Link>
       </div>
     </aside>
   );
@@ -183,10 +190,16 @@ function EmptyState() {
           <div className="mt-8 pt-6 border-t border-white/10">
             <button 
               onClick={() => navigate('/roadmaps')}
-              className="w-full bg-gradient-to-r from-primary to-orange-500 hover:from-primary/90 hover:to-orange-500/90 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-3 shadow-lg shadow-primary/20"
+              className="relative w-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 cursor-pointer overflow-hidden bg-[length:200%_100%]"
             >
-              <span className="material-symbols-outlined">add_circle</span>
-              {t('dashboard.empty.createRoadmap')}
+              {/* Onda suave - azul + amarelo claro */}
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 bg-[length:150%_100%] opacity-70 animate-[gradient-wave_5s_ease-in-out_infinite]"></span>
+              {/* Borda suave */}
+              <span className="absolute inset-0 rounded-xl ring-1 ring-white/10"></span>
+              <span className="relative z-10 flex items-center gap-2">
+                <span className="material-symbols-outlined">add_circle</span>
+                {t('dashboard.empty.createRoadmap')}
+              </span>
             </button>
             <p className="text-center text-slate-500 text-sm mt-4">
               {t('dashboard.empty.redirectToRoadmaps')}
