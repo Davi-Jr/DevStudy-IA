@@ -16,8 +16,8 @@ function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
-      <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
+    <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120] py-6">
+      <Link to="/" className="px-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer mb-6">
         <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -27,7 +27,7 @@ function Sidebar() {
           DevStudy <span className="text-primary">AI</span>
         </span>
       </Link>
-      <nav className="flex-1 px-4 mt-4 space-y-1">
+      <nav className="flex-1 px-4 space-y-1">
         {menuItems.map((item) => (
           <Link
             key={item.id}
@@ -48,6 +48,34 @@ function Sidebar() {
   );
 }
 
+// ==================== AVATAR COMPONENT ====================
+function UserAvatar({ user, size = "size-10" }: { user: any; size?: string }) {
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const initials = fullName
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (avatarUrl) {
+    return (
+      <img
+        alt={fullName}
+        className={`${size} rounded-full object-cover bg-slate-200`}
+        src={avatarUrl}
+      />
+    );
+  }
+
+  return (
+    <div className={`${size} rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold`}>
+      <span className="text-sm">{initials}</span>
+    </div>
+  );
+}
+
 // ==================== TOP BAR COMPONENT ====================
 function TopBar() {
   const { t, language, setLanguage } = useLanguage();
@@ -62,13 +90,10 @@ function TopBar() {
   }, []);
 
   return (
-    <header className="h-16 flex items-center justify-between px-8 border-b border-white/5 bg-[#0f172a]/50 backdrop-blur-md sticky top-0 z-10">
-      <div className="flex items-center gap-2">
-        <span className="text-slate-400 text-sm">{t('topbar.pages')}</span>
-        <span className="text-slate-400 text-sm">/</span>
-        <span className="text-sm font-medium">{t('topbar.myRoadmaps')}</span>
-      </div>
-      <div className="flex items-center gap-6">
+    <header className="grid h-[4.5rem] grid-cols-[1fr_auto_1fr] items-center px-8 bg-transparent border-b border-white/5 gap-4">
+      <div></div>
+      <div></div>
+      <div className="flex items-center justify-end gap-6">
         <div className="relative group">
           <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
             <span className="material-symbols-outlined text-lg">language</span>
@@ -82,22 +107,14 @@ function TopBar() {
             <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
           </div>
         </div>
-        <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg relative">
-          <span className="material-symbols-outlined text-xl">notifications</span>
-          <span className="absolute top-2 right-2 size-2 bg-primary rounded-full"></span>
-        </button>
         <div className="h-8 w-px bg-white/10"></div>
         <div className="flex items-center gap-3 cursor-pointer group">
-          <div className="text-right hidden sm:block">
+          <div className="text-right">
             <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || 'User'}</p>
-            <p className="text-[10px] text-slate-400 mt-1">{user?.email}</p>
+            <p className="text-xs text-slate-400 mt-1">{user?.email}</p>
           </div>
-          <div className="size-9 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
-            <img
-              alt="User avatar"
-              className="w-full h-full rounded-full"
-              src={user?.user_metadata?.avatar_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAOs0FPrt8NrXJjkcoF_owMSFGpSNPTjf_qjoBr4KFH8rXQkfkT5iAbKkn6nDJYXHD_H-lGvtViRek4pcYR41Iga6vqmIl0oEFg-Q7In-H7CqD2jnhMTkYU7m7r_NdV9JBmHV_G2NxNMseM5UFBgPPbAxdHmflfkhfIkQHitsLDvnMJyaVXQXUE7ALaPu_QozhONEu2RYJKImTjz826uHCD8mo0uvhUwhwQ2F0IZdoZE3aCl_YhvIBtMfcjKdlUTAr_VwfhNwU7zjs'}
-            />
+          <div className="size-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
+            <UserAvatar user={user} size="w-full h-full" />
           </div>
         </div>
       </div>
@@ -107,7 +124,6 @@ function TopBar() {
 
 // ==================== STACK CARD COMPONENT ====================
 interface StackCardProps {
-  icon: string;
   name: string;
   color: string;
   bgColor: string;
@@ -118,7 +134,7 @@ interface StackCardProps {
   onLevelChange: (index: number) => void;
 }
 
-function StackCard({ icon, name, color, bgColor, checked, onChange, levels, activeLevel, onLevelChange }: StackCardProps) {
+function StackCard({ name, color, bgColor, checked, onChange, levels, activeLevel, onLevelChange }: StackCardProps) {
   return (
     <div className="relative group cursor-pointer">
       <input
@@ -290,7 +306,6 @@ export default function RoadmapPage() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <StackCard
-                  icon="data_object"
                   name="React"
                   color="text-blue-400"
                   bgColor="bg-blue-500/10"
@@ -301,7 +316,6 @@ export default function RoadmapPage() {
                   onLevelChange={setReactLevel}
                 />
                 <StackCard
-                  icon="terminal"
                   name="Node.js"
                   color="text-green-400"
                   bgColor="bg-green-500/10"
@@ -312,7 +326,6 @@ export default function RoadmapPage() {
                   onLevelChange={setNodeLevel}
                 />
                 <StackCard
-                  icon="code"
                   name="Python"
                   color="text-yellow-400"
                   bgColor="bg-yellow-500/10"

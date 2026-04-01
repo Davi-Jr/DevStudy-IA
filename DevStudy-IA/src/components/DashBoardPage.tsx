@@ -3,6 +3,34 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
 
+// ==================== AVATAR COMPONENT ====================
+function UserAvatar({ user, size = "size-10" }: { user: any; size?: string }) {
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const initials = fullName
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (avatarUrl) {
+    return (
+      <img
+        alt={fullName}
+        className={`${size} rounded-full object-cover bg-slate-200`}
+        src={avatarUrl}
+      />
+    );
+  }
+
+  return (
+    <div className={`${size} rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold`}>
+      <span className="text-sm">{initials}</span>
+    </div>
+  );
+}
+
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
   const [activeItem, setActiveItem] = useState('dashboard');
@@ -96,11 +124,7 @@ function TopBar({ user }: { user: any }) {
             <p className="text-xs text-slate-400 mt-1">{user?.email}</p>
           </div>
           <div className="size-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
-            <img
-              alt="User Profile"
-              className="w-full h-full rounded-full bg-slate-200"
-              src={user?.user_metadata?.avatar_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBiYCiBM8jwtThWARAOXL40c_-j2CXzF_QQbZ-8XLerBJCvsV2SAKyF1tKaC_TRcY2v7klvn4lhZejGuqnSDTfmd4u7NVV0RFZPKu1_W_7imFIGCKiaJoQHKf4xEjaitNl_KfQVcjFMJbv_6QPlUv533JbaoOB5GS-kjgmL1qvqLPnSsCaInUDjuoJZrlqQ_7nnjYqHlhISegGUtVBBhaJruaX5xptw_eq6jd-3669Dpk4tlOQmnT20EWqCHViTy2HHjUlkC5ieIUQ'}
-            />
+            <UserAvatar user={user} size="w-full h-full" />
           </div>
         </div>
       </div>

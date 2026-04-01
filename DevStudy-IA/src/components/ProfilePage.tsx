@@ -3,6 +3,34 @@ import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
 
+// ==================== AVATAR COMPONENT ====================
+function UserAvatar({ user, size = "size-10" }: { user: any; size?: string }) {
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const initials = fullName
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (avatarUrl) {
+    return (
+      <img
+        alt={fullName}
+        className={`${size} rounded-full object-cover bg-slate-200`}
+        src={avatarUrl}
+      />
+    );
+  }
+
+  return (
+    <div className={`${size} rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold`}>
+      <span className="text-sm">{initials}</span>
+    </div>
+  );
+}
+
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
   const [activeItem, setActiveItem] = useState('settings');
@@ -50,12 +78,6 @@ function Sidebar() {
             ))}
           </nav>
         </div>
-        <div className="flex flex-col gap-1.5 pt-4 border-t border-slate-800">
-          <a className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-500 hover:bg-red-950/20 transition-colors" href="#">
-            <span className="material-symbols-outlined">logout</span>
-            <span className="text-sm font-semibold">Logout</span>
-          </a>
-        </div>
       </div>
     </aside>
   );
@@ -94,16 +116,8 @@ function TopBar() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <button className="p-2 rounded-xl bg-slate-800/50 text-slate-300 relative">
-            <span className="material-symbols-outlined">notifications</span>
-            <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-[#0f172a]"></span>
-          </button>
           <div className="h-10 w-10 rounded-full border-2 border-primary/30 p-0.5">
-            <img
-              alt="User"
-              className="w-full h-full rounded-full object-cover"
-              src={user?.user_metadata?.avatar_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDW1P_k0fntkihM994C-jV0b-X1n5CcwWBIDd8IOtPpbNk1rzX8FjICMnJK1mrnmS7jLmx0TjQwCfAr_9eu__MnIsAsdPOvF2HRhfpgOL7ggcKTekrvI0pdcJgN8rQc3ggBJ5lX0Vfom0XDIcFEj_QGKDXdknl6XDjZYhWNOL7N4_HhBeVIhkH9pXW-_kZnnlP19yVejhjQh4IeovuGRYKj5hA_Z4c5HnEHl1rDq_BcMjINqGOinDrvm8hQCIXOeWhsMAh-Wyg1bDg'}
-            />
+            <UserAvatar user={user} size="w-full h-full" />
           </div>
         </div>
       </div>
@@ -133,6 +147,16 @@ function RoadmapItem({ icon, title, progress, date, color, borderColor }: { icon
 
 // ==================== MAIN PROFILE PAGE ====================
 export default function ProfilePage() {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    }
+    getUser();
+  }, []);
+
   const roadmaps = [
     { icon: 'terminal', title: 'Fullstack React Engineer', progress: '65%', date: '2 days ago', color: 'bg-primary/30', borderColor: 'border-primary/40' },
     { icon: 'psychology', title: 'AI Architecture', progress: '12%', date: '1 week ago', color: 'bg-purple-500/30', borderColor: 'border-purple-500/40' },
@@ -157,15 +181,11 @@ export default function ProfilePage() {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="flex items-center gap-6">
                   <div className="relative group">
-                    <img
-                      alt="Alex Johnson"
-                      className="h-24 w-24 rounded-2xl object-cover shadow-2xl border-2 border-white/10"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW1P_k0fntkihM994C-jV0b-X1n5CcwWBIDd8IOtPpbNk1rzX8FjICMnJK1mrnmS7jLmx0TjQwCfAr_9eu__MnIsAsdPOvF2HRhfpgOL7ggcKTekrvI0pdcJgN8rQc3ggBJ5lX0Vfom0XDIcFEj_QGKDXdknl6XDjZYhWNOL7N4_HhBeVIhkH9pXW-_kZnnlP19yVejhjQh4IeovuGRYKj5hA_Z4c5HnEHl1rDq_BcMjINqGOinDrvm8hQCIXOeWhsMAh-Wyg1bDg"
-                    />
+                    <UserAvatar user={user} size="h-24 w-24 rounded-2xl" />
                   </div>
                   <div>
-                    <h4 className="text-2xl font-extrabold text-white tracking-tight">Alex Johnson</h4>
-                    <p className="text-slate-400">alex.johnson@gmail.com</p>
+                    <h4 className="text-2xl font-extrabold text-white tracking-tight">{user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}</h4>
+                    <p className="text-slate-400">{user?.email}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 self-start md:self-center">
