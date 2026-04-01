@@ -168,6 +168,30 @@ const translations: Translations = {
   'topbar.myRoadmaps': { PT: 'Meus Roadmaps', EN: 'My Roadmaps' },
   'topbar.studySessions': { PT: 'Sessões de Estudo', EN: 'Study Sessions' },
   'topbar.accountSettings': { PT: 'Configurações da Conta', EN: 'Account Settings' },
+
+  // Roadmap Page
+  'roadmap.generateTitle': { PT: 'Gerar Novo', EN: 'Generate New' },
+  'roadmap.generateSubtitle': { PT: 'Roadmap', EN: 'Roadmap' },
+  'roadmap.heroDescription': { PT: 'Aproveite nossa IA para analisar suas habilidades atuais ou repositórios de projetos e crie um caminho de aprendizado personalizado para o domínio.', EN: 'Leverage our AI to analyze your current skills or project repositories and build a personalized learning path to mastery.' },
+  'roadmap.step1': { PT: 'Stack & Proficiência', EN: 'Stack & Proficiency' },
+  'roadmap.selectLevel': { PT: 'Selecionar Nível', EN: 'Select Level' },
+  'roadmap.addTechnology': { PT: 'Adicionar Tecnologia', EN: 'Add Technology' },
+  'roadmap.step2': { PT: 'Detalhes da Análise IA', EN: 'AI Analysis Details' },
+  'roadmap.projectDescription': { PT: 'Descrição do Projeto ou Habilidades', EN: 'Project or Skills Description' },
+  'roadmap.projectPlaceholder': { PT: 'Conte para a IA sobre seus objetivos, o que você já sabe, ou um projeto específico que deseja construir...', EN: 'Tell the AI about your goals, what you already know, or a specific project you want to build...' },
+  'roadmap.githubUrl': { PT: 'URL do Repositório GitHub', EN: 'GitHub Repository URL' },
+  'roadmap.githubPlaceholder': { PT: 'https://github.com/user/repo', EN: 'https://github.com/user/repo' },
+  'roadmap.analyzeRepo': { PT: 'Analisar meu repo para identificar lacunas de conhecimento.', EN: 'Analyze my repo to identify knowledge gaps.' },
+  'roadmap.aiActive': { PT: 'AGENTE IA ATIVO', EN: 'AI AGENT ACTIVE' },
+  'roadmap.aiVersion': { PT: 'Modelo de deep learning v4.2', EN: 'Deep learning model v4.2' },
+  'roadmap.generateButton': { PT: 'Gerar Roadmap com IA', EN: 'Generate AI Roadmap' },
+  'roadmap.roadmapName': { PT: 'Nome do Roadmap', EN: 'Roadmap Name' },
+  'roadmap.preview': { PT: 'Pré-visualização', EN: 'Preview' },
+  'roadmap.addNewPhase': { PT: 'Adicionar Nova Fase', EN: 'Add New Phase' },
+  'roadmap.saveRoadmap': { PT: 'Salvar Roadmap no Perfil', EN: 'Save Roadmap to Profile' },
+  'roadmap.levels.beginner': { PT: 'Iniciante', EN: 'Beginner' },
+  'roadmap.levels.intermediate': { PT: 'Intermediário', EN: 'Intermediate' },
+  'roadmap.levels.advanced': { PT: 'Avançado', EN: 'Advanced' },
 };
 
 interface LanguageContextType {
