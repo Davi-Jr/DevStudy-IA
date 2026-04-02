@@ -286,7 +286,7 @@ export function getTechSvg(name: string): {
         <img
           src={`${SKILL_ICONS_BASE}i=${skillParam}&theme=dark`}
           alt={name}
-          className="w-6 h-6 object-contain"
+          className="w-full h-full object-contain"
           style={{ imageRendering: 'auto' }}
         />
       ),

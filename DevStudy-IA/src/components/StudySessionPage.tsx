@@ -68,46 +68,47 @@ function TopBar() {
   }, []);
 
   return (
-    <header className="h-16 flex items-center justify-between px-8 border-b border-white/5 bg-[#0f172a]/50 backdrop-blur-md sticky top-0 z-10">
-      <div className="flex items-center gap-4">
-        <h2 className="text-white text-lg font-bold">{t('topbar.studySessions')}</h2>
-      </div>
-      <div className="flex items-center gap-6">
-        <div className="relative group">
-          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
-            <span className="material-symbols-outlined text-lg">language</span>
-            {language === 'PT' ? 'PT-BR' : 'English'}
-            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-            </svg>
-          </button>
-          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
-            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
-          </div>
-        </div>
-        <div className="relative">
-          <input 
-            className="w-64 bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 text-white placeholder:text-slate-500" 
-            placeholder={t('dashboard.searchPlaceholder')} 
-            type="text"
-          />
-          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg leading-none">
-            search
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl relative">
-            <span className="material-symbols-outlined">notifications</span>
-            <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-[#0f172a]"></span>
-          </button>
-          <div className="h-10 w-10 rounded-full border-2 border-primary/30 p-0.5">
-            <img 
-              className="w-full h-full rounded-full object-cover" 
-              data-alt="User profile picture" 
-              src={user?.user_metadata?.avatar_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDpPO_A7DY3J-kZIJtEae52F7A5kWa-IqMg4d76yopXmjWZixfxsAtAstibGw0-Np67gFZZhEqVn6Tk5d95Aq653UZaWaxNpVphbBi1YjkMMw8YH9DjwqDaimnCX9GV7qdwuM-X3Ufds0H53jBQdds4LyUP8OOt3-H3DGx5w2hChd_XhaVQykeLKPSkRO-QmSlMUJA4FBal4PPleegjD-HTxJmYg7szhK9EiEtxn-LlQEn7vbSxQFiU2k-1o2L2Kh4TUhUP0mOMPtc'} 
-              alt="User profile"
-            />
+    <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-end h-16">
+          <div className="flex items-center gap-6">
+            <div className="relative group">
+              <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
+                <span className="material-symbols-outlined text-lg">language</span>
+                {language === 'PT' ? 'PT-BR' : 'English'}
+                <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                </svg>
+              </button>
+              <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
+                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+              </div>
+            </div>
+            <div className="relative">
+              <input 
+                className="w-64 bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 text-white placeholder:text-slate-500" 
+                placeholder={t('dashboard.searchPlaceholder')} 
+                type="text"
+              />
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg leading-none">
+                search
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <button className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl relative">
+                <span className="material-symbols-outlined">notifications</span>
+                <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full ring-2 ring-[#0f172a]"></span>
+              </button>
+              <div className="h-10 w-10 rounded-full border-2 border-primary/30 p-0.5">
+                <img 
+                  className="w-full h-full rounded-full object-cover" 
+                  data-alt="User profile picture" 
+                  src={user?.user_metadata?.avatar_url || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDpPO_A7DY3J-kZIJtEae52F7A5kWa-IqMg4d76yopXmjWZixfxsAtAstibGw0-Np67gFZZhEqVn6Tk5d95Aq653UZaWaxNpVphbBi1YjkMMw8YH9DjwqDaimnCX9GV7qdwuM-X3Ufds0H53jBQdds4LyUP8OOt3-H3DGx5w2hChd_XhaVQykeLKPSkRO-QmSlMUJA4FBal4PPleegjD-HTxJmYg7szhK9EiEtxn-LlQEn7vbSxQFiU2k-1o2L2Kh4TUhUP0mOMPtc'} 
+                  alt="User profile"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -335,7 +336,7 @@ function MainContent() {
   ];
 
   return (
-    <main className="flex-1 overflow-y-auto bg-gradient-to-br from-[#0f172a] to-[#0b1120] p-8">
+    <main className="flex-1 overflow-y-auto bg-gradient-to-br from-[#0f172a] to-[#0b1120] p-8 pt-16">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Top Summary Row */}
         <div className="flex justify-between items-end">

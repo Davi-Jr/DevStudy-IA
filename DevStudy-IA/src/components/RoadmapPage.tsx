@@ -91,30 +91,33 @@ function TopBar() {
   }, []);
 
   return (
-    <header className="h-24 flex items-center justify-between px-8 py-4 bg-transparent border-b border-white/5">
-      <div className="flex-1"></div>
-      <div className="flex items-center gap-6">
-        <div className="relative group">
-          <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
-            <span className="material-symbols-outlined text-lg">language</span>
-            {language === 'PT' ? t('header.language') : t('header.languageEN')}
-            <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-            </svg>
-          </button>
-          <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-            <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>{t('header.language')}</button>
-            <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>{t('header.languageEN')}</button>
-          </div>
-        </div>
-        <div className="h-8 w-px bg-white/10"></div>
-        <div className="flex items-center gap-3 cursor-pointer group">
-          <div className="text-right">
-            <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || 'User'}</p>
-            <p className="text-xs text-slate-400 mt-1">{user?.email}</p>
-          </div>
-          <div className="size-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
-            <UserAvatar user={user} size="w-full h-full" />
+    <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-end h-16">
+          <div className="flex items-center gap-6">
+            <div className="relative group">
+              <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
+                <span className="material-symbols-outlined text-lg">language</span>
+                {language === 'PT' ? t('header.language') : t('header.languageEN')}
+                <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+                </svg>
+              </button>
+              <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>{t('header.language')}</button>
+                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>{t('header.languageEN')}</button>
+              </div>
+            </div>
+            <div className="h-8 w-px bg-white/10"></div>
+            <div className="flex items-center gap-3 cursor-pointer group">
+              <div className="text-right">
+                <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || 'User'}</p>
+                <p className="text-xs text-slate-400 mt-1">{user?.email}</p>
+              </div>
+              <div className="size-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
+                <UserAvatar user={user} size="w-full h-full" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -260,7 +263,7 @@ export default function RoadmapPage() {
   return (
     <div className="flex h-screen overflow-hidden bg-[#0f172a]">
       <Sidebar />
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto pt-16">
         <TopBar />
         {isLoading ? (
           <div className="flex-1 flex flex-col items-center justify-center gap-6">
@@ -297,17 +300,17 @@ export default function RoadmapPage() {
                   {technologies.map((tech, index) => (
                     <div key={index} className="relative group cursor-pointer">
                       <div className="hidden peer"></div>
-                      <div className="block p-4 rounded-2xl bg-white/5 border border-white/10 transition-all">
+                      <div className="block p-4 rounded-2xl bg-white/3 border border-primary/40 transition-all hover:border-primary/50">
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl ${tech.bgColor} flex items-center justify-center ${tech.color}`}>
+                            <div className={`w-10 h-10 rounded-xl ${tech.bgColor} border border-primary/120 flex items-center justify-center ${tech.color}`}>
                               {tech.svg}
                             </div>
                             <span className="font-bold">{tech.name}</span>
                           </div>
                           <button
                             onClick={() => handleRemoveTechnology(index)}
-                            className="p-1 text-slate-500 hover:text-red-400 transition-all opacity-0 group-hover:opacity-100"
+                            className="p-1 text-slate-500 hover:text-red-400 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
                           >
                             <span className="material-symbols-outlined text-sm">close</span>
                           </button>
@@ -315,20 +318,28 @@ export default function RoadmapPage() {
                         <div className="space-y-2">
                           <div className="text-[10px] font-bold uppercase text-slate-500 mb-2">{t('roadmap.selectLevel')}</div>
                           <div className="grid grid-cols-3 gap-2">
-                            {levels.map((level, levelIndex) => (
-                              <button
-                                key={levelIndex}
-                                onClick={() => handleLevelChange(index, levelIndex)}
-                                className={`py-2 px-1 text-[10px] font-bold rounded-lg border transition-colors ${
-                                  tech.level === levelIndex
-                                    ? 'border-primary bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/20'
-                                    : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10'
-                                }`}
-                                type="button"
-                              >
-                                {level}
-                              </button>
-                            ))}
+                            {levels.map((level, levelIndex) => {
+                              // Cores para cada nível: verde (iniciante), amarelo (intermediário), vermelho (avançado)
+                              const levelColors = [
+                                { active: 'border-emerald-500/50 bg-emerald-500/20 text-emerald-400', hover: 'hover:border-emerald-500/30 hover:bg-emerald-500/10' },
+                                { active: 'border-yellow-500/50 bg-yellow-500/20 text-yellow-400', hover: 'hover:border-yellow-500/30 hover:bg-yellow-500/10' },
+                                { active: 'border-red-500/50 bg-red-500/20 text-red-400', hover: 'hover:border-red-500/30 hover:bg-red-500/10' }
+                              ];
+                              return (
+                                <button
+                                  key={levelIndex}
+                                  onClick={() => handleLevelChange(index, levelIndex)}
+                                  className={`py-2 px-1 text-[10px] font-bold rounded-lg border transition-colors cursor-pointer ${
+                                    tech.level === levelIndex
+                                      ? levelColors[levelIndex].active
+                                      : `border-white/10 bg-white/5 text-slate-400 ${levelColors[levelIndex].hover}`
+                                  }`}
+                                  type="button"
+                                >
+                                  {level}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                       </div>
@@ -350,22 +361,28 @@ export default function RoadmapPage() {
                       <div className="flex gap-2">
                         <button
                           onClick={handleAddTechnology}
-                          className="flex-1 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/80 transition-colors"
+                          className="flex-1 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/80 transition-colors cursor-pointer"
                         >
                           Adicionar
                         </button>
                         <button
                           onClick={() => { setShowAddTech(false); setNewTechName(''); }}
-                          className="px-4 py-2 text-slate-400 text-sm font-bold rounded-lg hover:bg-white/10 transition-colors"
+                          className="px-4 py-2 text-slate-400 text-sm font-bold rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
                         >
                           Cancelar
                         </button>
                       </div>
                     </div>
+                  ) : technologies.length >= 6 ? (
+                    <div className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-primary/30 bg-primary/5 min-h-[140px]">
+                      <span className="material-symbols-outlined text-2xl text-primary">info</span>
+                      <span className="text-sm text-slate-400 text-center">Máximo de 6 tecnologias atingido</span>
+                      <span className="text-xs text-slate-500 text-center">Avance para a próxima etapa para gerar seu roadmap</span>
+                    </div>
                   ) : (
                     <button
                       onClick={() => setShowAddTech(true)}
-                      className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-dashed border-white/10 hover:border-primary/50 hover:bg-white/5 transition-all text-slate-500 hover:text-primary min-h-[140px]"
+                      className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-dashed border-white/10 hover:border-primary/50 hover:bg-white/5 transition-all text-slate-500 hover:text-primary min-h-[140px] cursor-pointer"
                     >
                       <span className="material-symbols-outlined text-3xl">add_circle</span>
                       <span className="font-bold text-sm">{t('roadmap.addTechnology')}</span>
