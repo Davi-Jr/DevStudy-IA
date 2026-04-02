@@ -74,9 +74,9 @@ function Sidebar() {
         ))}
       </nav>
       <div className="p-4 mt-auto">
-<Link to="/roadmaps" className="relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 via-blue-400 to-purple-500 text-white rounded-xl py-3 px-4 cursor-pointer overflow-hidden font-bold bg-[length:200%_100%]">
-            {/* Onda suave - azul + amarelo claro */}
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-500 to-amber-300 bg-[length:900%_100%] opacity-100 animate-[gradient-wave_5s_ease-in-out_infinite]"></span>
+<Link to="/roadmaps" className="relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-3 px-4 cursor-pointer overflow-hidden font-bold bg-[length:200%_100%]">
+            {/* Onda suave - apenas azul */}
+            <span className="absolute inset-0 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-[length:150%_100%] opacity-80 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
             {/* Borda suave */}
             <span className="absolute inset-0 rounded-xl ring-1 ring-white/10"></span>
             {/* Conteúdo */}
@@ -188,12 +188,12 @@ function EmptyState() {
 
           {/* CTA Button */}
           <div className="mt-8 pt-6 border-t border-white/10">
-            <button 
+            <button
               onClick={() => navigate('/roadmaps')}
-              className="relative w-full bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 cursor-pointer overflow-hidden bg-[length:200%_100%]"
+              className="relative w-full bg-gradient-to-r from-blue-500 via-blue-400 to-yellow-200 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 cursor-pointer overflow-hidden bg-[length:200%_100%]"
             >
-              {/* Onda suave - azul + amarelo claro */}
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-600 via-blue-400 to-amber-500 bg-[length:150%_100%] opacity-70 animate-[gradient-wave_5s_ease-in-out_infinite]"></span>
+              {/* Onda suave - divisão clara entre azul e amarelo claro */}
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-300 to-yellow-200 bg-[length:150%_100%] opacity-80 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
               {/* Borda suave */}
               <span className="absolute inset-0 rounded-xl ring-1 ring-white/10"></span>
               <span className="relative z-10 flex items-center gap-2">
