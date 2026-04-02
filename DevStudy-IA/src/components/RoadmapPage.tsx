@@ -122,70 +122,8 @@ function TopBar() {
   );
 }
 
-// ==================== STACK CARD COMPONENT ====================
-interface StackCardProps {
-  name: string;
-  color: string;
-  bgColor: string;
-  checked: boolean;
-  onChange: () => void;
-  levels: string[];
-  activeLevel: number;
-  onLevelChange: (index: number) => void;
-}
-
-function StackCard({ name, color, bgColor, checked, onChange, levels, activeLevel, onLevelChange }: StackCardProps) {
-  const { t } = useLanguage();
-  return (
-    <div className="relative group cursor-pointer">
-      <input
-        checked={checked}
-        onChange={onChange}
-        className="hidden peer"
-        id={`stack-${name.toLowerCase().replace('.', '')}`}
-        type="checkbox"
-      />
-      <label
-        className="block p-4 rounded-2xl bg-white/5 border border-white/10 peer-checked:border-primary peer-checked:bg-primary/5 transition-all"
-        htmlFor={`stack-${name.toLowerCase().replace('.', '')}`}
-      >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl ${bgColor} flex items-center justify-center ${color}`}>
-              <span className="material-symbols-outlined">data_object</span>
-            </div>
-            <span className="font-bold">{name}</span>
-          </div>
-          <span className="material-symbols-outlined text-primary opacity-0 peer-checked:opacity-100 transition-opacity">
-            check_circle
-          </span>
-        </div>
-        <div className="space-y-2">
-          <div className="text-[10px] font-bold uppercase text-slate-500 mb-2">{t('roadmap.selectLevel')}</div>
-          <div className="grid grid-cols-3 gap-2">
-            {levels.map((level, index) => (
-              <button
-                key={index}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onLevelChange(index);
-                }}
-                className={`py-2 px-1 text-[10px] font-bold rounded-lg border transition-colors ${
-                  activeLevel === index
-                    ? 'border-primary bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/20'
-                    : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10'
-                }`}
-                type="button"
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-        </div>
-      </label>
-    </div>
-  );
-}
+// ==================== IMPORTS ====================
+import { getTechSvg } from './TechIcons';
 
 // ==================== PHASE MODULE COMPONENT ====================
 interface TaskItemProps {
@@ -263,17 +201,48 @@ function RecentCreation({ category, categoryColor, title, date, progress }: { ca
 export default function RoadmapPage() {
   const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
-  const [stackReact, setStackReact] = useState(true);
-  const [stackNode, setStackNode] = useState(true);
-  const [stackPython, setStackPython] = useState(false);
-  const [reactLevel, setReactLevel] = useState(2);
-  const [nodeLevel, setNodeLevel] = useState(0);
-  const [pythonLevel, setPythonLevel] = useState(0);
+  const [roadmapGenerated, setRoadmapGenerated] = useState(false);
+  const [technologies, setTechnologies] = useState<{ name: string; level: number; svg: React.ReactNode; color: string; bgColor: string }[]>([]);
+  const [showAddTech, setShowAddTech] = useState(false);
+  const [newTechName, setNewTechName] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleGenerateRoadmap = () => {
+    setRoadmapGenerated(true);
+    // Scroll para a seção do roadmap gerado
+    setTimeout(() => {
+      document.getElementById('generated-roadmap')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  const handleAddTechnology = () => {
+    if (newTechName.trim()) {
+      const techInfo = getTechSvg(newTechName);
+      setTechnologies([...technologies, {
+        name: newTechName,
+        level: 0,
+        svg: techInfo.svg,
+        color: techInfo.color,
+        bgColor: techInfo.bgColor
+      }]);
+      setNewTechName('');
+      setShowAddTech(false);
+    }
+  };
+
+  const handleRemoveTechnology = (index: number) => {
+    setTechnologies(technologies.filter((_, i) => i !== index));
+  };
+
+  const handleLevelChange = (index: number, level: number) => {
+    const updated = [...technologies];
+    updated[index].level = level;
+    setTechnologies(updated);
+  };
 
   const levels = [t('roadmap.levels.beginner'), t('roadmap.levels.intermediate'), t('roadmap.levels.advanced')];
 
@@ -324,40 +293,84 @@ export default function RoadmapPage() {
                   <h3 className="text-xl font-bold">{t('roadmap.step1')}</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <StackCard
-                    name="React"
-                    color="text-blue-400"
-                    bgColor="bg-blue-500/10"
-                    checked={stackReact}
-                    onChange={() => setStackReact(!stackReact)}
-                    levels={levels}
-                    activeLevel={reactLevel}
-                    onLevelChange={setReactLevel}
-                  />
-                  <StackCard
-                    name="Node.js"
-                    color="text-green-400"
-                    bgColor="bg-green-500/10"
-                    checked={stackNode}
-                    onChange={() => setStackNode(!stackNode)}
-                    levels={levels}
-                    activeLevel={nodeLevel}
-                    onLevelChange={setNodeLevel}
-                  />
-                  <StackCard
-                    name="Python"
-                    color="text-yellow-400"
-                    bgColor="bg-yellow-500/10"
-                    checked={stackPython}
-                    onChange={() => setStackPython(!stackPython)}
-                    levels={levels}
-                    activeLevel={pythonLevel}
-                    onLevelChange={setPythonLevel}
-                  />
-                  <button className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-dashed border-white/10 hover:border-primary/50 hover:bg-white/5 transition-all text-slate-500 hover:text-primary">
-                    <span className="material-symbols-outlined text-3xl">add_circle</span>
-                    <span className="font-bold text-sm">{t('roadmap.addTechnology')}</span>
-                  </button>
+                  {/* Tecnologias adicionadas dinamicamente */}
+                  {technologies.map((tech, index) => (
+                    <div key={index} className="relative group cursor-pointer">
+                      <div className="hidden peer"></div>
+                      <div className="block p-4 rounded-2xl bg-white/5 border border-white/10 transition-all">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-xl ${tech.bgColor} flex items-center justify-center ${tech.color}`}>
+                              {tech.svg}
+                            </div>
+                            <span className="font-bold">{tech.name}</span>
+                          </div>
+                          <button
+                            onClick={() => handleRemoveTechnology(index)}
+                            className="p-1 text-slate-500 hover:text-red-400 transition-all opacity-0 group-hover:opacity-100"
+                          >
+                            <span className="material-symbols-outlined text-sm">close</span>
+                          </button>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="text-[10px] font-bold uppercase text-slate-500 mb-2">{t('roadmap.selectLevel')}</div>
+                          <div className="grid grid-cols-3 gap-2">
+                            {levels.map((level, levelIndex) => (
+                              <button
+                                key={levelIndex}
+                                onClick={() => handleLevelChange(index, levelIndex)}
+                                className={`py-2 px-1 text-[10px] font-bold rounded-lg border transition-colors ${
+                                  tech.level === levelIndex
+                                    ? 'border-primary bg-gradient-to-r from-primary to-purple-600 text-white shadow-lg shadow-primary/20'
+                                    : 'border-white/10 bg-white/5 text-slate-400 hover:bg-white/10'
+                                }`}
+                                type="button"
+                              >
+                                {level}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* Botão para adicionar tecnologia */}
+                  {showAddTech ? (
+                    <div className="flex flex-col gap-3 p-4 rounded-2xl border border-primary/50 bg-primary/5">
+                      <input
+                        type="text"
+                        value={newTechName}
+                        onChange={(e) => setNewTechName(e.target.value)}
+                        placeholder="Nome da tecnologia"
+                        className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-slate-500 outline-none focus:border-primary"
+                        autoFocus
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddTechnology()}
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleAddTechnology}
+                          className="flex-1 py-2 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/80 transition-colors"
+                        >
+                          Adicionar
+                        </button>
+                        <button
+                          onClick={() => { setShowAddTech(false); setNewTechName(''); }}
+                          className="px-4 py-2 text-slate-400 text-sm font-bold rounded-lg hover:bg-white/10 transition-colors"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setShowAddTech(true)}
+                      className="flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border border-dashed border-white/10 hover:border-primary/50 hover:bg-white/5 transition-all text-slate-500 hover:text-primary min-h-[140px]"
+                    >
+                      <span className="material-symbols-outlined text-3xl">add_circle</span>
+                      <span className="font-bold text-sm">{t('roadmap.addTechnology')}</span>
+                    </button>
+                  )}
                 </div>
               </section>
 
@@ -411,18 +424,18 @@ export default function RoadmapPage() {
 
               {/* Submit Button */}
               <div className="flex flex-col items-center gap-6 pt-4">
-                <button className="w-full max-w-md px-10 py-5 bg-gradient-to-r from-primary to-purple-600 hover:shadow-[0_0_40px_rgba(6,87,249,0.4)] text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1">
+                <button
+                  onClick={handleGenerateRoadmap}
+                  className="w-full max-w-md px-10 py-5 bg-gradient-to-r from-primary to-purple-600 hover:shadow-[0_0_40px_rgba(6,87,249,0.4)] text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1"
+                >
                   <span className="material-symbols-outlined">rocket_launch</span>
                   {t('roadmap.generateButton')}
                 </button>
-                <div className="flex items-center gap-4 text-slate-400">
-                  <span className="material-symbols-outlined text-primary">auto_awesome</span>
-                  <p className="text-sm italic">{t('roadmap.estimatedTime')}</p>
-                </div>
               </div>
 
-              {/* Generated Result Section */}
-              <section className="mt-12 space-y-6">
+              {/* Generated Result Section - Oculto inicialmente */}
+              {roadmapGenerated && (
+                <section id="generated-roadmap" className="mt-12 space-y-6">
                 <div className="mb-4">
                   <label className="block text-[10px] font-bold text-primary mb-1 uppercase tracking-widest">{t('roadmap.roadmapName')}</label>
                   <div className="flex items-center gap-3 group">
@@ -471,6 +484,7 @@ export default function RoadmapPage() {
                   </button>
                 </div>
               </section>
+              )}
             </div>
           </div>
         )}
