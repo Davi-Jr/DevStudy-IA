@@ -82,14 +82,22 @@ function Navigation() {
               </div>
             </div>
             {user && (
-              <Link
-                to="/dashboard"
-                className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
-              >
-                <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
-                  <UserAvatar user={user} size="w-full h-full" />
+              <div className="relative group">
+                <Link
+                  to="/dashboard"
+                  className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
+                >
+                  <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
+                    <UserAvatar user={user} size="w-full h-full" />
+                  </div>
+                </Link>
+                <div className="absolute right-0 top-full mt-2 w-44 glass-effect rounded-twelve overflow-hidden border border-white/5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-xl">
+                  <Link to="/profile" className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/20 transition-colors cursor-pointer text-slate-300 hover:text-white">
+                    <span className="material-symbols-outlined text-lg">settings</span>
+                    Configurações
+                  </Link>
                 </div>
-              </Link>
+              </div>
             )}
           </div>
           {/* Mobile Toggle */}

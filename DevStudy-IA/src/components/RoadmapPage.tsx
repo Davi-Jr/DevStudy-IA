@@ -109,13 +109,21 @@ function TopBar() {
               </div>
             </div>
             <div className="h-8 w-px bg-white/10"></div>
-            <div className="flex items-center gap-3 cursor-pointer group">
-              <div className="text-right">
-                <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || 'User'}</p>
-                <p className="text-xs text-slate-400 mt-1">{user?.email}</p>
+            <div className="relative group">
+              <div className="flex items-center gap-3 cursor-pointer">
+                <div className="text-right">
+                  <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || 'User'}</p>
+                  <p className="text-xs text-slate-400 mt-1">{user?.email}</p>
+                </div>
+                <div className="size-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
+                  <UserAvatar user={user} size="w-full h-full" />
+                </div>
               </div>
-              <div className="size-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
-                <UserAvatar user={user} size="w-full h-full" />
+              <div className="absolute right-0 top-full mt-2 w-44 glass-effect rounded-twelve overflow-hidden border border-white/5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-xl">
+                <Link to="/profile" className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/20 transition-colors cursor-pointer text-slate-300 hover:text-white">
+                  <span className="material-symbols-outlined text-lg">settings</span>
+                  Configurações
+                </Link>
               </div>
             </div>
           </div>
