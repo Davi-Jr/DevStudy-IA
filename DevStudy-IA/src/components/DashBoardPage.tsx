@@ -38,8 +38,8 @@ function Sidebar() {
   
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
-    { id: 'roadmaps', icon: 'map', label: t('sidebar.roadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'auto_stories', label: t('sidebar.studySessions'), href: '#' },
+    { id: 'roadmaps', icon: 'alt_route', label: t('sidebar.roadmaps'), href: '/roadmaps' },
+    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '#' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
@@ -170,7 +170,7 @@ function EmptyState() {
                   <p className="text-slate-400 text-sm mt-1">{step.description}</p>
                 </div>
                 {index < steps.length - 1 && (
-                  <div className="absolute left-5 w-px h-8 bg-primary/30 ml-4"></div>
+                  <div className=""></div>
                 )}
               </div>
             ))}
@@ -180,10 +180,10 @@ function EmptyState() {
           <div className="mt-8 pt-6 border-t border-white/10">
             <button
               onClick={() => navigate('/roadmaps')}
-              className="relative w-full bg-gradient-to-r from-blue-500 via-blue-400 to-yellow-200 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 cursor-pointer overflow-hidden bg-[length:200%_100%]"
+              className="relative w-full bg-gradient-to-r from-primary to-blue-500 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 cursor-pointer overflow-hidden shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow bg-[length:200%_100%]"
             >
-              {/* Onda suave - divisão clara entre azul e amarelo claro */}
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-blue-300 to-yellow-200 bg-[length:150%_100%] opacity-80 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
+              {/* Animacao de gradiente */}
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-primary bg-[length:150%_100%] opacity-60 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
               {/* Borda suave */}
               <span className="absolute inset-0 rounded-xl ring-1 ring-white/10"></span>
               <span className="relative z-10 flex items-center gap-2">

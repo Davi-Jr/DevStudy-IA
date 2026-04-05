@@ -11,8 +11,8 @@ function Sidebar() {
   
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
-    { id: 'roadmaps', icon: 'map', label: t('sidebar.roadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'auto_stories', label: t('sidebar.studySessions'), href: '/study-sessions' },
+    { id: 'roadmaps', icon: 'alt_route', label: t('sidebar.roadmaps'), href: '/roadmaps' },
+    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '/study-sessions' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
@@ -276,7 +276,7 @@ function TopBar() {
   const { t, language, setLanguage } = useLanguage();
   
   return (
-    <header className="h-16 flex items-center justify-between px-8 bg-transparent border-b border-white/5">
+    <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5 h-16 flex items-center justify-between px-8">
       <div className="flex-1"></div>
       <div className="flex items-center gap-6">
         <div className="relative group">
@@ -304,7 +304,7 @@ export default function AboutPage() {
       <Sidebar />
       <main className="flex-1 flex flex-col overflow-hidden">
         <TopBar />
-        <div className="flex-1 overflow-y-auto p-8">
+        <div className="flex-1 overflow-y-auto p-8 pt-16">
           <div className="max-w-6xl mx-auto space-y-20">
             <PurposeSection />
             <DeveloperSection />
