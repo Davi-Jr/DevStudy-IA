@@ -9,8 +9,8 @@ function Sidebar() {
 
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
-    { id: 'roadmaps', icon: 'map', label: 'My Roadmaps', href: '/roadmaps' },
-    { id: 'sessions', icon: 'auto_stories', label: 'Study Sessions', href: '/study-sessions' },
+    { id: 'roadmaps', icon: 'alt_route', label: 'My Roadmaps', href: '/roadmaps' },
+    { id: 'sessions', icon: 'menu_book', label: 'Study Sessions', href: '/study-sessions' },
     { id: 'about', icon: 'info', label: 'About', href: '/about' },
     { id: 'settings', icon: 'settings', label: 'Settings', href: '/profile' },
   ];

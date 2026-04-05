@@ -10,15 +10,15 @@ function Sidebar() {
 
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: t('topbar.pages'), href: '/dashboard' },
-    { id: 'roadmaps', icon: 'map', label: t('topbar.myRoadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'auto_stories', label: t('topbar.studySessions'), href: '#' },
+    { id: 'roadmaps', icon: 'alt_route', label: t('topbar.myRoadmaps'), href: '/roadmaps' },
+    { id: 'sessions', icon: 'menu_book', label: t('topbar.studySessions'), href: '#' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
 
   return (
-    <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120] py-6">
-      <Link to="/" className="px-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer mb-6">
+    <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
+      <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
         <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
@@ -28,7 +28,7 @@ function Sidebar() {
           DevStudy <span className="text-primary">AI</span>
         </span>
       </Link>
-      <nav className="flex-1 px-4 space-y-1">
+      <nav className="flex-1 px-4 space-y-1 mt-4">
         {menuItems.map((item) => (
           <Link
             key={item.id}

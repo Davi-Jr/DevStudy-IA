@@ -1,13 +1,52 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
+import { supabase } from '@/lib/supabase';
 import "../index.css";
+
+// ==================== AVATAR COMPONENT ====================
+function UserAvatar({ user, size = "size-10" }: { user: any; size?: string }) {
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const initials = fullName
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (avatarUrl) {
+    return (
+      <img
+        alt={fullName}
+        className={`${size} rounded-full object-cover bg-slate-200`}
+        src={avatarUrl}
+      />
+    );
+  }
+
+  return (
+    <div className={`${size} rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold`}>
+      <span className="text-sm">{initials}</span>
+    </div>
+  );
+}
 
 // ==================== COMPONENTS ====================
 
 // Navigation Component
 function Navigation() {
   const { t, setLanguage, language } = useLanguage();
-  
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function getUser() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    }
+    getUser();
+  }, []);
+
   return (
     <nav className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -42,14 +81,16 @@ function Navigation() {
                 <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
               </div>
             </div>
-           <Link 
-              to="/dashboard" 
-              className="group relative flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
-            >
-              <div className="w-11 h-11 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
-                <span className="material-symbols-outlined text-white text-xl">person</span>
-              </div>
-            </Link>
+            {user && (
+              <Link
+                to="/dashboard"
+                className="group relative flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
+              >
+                <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
+                  <UserAvatar user={user} size="w-full h-full" />
+                </div>
+              </Link>
+            )}
           </div>
           {/* Mobile Toggle */}
           <div className="md:hidden">
