@@ -192,6 +192,26 @@ const translations: Translations = {
   'roadmap.levels.beginner': { PT: 'Iniciante', EN: 'Beginner' },
   'roadmap.levels.intermediate': { PT: 'Intermediário', EN: 'Intermediate' },
   'roadmap.levels.advanced': { PT: 'Avançado', EN: 'Advanced' },
+
+  // Profile Page
+  'profile.preferences': { PT: 'Preferências', EN: 'Preferences' },
+  'profile.preferencesDesc': { PT: 'Gerencie seu perfil e configurações de roadmap de aprendizado.', EN: 'Manage your profile and learning roadmap configurations.' },
+  'profile.logout': { PT: 'Sair', EN: 'Logout' },
+  'profile.deleteAccount': { PT: 'Excluir Conta', EN: 'Delete Account' },
+  'profile.manageRoadmaps': { PT: 'Gerenciar Roadmaps', EN: 'Manage Roadmaps' },
+  'profile.active': { PT: 'Ativos', EN: 'Active' },
+  'profile.createNew': { PT: 'Criar Novo Roadmap', EN: 'Create New Roadmap' },
+  'profile.cancel': { PT: 'Cancelar', EN: 'Cancel' },
+  'profile.saveChanges': { PT: 'Salvar Alterações', EN: 'Save Changes' },
+  'profile.progress': { PT: 'Progresso', EN: 'Progress' },
+  'profile.updated': { PT: 'Atualizado', EN: 'Updated' },
+  'profile.fullstackTitle': { PT: 'Engenheiro React Fullstack', EN: 'Fullstack React Engineer' },
+  'profile.aiArchTitle': { PT: 'Arquitetura de IA', EN: 'AI Architecture' },
+  'profile.daysAgo': { PT: 'dias atrás', EN: 'days ago' },
+  'profile.weekAgo': { PT: 'semana atrás', EN: 'week ago' },
+  'profile.noRoadmaps': { PT: 'Nenhum roadmap ainda', EN: 'No roadmaps yet' },
+  'profile.justNow': { PT: 'agora', EN: 'just now' },
+  'profile.deleteRoadmap': { PT: 'Excluir roadmap', EN: 'Delete roadmap' },
 };
 
 interface LanguageContextType {
