@@ -201,7 +201,6 @@ const translations: Translations = {
   'profile.manageRoadmaps': { PT: 'Gerenciar Roadmaps', EN: 'Manage Roadmaps' },
   'profile.active': { PT: 'Ativos', EN: 'Active' },
   'profile.createNew': { PT: 'Criar Novo Roadmap', EN: 'Create New Roadmap' },
-  'profile.cancel': { PT: 'Cancelar', EN: 'Cancel' },
   'profile.saveChanges': { PT: 'Salvar Alterações', EN: 'Save Changes' },
   'profile.progress': { PT: 'Progresso', EN: 'Progress' },
   'profile.updated': { PT: 'Atualizado', EN: 'Updated' },
@@ -212,6 +211,15 @@ const translations: Translations = {
   'profile.noRoadmaps': { PT: 'Nenhum roadmap ainda', EN: 'No roadmaps yet' },
   'profile.justNow': { PT: 'agora', EN: 'just now' },
   'profile.deleteRoadmap': { PT: 'Excluir roadmap', EN: 'Delete roadmap' },
+  'profile.deleteRoadmapConfirm': { PT: 'Excluir roadmap', EN: 'Delete roadmap' },
+  'profile.deleteRoadmapMsg': { PT: 'Tem certeza que deseja excluir este roadmap? Esta ação não pode ser desfeita.', EN: 'Are you sure you want to delete this roadmap? This action cannot be undone.' },
+  'profile.logoutTitle': { PT: 'Sair da conta', EN: 'Sign out' },
+  'profile.logoutMsg': { PT: 'Tem certeza que deseja sair? Você precisará fazer login novamente para acessar.', EN: 'Are you sure you want to sign out? You will need to log in again to access.' },
+  'profile.deleteAccountTitle': { PT: 'Excluir conta', EN: 'Delete account' },
+  'profile.deleteAccountMsg': { PT: 'Tem certeza que deseja excluir sua conta? Todos os seus dados serão perdidos permanentemente.', EN: 'Are you sure you want to delete your account? All your data will be permanently lost.' },
+  'profile.cancel': { PT: 'Cancelar', EN: 'Cancel' },
+  'profile.confirmDelete': { PT: 'Excluir', EN: 'Delete' },
+  'profile.confirmLogout': { PT: 'Sair', EN: 'Sign out' },
 };
 
 interface LanguageContextType {
