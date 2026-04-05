@@ -124,12 +124,80 @@ function RoadmapItem({ icon, title, progress, dateLabel, color, borderColor, onD
   );
 }
 
+// ==================== CONFIRM MODAL COMPONENT ====================
+function ConfirmModal({ open, title, message, confirmLabel, cancelLabel = 'profile.cancel', onConfirm, onCancel, variant = 'danger' }: {
+  open: boolean;
+  title: string;
+  message: string;
+  confirmLabel: string;
+  cancelLabel?: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  variant?: 'danger' | 'warning';
+}) {
+  const { t } = useLanguage();
+
+  if (!open) return null;
+
+  const btnClass = variant === 'danger'
+    ? 'bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/25'
+    : 'bg-orange-500 hover:bg-orange-600 shadow-lg shadow-orange-500/25';
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" onClick={onCancel}>
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
+
+      {/* Modal */}
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative glass-card rounded-3xl p-8 max-w-sm w-full shadow-2xl border border-white/20 bg-slate-800/50 animate-[fadeIn_0.2s_ease-out]"
+      >
+        {/* Icon */}
+        <div className="flex justify-center mb-6">
+          <div className={`w-14 h-14 rounded-full flex items-center justify-center ${variant === 'danger' ? 'bg-red-500/10' : 'bg-orange-500/10'}`}>
+            <span className="material-symbols-outlined text-3xl text-red-400">
+              {variant === 'danger' ? 'delete_forever' : 'warning'}
+            </span>
+          </div>
+        </div>
+
+        {/* Content */}
+        <h3 className="text-xl font-bold text-white text-center mb-2">{title}</h3>
+        <p className="text-sm text-slate-400 text-center mb-8 leading-relaxed">{message}</p>
+
+        {/* Actions */}
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 rounded-2xl border border-slate-700 px-6 py-3 font-bold text-slate-400 transition hover:bg-slate-800 cursor-pointer"
+          >
+            {t(cancelLabel)}
+          </button>
+          <button
+            onClick={onConfirm}
+            className={`flex-1 rounded-2xl px-6 py-3 font-bold text-white transition hover:scale-[1.02] active:scale-95 cursor-pointer ${btnClass}`}
+          >
+            {t(confirmLabel)}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ==================== MAIN PROFILE PAGE ====================
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { t } = useLanguage();
+
+  // Modal states
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [showDeleteRoadmapModal, setShowDeleteRoadmapModal] = useState(false);
+  const [pendingRoadmapTitle, setPendingRoadmapTitle] = useState<string | null>(null);
 
   useEffect(() => {
     async function getUser() {
@@ -160,7 +228,14 @@ export default function ProfilePage() {
   }
 
   function handleDeleteRoadmap(title: string) {
-    alert(`${t('profile.deleteRoadmap')} "${title}"?`);
+    setPendingRoadmapTitle(title);
+    setShowDeleteRoadmapModal(true);
+  }
+
+  function confirmDeleteRoadmap() {
+    setShowDeleteRoadmapModal(false);
+    setPendingRoadmapTitle(null);
+    // Aqui vai a lógica real de exclusão
   }
 
   const roadmaps = [
@@ -195,11 +270,11 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3 self-start md:self-center">
-                  <button onClick={handleLogout} className="flex items-center gap-2 rounded-2xl bg-red-500/10 px-6 py-3 font-bold text-red-400 transition hover:bg-red-500/20 border border-red-500/20 cursor-pointer">
+                  <button onClick={() => setShowLogoutModal(true)} className="flex items-center gap-2 rounded-2xl bg-red-500/10 px-6 py-3 font-bold text-red-400 transition hover:bg-red-500/20 border border-red-500/20 cursor-pointer">
                     <span className="material-symbols-outlined !text-xl">logout</span>
                     <span>{t('profile.logout')}</span>
                   </button>
-                  <button className="flex items-center gap-2 rounded-2xl bg-red-500/10 px-4 py-3 font-bold text-red-400 transition hover:bg-red-500/20 border border-red-500/20 cursor-pointer" title={t('profile.deleteAccount')}>
+                  <button onClick={() => setShowDeleteAccountModal(true)} className="flex items-center gap-2 rounded-2xl bg-red-500/10 px-4 py-3 font-bold text-red-400 transition hover:bg-red-500/20 border border-red-500/20 cursor-pointer" title={t('profile.deleteAccount')}>
                     <span className="material-symbols-outlined !text-xl">delete</span>
                   </button>
                 </div>
@@ -242,6 +317,36 @@ export default function ProfilePage() {
           </div>
         </main>
       </div>
+
+      {/* Confirm Modals */}
+      <ConfirmModal
+        open={showLogoutModal}
+        title={t('profile.logoutTitle')}
+        message={t('profile.logoutMsg')}
+        confirmLabel={t('profile.confirmLogout')}
+        onConfirm={handleLogout}
+        onCancel={() => setShowLogoutModal(false)}
+        variant="warning"
+      />
+      <ConfirmModal
+        open={showDeleteAccountModal}
+        title={t('profile.deleteAccountTitle')}
+        message={t('profile.deleteAccountMsg')}
+        confirmLabel={t('profile.confirmDelete')}
+        onConfirm={() => { setShowDeleteAccountModal(false); /* lógica real de delete */ }}
+        onCancel={() => setShowDeleteAccountModal(false)}
+        variant="danger"
+      />
+      <ConfirmModal
+        open={showDeleteRoadmapModal}
+        title={t('profile.deleteRoadmapConfirm')}
+        message={t('profile.deleteRoadmapMsg')}
+        confirmLabel={t('profile.confirmDelete')}
+        onConfirm={confirmDeleteRoadmap}
+        onCancel={() => { setShowDeleteRoadmapModal(false); setPendingRoadmapTitle(null); }}
+        variant="danger"
+      />
+
       {/* Mobile Bottom Nav */}
       <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-1 rounded-3xl glass-card px-2 py-2 shadow-2xl lg:hidden z-50">
         <Link to="/dashboard" className="flex h-12 w-12 items-center justify-center rounded-2xl text-slate-400 transition hover:text-white">
