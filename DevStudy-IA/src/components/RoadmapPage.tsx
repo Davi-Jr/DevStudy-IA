@@ -307,14 +307,13 @@ export default function RoadmapPage() {
                   {/* Tecnologias adicionadas dinamicamente */}
                   {technologies.map((tech, index) => (
                     <div key={index} className="relative group cursor-pointer">
-                      <div className="hidden peer"></div>
-                      <div className="block p-4 rounded-2xl bg-white/3 border border-primary/40 transition-all hover:border-primary/50">
-                        <div className="flex items-center justify-between mb-4">
+                      <div className="block p-5 rounded-2xl bg-white/5 border border-white/10 transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-0.5">
+                        <div className="flex items-center justify-between mb-5">
                           <div className="flex items-center gap-3">
-                            <div className={`w-10 h-10 rounded-xl ${tech.bgColor} border border-primary/120 flex items-center justify-center ${tech.color}`}>
+                            <div className={`w-12 h-12 rounded-xl bg-slate-900/80 border border-white/10 flex items-center justify-center group-hover:border-white/20 transition-all p-2.5 ${tech.color}`}>
                               {tech.svg}
                             </div>
-                            <span className="font-bold">{tech.name}</span>
+                            <span className="font-bold text-white">{tech.name}</span>
                           </div>
                           <button
                             onClick={() => handleRemoveTechnology(index)}

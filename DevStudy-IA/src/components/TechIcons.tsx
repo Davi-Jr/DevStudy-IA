@@ -13,7 +13,7 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   nextjs: 'nextjs',
   next: 'nextjs',
   nuxt: 'nuxt',
-  
+
   // Backend
   nodejs: 'nodejs',
   node: 'nodejs',
@@ -24,7 +24,7 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   spring: 'spring',
   rails: 'rails',
   laravel: 'laravel',
-  
+
   // Languages
   javascript: 'javascript',
   js: 'javascript',
@@ -41,7 +41,7 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   php: 'php',
   swift: 'swift',
   kotlin: 'kotlin',
-  
+
   // Databases
   postgresql: 'postgresql',
   postgres: 'postgresql',
@@ -52,7 +52,7 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   firebase: 'firebase',
   sqlite: 'sqlite',
   supabase: 'supabase',
-  
+
   // DevOps & Cloud
   docker: 'docker',
   kubernetes: 'kubernetes',
@@ -64,7 +64,7 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   jenkins: 'jenkins',
   circleci: 'circleci',
   githubactions: 'githubactions',
-  
+
   // Tools
   git: 'git',
   github: 'github',
@@ -74,37 +74,37 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   postman: 'postman',
   figma: 'figma',
   bash: 'bash',
-  
+
   // Mobile
   reactnative: 'reactnative',
   'react native': 'reactnative',
   flutter: 'flutter',
   expo: 'expo',
-  
+
   // AI/ML
   tensorflow: 'tensorflow',
   pytorch: 'pytorch',
   openai: 'openai',
   langchain: 'langchain',
   huggingface: 'huggingface',
-  
+
   // Testing
   jest: 'jest',
   cypress: 'cypress',
   selenium: 'selenium',
   playwright: 'playwright',
-  
+
   // Build tools
   webpack: 'webpack',
   vite: 'vite',
   esbuild: 'esbuild',
   gulp: 'gulp',
-  
+
   // Package managers
   npm: 'npm',
   yarn: 'yarn',
   pnpm: 'pnpm',
-  
+
   // CSS & HTML
   html: 'html',
   css: 'css',
@@ -112,7 +112,7 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   tailwind: 'tailwind',
   bootstrap: 'bootstrap',
   materialui: 'mui',
-  
+
   // Others
   graphql: 'graphql',
   rest: 'rest',
@@ -133,6 +133,7 @@ const TECH_SKILL_PARAMS: Record<string, string> = {
   digitalocean: 'digitalocean',
   vultr: 'vultr',
   cloudflare: 'cloudflare',
+  nginx: 'nginx',
 };
 
 // Cores para cada tecnologia
@@ -153,8 +154,8 @@ const TECH_COLORS: Record<string, { color: string; bgColor: string }> = {
   laravel: { color: 'text-red-400', bgColor: 'bg-red-500/10' },
   javascript: { color: 'text-yellow-400', bgColor: 'bg-yellow-500/10' },
   typescript: { color: 'text-blue-400', bgColor: 'bg-blue-500/10' },
-  python: { color: 'text-blue-400', bgColor: 'bg-blue-500/10' },
-  java: { color: 'text-orange-400', bgColor: 'bg-orange-500/10' },
+  python: { color: 'text-yellow-400', bgColor: 'bg-yellow-500/10' },
+  java: { color: 'text-red-400', bgColor: 'bg-red-500/10' },
   csharp: { color: 'text-purple-400', bgColor: 'bg-purple-500/10' },
   ruby: { color: 'text-red-400', bgColor: 'bg-red-500/10' },
   go: { color: 'text-cyan-400', bgColor: 'bg-cyan-500/10' },
@@ -244,33 +245,6 @@ function normalizeTechName(name: string): string {
     .replace('material ui', 'mui');
 }
 
-// Função para obter ícone do skillicons.dev
-export function getTechIcon(name: string): {
-  url: string;
-  color: string;
-  bgColor: string;
-  isSvgUrl: boolean;
-} {
-  const normalized = normalizeTechName(name);
-  const skillParam = TECH_SKILL_PARAMS[normalized];
-  
-  if (skillParam) {
-    return {
-      url: `${SKILL_ICONS_BASE}i=${skillParam}&theme=dark`,
-      color: TECH_COLORS[skillParam]?.color || DEFAULT_COLORS.color,
-      bgColor: TECH_COLORS[skillParam]?.bgColor || DEFAULT_COLORS.bgColor,
-      isSvgUrl: true
-    };
-  }
-  
-  return {
-    url: '',
-    color: DEFAULT_COLORS.color,
-    bgColor: DEFAULT_COLORS.bgColor,
-    isSvgUrl: false
-  };
-}
-
 // Função para compatibilidade com código existente
 export function getTechSvg(name: string): {
   svg: React.ReactNode;
@@ -279,7 +253,7 @@ export function getTechSvg(name: string): {
 } {
   const normalized = normalizeTechName(name);
   const skillParam = TECH_SKILL_PARAMS[normalized];
-  
+
   if (skillParam) {
     return {
       svg: (
@@ -288,13 +262,16 @@ export function getTechSvg(name: string): {
           alt={name}
           className="w-full h-full object-contain"
           style={{ imageRendering: 'auto' }}
+          onError={(e) => {
+            (e.target as HTMLImageElement).style.display = 'none';
+          }}
         />
       ),
-      color: TECH_COLORS[skillParam]?.color || DEFAULT_COLORS.color,
-      bgColor: TECH_COLORS[skillParam]?.bgColor || DEFAULT_COLORS.bgColor
+      color: TECH_COLORS[normalized]?.color || DEFAULT_COLORS.color,
+      bgColor: TECH_COLORS[normalized]?.bgColor || DEFAULT_COLORS.bgColor
     };
   }
-  
+
   return {
     svg: DEFAULT_ICON_SVG,
     color: DEFAULT_COLORS.color,
