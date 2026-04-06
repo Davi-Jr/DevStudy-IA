@@ -7,6 +7,7 @@ import RoadmapPage from './components/RoadmapPage';
 import ProfilePage from './components/ProfilePage';
 import StudySessionPage from './components/StudySessionPage';
 import AboutPage from './components/AboutPage';
+import OAuthCallback from './components/OAuthCallback';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/auth/callback" element={<OAuthCallback />} />
           <Route path="/dashboard" element={<DashBoardPage />} />
           <Route path="/roadmaps" element={<RoadmapPage />} />
           <Route path="/profile" element={<ProfilePage />} />
