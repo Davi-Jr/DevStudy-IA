@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
+import { generateRoadmap } from '@/lib/gemini';
+import { generateRoadmapFree } from '@/lib/geminiFree';
+import { analyzeRepository } from '@/lib/gitingest';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
+import { getTechSvg } from './TechIcons';
 
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
@@ -133,8 +137,6 @@ function TopBar() {
   );
 }
 
-// ==================== IMPORTS ====================
-import { getTechSvg } from './TechIcons';
 
 // ==================== PHASE MODULE COMPONENT ====================
 interface TaskItemProps {
@@ -212,6 +214,9 @@ function RecentCreation({ category, categoryColor, title, date, progress }: { ca
 export default function RoadmapPage() {
   const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [roadmap, setRoadmap] = useState<string>('');
+  const [useFree, setUseFree] = useState(false);
   const [roadmapGenerated, setRoadmapGenerated] = useState(false);
   const [technologies, setTechnologies] = useState<{ name: string; level: number; svg: React.ReactNode; color: string; bgColor: string }[]>([]);
   const [showAddTech, setShowAddTech] = useState(false);
@@ -222,13 +227,32 @@ export default function RoadmapPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleGenerateRoadmap = () => {
+  const handleGenerateRoadmap = async () => {
     setRoadmapGenerated(true);
-    // Scroll para a seção do roadmap gerado
-    setTimeout(() => {
-      document.getElementById('generated-roadmap')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
+    setLoading(true);
+    try {
+      // opcional: analisar repositório via gitingest
+      const repoInfo = await analyzeRepository('https://github.com/SEU_USUARIO/SEU_REPO');
+      const techs = repoInfo.technologies?.length ? repoInfo.technologies : technologies.map(t => t.name);
+
+      const fn = useFree ? generateRoadmapFree : generateRoadmap;
+      const result = await fn({
+        projectDescription: 'Descrição do projeto aqui', // você pode trocar por um textarea futuro
+        technologies: techs,
+        repoUrl: 'https://github.com/SEU_USUARIO/SEU_REPO'
+      });
+      setRoadmap(result);
+    } catch (e) {
+      console.error(e);
+      setRoadmap('❌ Falha ao gerar roadmap. Verifique a chave da API.');
+    } finally {
+      setLoading(false);
+      // scroll para a seção gerada
+      setTimeout(() => {
+        document.getElementById('generated-roadmap')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }
 
   const handleAddTechnology = () => {
     if (newTechName.trim()) {
@@ -516,3 +540,4 @@ export default function RoadmapPage() {
     </div>
   );
 }
+
