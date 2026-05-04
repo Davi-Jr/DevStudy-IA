@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
 import { supabase } from '@/lib/supabase';
 import "../index.css";
@@ -117,6 +117,22 @@ function Navigation() {
 // Hero Section Component
 function HeroSection() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+  const [redirecting, setRedirecting] = useState(false);
+
+  const handlePrimaryCta = async () => {
+    if (redirecting) return;
+
+    try {
+      setRedirecting(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      navigate(user ? '/dashboard' : '/login');
+    } catch {
+      navigate('/login');
+    } finally {
+      setRedirecting(false);
+    }
+  };
   
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -134,9 +150,14 @@ function HeroSection() {
             {t('hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <Link to="/dashboard" className="bg-gradient-to-r from-primary to-blue-600 hover:shadow-lg hover:shadow-primary/25 px-8 py-4 rounded-twelve font-bold text-lg transition-all">
-            {t('hero.cta')}
-            </Link>
+            <button
+              onClick={handlePrimaryCta}
+              disabled={redirecting}
+              className="bg-gradient-to-r from-primary to-blue-600 hover:shadow-lg hover:shadow-primary/25 px-8 py-4 rounded-twelve font-bold text-lg transition-all disabled:opacity-70 disabled:cursor-wait"
+              type="button"
+            >
+              {redirecting ? 'Carregando...' : t('hero.cta')}
+            </button>
             <button className="glass-effect hover:bg-white/10 px-8 py-4 rounded-twelve font-bold text-lg transition-all">
                {t('hero.learnMore')}
             </button>
