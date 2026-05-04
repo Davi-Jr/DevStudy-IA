@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
 
 // ==================== HEADER COMPONENT ====================
 function Header() {
   const { t, setLanguage, language } = useLanguage();
-  
+
   return (
     <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
       <div className="flex items-center justify-between px-6 py-6 md:px-20 lg:px-40">
@@ -58,9 +58,9 @@ function FeatureCard({ icon, title }: FeatureCardProps) {
 // ==================== GOOGLE BUTTON COMPONENT ====================
 function GoogleLoginButton({ onClick }: { onClick: () => void }) {
   const { t } = useLanguage();
-  
+
   return (
-    <button 
+    <button
       onClick={onClick}
       className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-blue-600 py-4 px-6 rounded-twelve font-bold shadow-sm cursor-pointer transition-transform duration-200 hover:shadow-lg hover:shadow-primary/25 active:scale-[0.97]"
     >
@@ -75,6 +75,37 @@ function GoogleLoginButton({ onClick }: { onClick: () => void }) {
   );
 }
 
+function normalizeUrl(url?: string) {
+  return url?.trim().replace(/\/+$/, '');
+}
+
+function resolveAuthCallbackUrl() {
+  const currentOrigin = normalizeUrl(window.location.origin);
+  const devUrl = normalizeUrl(import.meta.env.VITE_DEV_URL);
+  const siteUrl = normalizeUrl(import.meta.env.VITE_SITE_URL);
+  const hostname = window.location.hostname;
+
+  const isLocalhost =
+    import.meta.env.DEV ||
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === '::1' ||
+    hostname === '0.0.0.0';
+
+  // Em ambiente local, sempre usamos a origem atual para evitar cair no deploy.
+  const baseUrl = isLocalhost ? currentOrigin || devUrl : currentOrigin || siteUrl;
+
+  if (!baseUrl) {
+    throw new Error(
+      isLocalhost
+        ? 'Erro de configuracao: defina VITE_DEV_URL no .env'
+        : 'Erro de configuracao: defina VITE_SITE_URL no .env'
+    );
+  }
+
+  return `${baseUrl}/auth/callback`;
+}
+
 // ==================== LOGIN CARD COMPONENT ====================
 function LoginCard() {
   const { t } = useLanguage();
@@ -86,11 +117,12 @@ function LoginCard() {
     try {
       setLoading(true);
       setError(null);
-      
+
+      const redirectTo = resolveAuthCallbackUrl();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo,
         },
       });
 
@@ -98,7 +130,7 @@ function LoginCard() {
         setError(error.message);
       }
     } catch (err) {
-      setError(t('login.errorGoogle'));
+      setError(err instanceof Error ? err.message : t('login.errorGoogle'));
     } finally {
       setLoading(false);
     }
@@ -134,7 +166,7 @@ function LoginCard() {
 // ==================== FOOTER COMPONENT ====================
 function Footer() {
   const { t } = useLanguage();
-  
+
   return (
     <footer className="w-full px-6 py-8 md:px-20 lg:px-40 border-t border-white/5 mt-auto">
       <div className="flex flex-col md:flex-row justify-center items-center gap-4">
@@ -149,7 +181,7 @@ function Footer() {
 // ==================== MAIN LOGIN PAGE COMPONENT ====================
 export default function LoginPage() {
   const { t } = useLanguage();
-  
+
   const features = [
     { icon: 'route', title: t('feature.personalized') },
     { icon: 'psychology', title: t('feature.generative') },
@@ -159,31 +191,30 @@ export default function LoginPage() {
   return (
     <div className="bg-darkBg text-slate-100 font-sans min-h-screen">
       <Header />
-      
+
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-39">
-          <div className="max-w-md w-full space-y-10">
-            <div className="text-center space-y-10">
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-                {t('login.welcome')}{' '}
-                <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                  {t('hero.title.pt')}
-                </span>
-              </h1>
-              <p className="text-slate-400 text-lg">
-                {t('login.subtitle')}
-              </p>
-            </div>
-            
-            <LoginCard />
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
-              {features.map((feature, index) => (
-                <FeatureCard key={index} icon={feature.icon} title={feature.title} />
-              ))}
-            </div>
+        <div className="max-w-md w-full space-y-10">
+          <div className="text-center space-y-10">
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+              {t('login.welcome')}{' '}
+              <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
+                {t('hero.title.pt')}
+              </span>
+            </h1>
+            <p className="text-slate-400 text-lg">
+              {t('login.subtitle')}
+            </p>
           </div>
-        </main>
+
+          <LoginCard />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
+            {features.map((feature, index) => (
+              <FeatureCard key={index} icon={feature.icon} title={feature.title} />
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
-
