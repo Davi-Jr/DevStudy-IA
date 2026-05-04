@@ -146,6 +146,108 @@ interface TaskItemProps {
   content: string;
 }
 
+interface ParsedPhase {
+  title: string;
+  tasks: TaskItemProps[];
+}
+
+const PHASE_STYLES = [
+  { color: 'text-primary', bgColor: 'bg-primary/20' },
+  { color: 'text-purple-400', bgColor: 'bg-purple-500/20' },
+  { color: 'text-emerald-400', bgColor: 'bg-emerald-500/20' },
+];
+
+const getTaskLevelStyle = (content: string) => {
+  const normalized = content.toLowerCase();
+  if (normalized.includes('avanc') || normalized.includes('advanced')) {
+    return {
+      level: 'Avancado',
+      levelColor: 'text-blue-400',
+      levelBg: 'border-blue-500/30 bg-blue-500/10',
+    };
+  }
+  if (normalized.includes('intermed')) {
+    return {
+      level: 'Intermediario',
+      levelColor: 'text-purple-400',
+      levelBg: 'border-purple-500/30 bg-purple-500/10',
+    };
+  }
+  return {
+    level: 'Iniciante',
+    levelColor: 'text-emerald-400',
+    levelBg: 'border-emerald-500/30 bg-emerald-500/10',
+  };
+};
+
+const parseRoadmapToPhases = (roadmapText: string): ParsedPhase[] => {
+  const lines = roadmapText
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  const phases: ParsedPhase[] = [];
+  let currentPhase: ParsedPhase | null = null;
+
+  const phaseRegex = /^(#+\s*)?((fase|phase)\s*\d+|basico|intermediario|avancado)\b[:\-\s]*/i;
+  const taskRegex = /^([-*•]\s+|\d+[.)]\s+)/;
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/^`+|`+$/g, '').trim();
+    if (!line) continue;
+
+    if (phaseRegex.test(line)) {
+      if (currentPhase && currentPhase.tasks.length > 0) {
+        phases.push(currentPhase);
+      }
+      currentPhase = { title: line.replace(/^#+\s*/, ''), tasks: [] };
+      continue;
+    }
+
+    if (!currentPhase) {
+      currentPhase = { title: 'Fase 1: Fundamentos', tasks: [] };
+    }
+
+    if (taskRegex.test(line) || line.length > 15) {
+      const cleaned = line.replace(taskRegex, '').trim();
+      const levelInfo = getTaskLevelStyle(cleaned);
+      currentPhase.tasks.push({
+        color: PHASE_STYLES[(phases.length % PHASE_STYLES.length)].color,
+        bgColor: PHASE_STYLES[(phases.length % PHASE_STYLES.length)].bgColor,
+        level: levelInfo.level,
+        levelColor: levelInfo.levelColor,
+        levelBg: levelInfo.levelBg,
+        content: cleaned,
+      });
+    }
+  }
+
+  if (currentPhase && currentPhase.tasks.length > 0) {
+    phases.push(currentPhase);
+  }
+
+  if (phases.length === 0) {
+    const fallbackTasks = lines.slice(0, 6).map((line) => {
+      const cleaned = line.replace(taskRegex, '').trim();
+      const levelInfo = getTaskLevelStyle(cleaned);
+      return {
+        color: PHASE_STYLES[0].color,
+        bgColor: PHASE_STYLES[0].bgColor,
+        level: levelInfo.level,
+        levelColor: levelInfo.levelColor,
+        levelBg: levelInfo.levelBg,
+        content: cleaned,
+      };
+    });
+
+    return fallbackTasks.length > 0
+      ? [{ title: 'Fase 1: Roadmap Gerado', tasks: fallbackTasks }]
+      : [];
+  }
+
+  return phases;
+};
+
 function TaskItem({ color, bgColor, level, levelColor, levelBg, content }: TaskItemProps) {
   return (
     <div className="group flex items-center gap-4 p-3 rounded-xl bg-white/5 border border-transparent hover:border-white/10 transition-all">
@@ -208,20 +310,47 @@ function RecentCreation({ category, categoryColor, title, date, progress }: { ca
   );
 }
 
+<<<<<<< Updated upstream
+=======
+async function generateRoadmapWithSelectedProvider(payload: {
+  projectDescription: string;
+  technologies: string[];
+  repoUrl?: string;
+  model?: string;
+}) {
+  const { generateRoadmapOpenRouter } = await import('@/lib/openrouter');
+  return generateRoadmapOpenRouter(payload);
+}
+
+>>>>>>> Stashed changes
 // ==================== MAIN ROADMAP PAGE ====================
 export default function RoadmapPage() {
   const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
+<<<<<<< Updated upstream
+=======
+  const [loading, setLoading] = useState(false);
+  const [roadmap, setRoadmap] = useState<string>('');
+>>>>>>> Stashed changes
   const [roadmapGenerated, setRoadmapGenerated] = useState(false);
   const [technologies, setTechnologies] = useState<{ name: string; level: number; svg: React.ReactNode; color: string; bgColor: string }[]>([]);
   const [showAddTech, setShowAddTech] = useState(false);
   const [newTechName, setNewTechName] = useState('');
+  const [projectDescription, setProjectDescription] = useState('');
+  const [repoUrl, setRepoUrl] = useState('');
+  const [generatedTitle, setGeneratedTitle] = useState('');
+  const [generatedPhases, setGeneratedPhases] = useState<ParsedPhase[]>([]);
+  const [freeModels, setFreeModels] = useState<{ id: string; name: string; contextLength: number }[]>([]);
+  const [selectedModel, setSelectedModel] = useState('');
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [modelsError, setModelsError] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
+<<<<<<< Updated upstream
   const handleGenerateRoadmap = () => {
     setRoadmapGenerated(true);
     // Scroll para a seção do roadmap gerado
@@ -229,6 +358,106 @@ export default function RoadmapPage() {
       document.getElementById('generated-roadmap')?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
   };
+=======
+  useEffect(() => {
+    const loadFreeModels = async () => {
+      setModelsLoading(true);
+      setModelsError(null);
+      try {
+        const today = new Date().toISOString().slice(0, 10);
+        const cacheKey = 'openrouter_free_models_daily_cache';
+        const cachedRaw = localStorage.getItem(cacheKey);
+        const cached = cachedRaw ? JSON.parse(cachedRaw) : null;
+
+        let models: { id: string; name: string; contextLength: number }[] = [];
+
+        if (cached?.date === today && Array.isArray(cached?.models) && cached.models.length > 0) {
+          models = cached.models;
+        } else {
+          const { listCurrentlyAvailableFreeOpenRouterModels } = await import('@/lib/openrouter');
+          models = await listCurrentlyAvailableFreeOpenRouterModels();
+          localStorage.setItem(cacheKey, JSON.stringify({ date: today, models }));
+        }
+
+        setFreeModels(models);
+        setSelectedModel((current) => current || models[0]?.id || '');
+      } catch (error) {
+        setModelsError(error instanceof Error ? error.message : 'Falha ao carregar modelos free da OpenRouter.');
+      } finally {
+        setModelsLoading(false);
+      }
+    };
+
+    loadFreeModels();
+  }, []);
+
+  const handleGenerateRoadmap = async () => {
+    if (technologies.length === 0) {
+      setRoadmapGenerated(true);
+      setRoadmap('Adicione pelo menos uma tecnologia antes de gerar o roadmap.');
+      return;
+    }
+
+    if (!projectDescription.trim()) {
+      setRoadmapGenerated(true);
+      setRoadmap('Preencha a descricao do projeto para gerar o roadmap.');
+      return;
+    }
+
+    if (!selectedModel) {
+      setRoadmapGenerated(true);
+      setRoadmap('Selecione um modelo free da OpenRouter antes de gerar.');
+      return;
+    }
+
+    setRoadmapGenerated(true);
+    setLoading(true);
+    try {
+      const cleanRepoUrl = repoUrl.trim();
+      let repoTechs: string[] = [];
+
+      if (cleanRepoUrl) {
+        const repoInfo = await analyzeRepository(cleanRepoUrl);
+        repoTechs = repoInfo.technologies || [];
+      }
+
+      const selectedTechsWithLevel = technologies.map((tech) => {
+        const levelLabel = levels[tech.level] || levels[0];
+        return `${tech.name} (${levelLabel})`;
+      });
+
+      const techs = repoTechs.length > 0 ? repoTechs : selectedTechsWithLevel;
+
+      const result = await generateRoadmapWithSelectedProvider({
+        projectDescription: projectDescription.trim(),
+        technologies: techs,
+        repoUrl: cleanRepoUrl || undefined,
+        model: selectedModel || undefined,
+      });
+
+      const firstNonEmptyLine =
+        result
+          .split('\n')
+          .map((line) => line.trim())
+          .find((line) => line.length > 0 && !line.startsWith('-') && !line.startsWith('*')) || '';
+      const safeTitle = firstNonEmptyLine.replace(/^#+\s*/, '').slice(0, 80);
+
+      setGeneratedTitle(safeTitle || `Roadmap de ${technologies.map((t) => t.name).join(', ')}`);
+      setRoadmap(result);
+      setGeneratedPhases(parseRoadmapToPhases(result));
+    } catch (e) {
+      console.error(e);
+      setRoadmap(e instanceof Error ? `Falha ao gerar roadmap: ${e.message}` : 'Falha ao gerar roadmap.');
+      setGeneratedPhases([]);
+    } finally {
+      setLoading(false);
+      // scroll para a seção gerada
+      setTimeout(() => {
+        document.getElementById('generated-roadmap')?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }
+>>>>>>> Stashed changes
 
   const handleAddTechnology = () => {
     if (newTechName.trim()) {
@@ -257,19 +486,17 @@ export default function RoadmapPage() {
 
   const levels = [t('roadmap.levels.beginner'), t('roadmap.levels.intermediate'), t('roadmap.levels.advanced')];
 
-  const phase1Tasks: TaskItemProps[] = [
-    { color: 'text-primary', bgColor: 'bg-primary/20', level: 'Avançado', levelColor: 'text-blue-400', levelBg: 'border-blue-500/30 bg-blue-500/10', content: 'Master React Server Components and Suspense patterns' },
-    { color: 'text-primary', bgColor: 'bg-primary/20', level: 'Intermediário', levelColor: 'text-purple-400', levelBg: 'border-purple-500/30 bg-purple-500/10', content: 'Implement complex state management with TanStack Query (React Query)' },
-  ];
-
-  const phase2Tasks: TaskItemProps[] = [
-    { color: 'text-purple-400', bgColor: 'bg-purple-500/20', level: 'Intermediário', levelColor: 'text-purple-400', levelBg: 'border-purple-500/30 bg-purple-500/10', content: 'Deep dive into Prisma ORM with PostgreSQL relationship indexing' },
-    { color: 'text-purple-400', bgColor: 'bg-purple-500/20', level: 'Avançado', levelColor: 'text-blue-400', levelBg: 'border-blue-500/30 bg-blue-500/10', content: 'Build high-performance tRPC endpoints for end-to-end type safety' },
-    { color: 'text-purple-400', bgColor: 'bg-purple-500/20', level: 'Iniciante', levelColor: 'text-emerald-400', levelBg: 'border-emerald-500/30 bg-emerald-500/10', content: 'Setup basic Express routing with CORS' },
-  ];
-
   return (
     <div className="flex h-screen overflow-hidden bg-[#0f172a]">
+      {loading && (
+        <div className="fixed inset-0 z-[100] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-14 h-14 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-white font-bold text-lg">Gerando roadmap com IA...</p>
+            <p className="text-slate-300 text-sm mt-1">Isso pode levar alguns segundos</p>
+          </div>
+        </div>
+      )}
       <Sidebar />
       <main className="flex-1 flex flex-col h-screen overflow-y-auto pt-16">
         <TopBar />
@@ -408,10 +635,30 @@ export default function RoadmapPage() {
                   <div>
                     <label className="block text-sm font-bold text-slate-300 mb-2">{t('roadmap.projectDescription')}</label>
                     <textarea
+                      value={projectDescription}
+                      onChange={(e) => setProjectDescription(e.target.value)}
                       className="w-full bg-black/20 border border-white/10 rounded-2xl focus:ring-primary focus:border-primary placeholder:text-slate-600 transition-all text-white p-4"
                       placeholder={t('roadmap.projectPlaceholder')}
                       rows={4}
                     ></textarea>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-slate-300 mb-2">Modelo OpenRouter (free)</label>
+                    <select
+                      value={selectedModel}
+                      onChange={(e) => setSelectedModel(e.target.value)}
+                      disabled={modelsLoading || freeModels.length === 0}
+                      className="w-full bg-black/20 border border-white/10 rounded-xl px-3 py-3 text-sm text-white outline-none focus:border-primary disabled:opacity-60"
+                    >
+                      {modelsLoading && <option value="">Carregando modelos free...</option>}
+                      {!modelsLoading && freeModels.length === 0 && <option value="">Nenhum modelo free disponivel</option>}
+                      {!modelsLoading && freeModels.map((model) => (
+                        <option key={model.id} value={model.id}>
+                          {model.name} ({model.id}) - {model.contextLength || 0} ctx
+                        </option>
+                      ))}
+                    </select>
+                    {modelsError && <p className="text-[11px] text-red-400 mt-2">{modelsError}</p>}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
@@ -421,6 +668,8 @@ export default function RoadmapPage() {
                           <span className="material-symbols-outlined text-lg">link</span>
                         </div>
                         <input
+                          value={repoUrl}
+                          onChange={(e) => setRepoUrl(e.target.value)}
                           className="w-full bg-black/20 border border-white/10 pl-10 rounded-xl focus:ring-primary focus:border-primary placeholder:text-slate-600 text-white p-3"
                           placeholder={t('roadmap.githubPlaceholder')}
                           type="text"
@@ -438,7 +687,7 @@ export default function RoadmapPage() {
                         </div>
                         <div>
                           <p className="text-[11px] font-bold text-primary">{t('roadmap.aiActive')}</p>
-                          <p className="text-[10px] text-slate-400">{t('roadmap.aiVersion')}</p>
+                          <p className="text-[10px] text-slate-400">{selectedModel || t('roadmap.aiVersion')}</p>
                         </div>
                       </div>
                     </div>
@@ -450,45 +699,54 @@ export default function RoadmapPage() {
               <div className="flex flex-col items-center gap-6 pt-4">
                 <button
                   onClick={handleGenerateRoadmap}
-                  className="w-full max-w-md px-10 py-5 bg-gradient-to-r from-primary to-purple-600 hover:shadow-[0_0_40px_rgba(6,87,249,0.4)] text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1"
+                  disabled={loading}
+                  className="w-full max-w-md px-10 py-5 bg-gradient-to-r from-primary to-purple-600 hover:shadow-[0_0_40px_rgba(6,87,249,0.4)] text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-wait"
                 >
                   <span className="material-symbols-outlined">rocket_launch</span>
-                  {t('roadmap.generateButton')}
+                  {loading ? 'Gerando roadmap...' : t('roadmap.generateButton')}
                 </button>
               </div>
 
               {/* Generated Result Section - Oculto inicialmente */}
               {roadmapGenerated && (
                 <section id="generated-roadmap" className="mt-12 space-y-6">
+                <div className="glass-card rounded-2xl p-6 border border-primary/20 bg-primary/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="material-symbols-outlined text-primary">auto_awesome</span>
+                    <h4 className="text-lg font-bold text-white">Roadmap gerado pela IA</h4>
+                  </div>
+                  <pre className="whitespace-pre-wrap text-sm text-slate-200 leading-6">{roadmap}</pre>
+                </div>
                 <div className="mb-4">
                   <label className="block text-[10px] font-bold text-primary mb-1 uppercase tracking-widest">{t('roadmap.roadmapName')}</label>
                   <div className="flex items-center gap-3 group">
                     <span className="material-symbols-outlined text-primary">edit_note</span>
                     <h3 className="text-3xl font-extrabold tracking-tight outline-none focus:bg-white/5 px-2 py-1 rounded-lg transition-all" contentEditable={true}>
-                      Meu Roadmap de React Fullstack
+                      {generatedTitle || 'Meu Roadmap'}
                     </h3>
                   </div>
                 </div>
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
                     <span className="material-symbols-outlined text-primary">fact_check</span>
-                    <h3 className="text-2xl font-bold tracking-tight" contentEditable={true}>Fullstack React Mastery</h3>
+                    <h3 className="text-2xl font-bold tracking-tight" contentEditable={true}>{generatedTitle || 'Roadmap Personalizado'}</h3>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="px-3 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30 uppercase tracking-widest">{t('roadmap.preview')}</span>
                   </div>
                 </div>
                 <div className="glass-card rounded-3xl overflow-hidden">
-                  <PhaseModule
-                    title="Phase 1: Advanced Frontend & State"
-                    color="text-primary"
-                    tasks={phase1Tasks}
-                  />
-                  <PhaseModule
-                    title="Phase 2: Scalable Backend Architecture"
-                    color="text-purple-400"
-                    tasks={phase2Tasks}
-                  />
+                  {generatedPhases.map((phase, index) => {
+                    const phaseColor = PHASE_STYLES[index % PHASE_STYLES.length].color;
+                    return (
+                      <PhaseModule
+                        key={`${phase.title}-${index}`}
+                        title={phase.title}
+                        color={phaseColor}
+                        tasks={phase.tasks}
+                      />
+                    );
+                  })}
                   <div className="p-6 bg-white/5">
                     <button className="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors mx-auto">
                       <span className="material-symbols-outlined">add_circle</span>
@@ -516,3 +774,8 @@ export default function RoadmapPage() {
     </div>
   );
 }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
