@@ -38,7 +38,7 @@ export const generateRoadmapFree = async (payload: {
     .replace('{repoUrl}', payload.repoUrl ?? 'Nao disponivel');
 
   const resp = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${publicApiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${publicApiKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -49,6 +49,11 @@ export const generateRoadmapFree = async (payload: {
   );
 
   const data = await resp.json();
+  if (!resp.ok) {
+    const apiMessage = data?.error?.message || `HTTP ${resp.status}`;
+    throw new Error(`Gemini API error: ${apiMessage}`);
+  }
+
   return (
     data.candidates?.[0]?.content?.parts?.[0]?.text ??
     'Erro ao gerar roadmap (modo gratuito)'

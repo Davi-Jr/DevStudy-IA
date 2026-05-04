@@ -27,7 +27,7 @@ const getGeminiApiKey = () => {
 
 export const initializeGemini = () => {
   const genAI = new GoogleGenerativeAI(getGeminiApiKey());
-  return genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+  return genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 };
 
 export const generateRoadmap = async (payload: {
