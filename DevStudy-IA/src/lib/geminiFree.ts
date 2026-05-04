@@ -1,27 +1,28 @@
 // src/lib/geminiFree.ts
-// Esta implementação usa a *chave pública* do Gemini (modo gratuito).
-// A chave não fica “hard‑coded” no código fonte – ela é lida do .env por
-// meio da variável VITE_GEMINI_API_KEY_FREE, garantindo que não seja
-// visível em commits ou no bundle semi‑desobfuscado.
+// Esta implementacao usa a chave publica do Gemini via VITE_GEMINI_API_KEY.
 
-const PUBLIC_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const getPublicApiKey = () => {
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
 
-if (!PUBLIC_API_KEY) {
-  throw new Error(
-    'PUBLIC_API_KEY não encontrada. Defina VITE_GEMINI_API_KEY no seu .env'
-  );
-}
+  if (!apiKey) {
+    throw new Error(
+      'VITE_GEMINI_API_KEY nao encontrada. Defina essa variavel em DevStudy-IA/.env e reinicie o servidor Vite.'
+    );
+  }
 
+  return apiKey;
+};
+// MAIS APERFEIÇOAMENTO EM BREVE
 const BASE_PROMPT = `
-Você é um especialista em criação de roadmaps técnicos.
-Recebe as seguintes informações:
-- Descrição do projeto: {projectDescription}
+Voce e um especialista em criacao de roadmaps tecnicos.
+Recebe as seguintes informacoes:
+- Descricao do projeto: {projectDescription}
 - Tecnologias: {technologies}
-- URL do repositório: {repoUrl}
-Crie um roadmap estruturado em fases (básico, intermediário, avançado) com:
-1. Título da fase
-2. 3‑5 tarefas específicas
-3. Nível de dificuldade
+- URL do repositorio: {repoUrl}
+Crie um roadmap estruturado em fases (basico, intermediario, avancado) com:
+1. Titulo da fase
+2. 3-5 tarefas especificas
+3. Nivel de dificuldade
 4. Tempo estimado por tarefa
 `;
 
@@ -30,13 +31,14 @@ export const generateRoadmapFree = async (payload: {
   technologies: string[];
   repoUrl?: string;
 }) => {
+  const publicApiKey = getPublicApiKey();
   const prompt = BASE_PROMPT
     .replace('{projectDescription}', payload.projectDescription)
     .replace('{technologies}', payload.technologies.join(', '))
-    .replace('{repoUrl}', payload.repoUrl ?? 'Não disponível');
+    .replace('{repoUrl}', payload.repoUrl ?? 'Nao disponivel');
 
   const resp = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${PUBLIC_API_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${publicApiKey}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

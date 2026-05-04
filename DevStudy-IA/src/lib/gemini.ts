@@ -1,22 +1,32 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const BASE_PROMPT = `
-Você é um especialista em criação de roadmaps técnicos.
-Recebe as seguintes informações:
-- Descrição do projeto: {projectDescription}
+Voce e um especialista em criacao de roadmaps tecnicos.
+Recebe as seguintes informacoes:
+- Descricao do projeto: {projectDescription}
 - Tecnologias: {technologies}
-- URL do repositório: {repoUrl}
-Crie um roadmap estruturado em fases (básico, intermediário, avançado) com:
-1. Título da fase
-2. 3‑5 tarefas específicas
-3. Nível de dificuldade
+- URL do repositorio: {repoUrl}
+Crie um roadmap estruturado em fases (basico, intermediario, avancado) com:
+1. Titulo da fase
+2. 3-5 tarefas especificas
+3. Nivel de dificuldade
 4. Tempo estimado por tarefa
 `;
 
+const getGeminiApiKey = () => {
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
+
+  if (!apiKey) {
+    throw new Error(
+      'VITE_GEMINI_API_KEY nao encontrada. Defina essa variavel em DevStudy-IA/.env e reinicie o servidor Vite.'
+    );
+  }
+
+  return apiKey;
+};
+
 export const initializeGemini = () => {
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-  if (!apiKey) throw new Error('Gemini API key não configurada');
-  const genAI = new GoogleGenerativeAI(apiKey);
+  const genAI = new GoogleGenerativeAI(getGeminiApiKey());
   return genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 };
 
@@ -30,7 +40,7 @@ export const generateRoadmap = async (payload: {
   const prompt = BASE_PROMPT
     .replace('{projectDescription}', payload.projectDescription)
     .replace('{technologies}', payload.technologies.join(', '))
-    .replace('{repoUrl}', payload.repoUrl ?? 'Não disponível');
+    .replace('{repoUrl}', payload.repoUrl ?? 'Nao disponivel');
 
   const result = await model.generateContent(prompt);
   const text = result.response?.candidates?.[0]?.content?.parts?.[0]?.text;
