@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import { generateRoadmap } from '@/lib/gemini';
-import { generateRoadmapFree } from '@/lib/geminiFree';
 import { analyzeRepository } from '@/lib/gitingest';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
@@ -210,6 +208,23 @@ function RecentCreation({ category, categoryColor, title, date, progress }: { ca
   );
 }
 
+async function generateRoadmapWithSelectedProvider(
+  payload: {
+    projectDescription: string;
+    technologies: string[];
+    repoUrl?: string;
+  },
+  useFree: boolean
+) {
+  if (useFree) {
+    const { generateRoadmapFree } = await import('@/lib/geminiFree');
+    return generateRoadmapFree(payload);
+  }
+
+  const { generateRoadmap } = await import('@/lib/gemini');
+  return generateRoadmap(payload);
+}
+
 // ==================== MAIN ROADMAP PAGE ====================
 export default function RoadmapPage() {
   const { t } = useLanguage();
@@ -235,12 +250,11 @@ export default function RoadmapPage() {
       const repoInfo = await analyzeRepository('https://github.com/SEU_USUARIO/SEU_REPO');
       const techs = repoInfo.technologies?.length ? repoInfo.technologies : technologies.map(t => t.name);
 
-      const fn = useFree ? generateRoadmapFree : generateRoadmap;
-      const result = await fn({
+      const result = await generateRoadmapWithSelectedProvider({
         projectDescription: 'Descrição do projeto aqui', // você pode trocar por um textarea futuro
         technologies: techs,
         repoUrl: 'https://github.com/SEU_USUARIO/SEU_REPO'
-      });
+      }, useFree);
       setRoadmap(result);
     } catch (e) {
       console.error(e);
