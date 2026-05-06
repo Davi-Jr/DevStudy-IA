@@ -292,26 +292,6 @@ function PhaseModule({ title, color, tasks }: { title: string; color: string; ta
   );
 }
 
-// ==================== RECENT CREATION CARD ====================
-function RecentCreation({ category, categoryColor, title, date, progress }: { category: string; categoryColor: string; title: string; date: string; progress: number }) {
-  return (
-    <div className="glass-card rounded-2xl p-4 hover:bg-white/5 transition-colors cursor-pointer group">
-      <div className="flex items-center justify-between mb-2">
-        <span className={`text-[10px] font-bold py-1 px-2 rounded ${categoryColor}`}>{category}</span>
-        <span className="text-[10px] text-slate-500">{date}</span>
-      </div>
-      <h5 className="font-bold text-sm group-hover:text-primary transition-colors">{title}</h5>
-      <div className="flex gap-1 mt-3">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= progress ? 'bg-primary' : 'bg-primary/20'}`}></div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-<<<<<<< Updated upstream
-=======
 async function generateRoadmapWithSelectedProvider(payload: {
   projectDescription: string;
   technologies: string[];
@@ -322,16 +302,18 @@ async function generateRoadmapWithSelectedProvider(payload: {
   return generateRoadmapOpenRouter(payload);
 }
 
->>>>>>> Stashed changes
+async function analyzeRepository(_repoUrl: string): Promise<{ technologies: string[] }> {
+  return { technologies: [] };
+}
+
+
 // ==================== MAIN ROADMAP PAGE ====================
 export default function RoadmapPage() {
   const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(true);
-<<<<<<< Updated upstream
-=======
+
   const [loading, setLoading] = useState(false);
   const [roadmap, setRoadmap] = useState<string>('');
->>>>>>> Stashed changes
   const [roadmapGenerated, setRoadmapGenerated] = useState(false);
   const [technologies, setTechnologies] = useState<{ name: string; level: number; svg: React.ReactNode; color: string; bgColor: string }[]>([]);
   const [showAddTech, setShowAddTech] = useState(false);
@@ -350,15 +332,7 @@ export default function RoadmapPage() {
     return () => clearTimeout(timer);
   }, []);
 
-<<<<<<< Updated upstream
-  const handleGenerateRoadmap = () => {
-    setRoadmapGenerated(true);
-    // Scroll para a seção do roadmap gerado
-    setTimeout(() => {
-      document.getElementById('generated-roadmap')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-=======
+
   useEffect(() => {
     const loadFreeModels = async () => {
       setModelsLoading(true);
@@ -438,8 +412,8 @@ export default function RoadmapPage() {
       const firstNonEmptyLine =
         result
           .split('\n')
-          .map((line) => line.trim())
-          .find((line) => line.length > 0 && !line.startsWith('-') && !line.startsWith('*')) || '';
+          .map((line: string) => line.trim())
+          .find((line: string) => line.length > 0 && !line.startsWith('-') && !line.startsWith('*')) || '';
       const safeTitle = firstNonEmptyLine.replace(/^#+\s*/, '').slice(0, 80);
 
       setGeneratedTitle(safeTitle || `Roadmap de ${technologies.map((t) => t.name).join(', ')}`);
@@ -457,7 +431,7 @@ export default function RoadmapPage() {
       }, 100);
     }
   }
->>>>>>> Stashed changes
+
 
   const handleAddTechnology = () => {
     if (newTechName.trim()) {
@@ -774,8 +748,3 @@ export default function RoadmapPage() {
     </div>
   );
 }
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
