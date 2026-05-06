@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
 
 // ==================== HEADER COMPONENT ====================
@@ -109,13 +109,10 @@ function resolveAuthCallbackUrl() {
 // ==================== LOGIN CARD COMPONENT ====================
 function LoginCard() {
   const { t } = useLanguage();
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   const handleGoogleLogin = async () => {
     try {
-      setLoading(true);
       setError(null);
 
       const redirectTo = resolveAuthCallbackUrl();
@@ -130,9 +127,7 @@ function LoginCard() {
         setError(error.message);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('login.errorGoogle'));
-    } finally {
-      setLoading(false);
+      setError(t('login.errorGoogle'));
     }
   };
 
@@ -160,21 +155,6 @@ function LoginCard() {
         <GoogleLoginButton onClick={handleGoogleLogin} />
       </div>
     </div>
-  );
-}
-
-// ==================== FOOTER COMPONENT ====================
-function Footer() {
-  const { t } = useLanguage();
-
-  return (
-    <footer className="w-full px-6 py-8 md:px-20 lg:px-40 border-t border-white/5 mt-auto">
-      <div className="flex flex-col md:flex-row justify-center items-center gap-4">
-        <p className="text-sm text-slate-500 dark:text-slate-400 text-center">
-          {t('footer.copyright')}
-        </p>
-      </div>
-    </footer>
   );
 }
 
