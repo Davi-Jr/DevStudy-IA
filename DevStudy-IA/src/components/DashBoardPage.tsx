@@ -92,7 +92,7 @@ function Sidebar() {
 
 // ==================== TOP BAR COMPONENT ====================
 function TopBar({ user }: { user: any }) {
-  const { t, language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   
   return (
     <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
@@ -367,7 +367,6 @@ export default function DashBoardPage() {
   const [user, setUser] = useState<any>(null);
   const [roadmaps, setRoadmaps] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { t } = useLanguage();
   const navigate = useNavigate();
 
@@ -382,7 +381,6 @@ export default function DashBoardPage() {
       
       if (userError) {
         console.error('Error getting user:', userError);
-        setError(userError.message);
         // If not logged in, redirect to login
         navigate('/login');
         return;
@@ -404,13 +402,11 @@ export default function DashBoardPage() {
 
       if (roadmapsError) {
         console.error('Error fetching roadmaps:', roadmapsError);
-        setError(roadmapsError.message);
       } else {
         setRoadmaps(roadmapsData || []);
       }
     } catch (err: any) {
       console.error('Unexpected error:', err);
-      setError(err.message);
     } finally {
       setLoading(false);
     }
