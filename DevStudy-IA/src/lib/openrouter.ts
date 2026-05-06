@@ -115,7 +115,7 @@ export const listFreeOpenRouterModels = async () => {
       name: String(model.name || model.id),
       contextLength: Number(model.context_length || 0),
     }))
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a: OpenRouterFreeModel, b: OpenRouterFreeModel) => a.name.localeCompare(b.name));
 
   if (freeModels.length === 0) {
     throw new Error('Nenhum modelo free encontrado na OpenRouter agora.');
