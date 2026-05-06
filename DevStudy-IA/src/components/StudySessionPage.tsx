@@ -3,6 +3,33 @@ import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
 
+function UserAvatar({ user, size = "size-10" }: { user: any; size?: string }) {
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
+  const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
+  const initials = fullName
+    .split(' ')
+    .map((n: string) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (avatarUrl) {
+    return (
+      <img
+        alt={fullName}
+        className={`${size} rounded-full object-cover bg-slate-200`}
+        src={avatarUrl}
+      />
+    );
+  }
+
+  return (
+    <div className={`${size} rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold`}>
+      <span className="text-sm">{initials}</span>
+    </div>
+  );
+}
+
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
   const [activeItem, setActiveItem] = useState('sessions');
