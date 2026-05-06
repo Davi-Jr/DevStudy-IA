@@ -197,7 +197,6 @@ export default function ProfilePage() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const [showDeleteRoadmapModal, setShowDeleteRoadmapModal] = useState(false);
-  const [pendingRoadmapTitle, setPendingRoadmapTitle] = useState<string | null>(null);
 
   useEffect(() => {
     async function getUser() {
@@ -228,13 +227,12 @@ export default function ProfilePage() {
   }
 
   function handleDeleteRoadmap(title: string) {
-    setPendingRoadmapTitle(title);
+    void title;
     setShowDeleteRoadmapModal(true);
   }
 
   function confirmDeleteRoadmap() {
     setShowDeleteRoadmapModal(false);
-    setPendingRoadmapTitle(null);
     // Aqui vai a lógica real de exclusão
   }
 
@@ -343,7 +341,7 @@ export default function ProfilePage() {
         message={t('profile.deleteRoadmapMsg')}
         confirmLabel={t('profile.confirmDelete')}
         onConfirm={confirmDeleteRoadmap}
-        onCancel={() => { setShowDeleteRoadmapModal(false); setPendingRoadmapTitle(null); }}
+        onCancel={() => { setShowDeleteRoadmapModal(false); }}
         variant="danger"
       />
 
