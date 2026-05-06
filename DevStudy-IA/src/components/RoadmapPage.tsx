@@ -302,10 +302,6 @@ async function generateRoadmapWithSelectedProvider(payload: {
   return generateRoadmapOpenRouter(payload);
 }
 
-async function analyzeRepository(_repoUrl: string): Promise<{ technologies: string[] }> {
-  return { technologies: [] };
-}
-
 
 // ==================== MAIN ROADMAP PAGE ====================
 export default function RoadmapPage() {
