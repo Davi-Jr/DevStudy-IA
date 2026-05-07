@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { analyzeRepository } from '@/lib/gitingest';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
@@ -21,13 +21,13 @@ function Sidebar() {
   return (
     <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
       <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-        <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
+          <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
           </svg>
         </div>
         <span className="font-bold text-xl tracking-tight text-white">
-          DevStudy <span className="text-primary">AI</span>
+          DevStudy <span className="brand-gradient-text">AI</span>
         </span>
       </Link>
       <nav className="flex-1 px-4 space-y-1 mt-4">
@@ -670,7 +670,7 @@ export default function RoadmapPage() {
                 <button
                   onClick={handleGenerateRoadmap}
                   disabled={loading}
-                  className="w-full max-w-md px-10 py-5 bg-gradient-to-r from-primary to-purple-600 hover:shadow-[0_0_40px_rgba(6,87,249,0.4)] text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-wait"
+                  className="w-full max-w-md px-10 py-5 brand-gradient-bg hover:shadow-[0_0_40px_rgba(6,87,249,0.4)] text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all transform hover:-translate-y-1 disabled:opacity-70 disabled:cursor-wait"
                 >
                   <span className="material-symbols-outlined">rocket_launch</span>
                   {loading ? 'Gerando roadmap...' : t('roadmap.generateButton')}
@@ -744,3 +744,5 @@ export default function RoadmapPage() {
     </div>
   );
 }
+
+

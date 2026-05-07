@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
@@ -45,13 +45,13 @@ function Sidebar() {
   return (
     <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
       <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-        <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
+          <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
           </svg>
         </div>
         <span className="font-bold text-xl tracking-tight text-white">
-          DevStudy <span className="text-primary">AI</span>
+          DevStudy <span className="brand-gradient-text">AI</span>
         </span>
       </Link>
       <nav className="flex-1 px-4 mt-4 space-y-1">
@@ -170,7 +170,7 @@ function RoadmapCard({
     'in-progress': {
       badge: 'In Progress',
       badgeClass: 'bg-green-500/10 text-green-400 border-green-500/20',
-      progressGradient: 'bg-gradient-to-r from-primary to-purple-500',
+      progressGradient: 'brand-gradient-bg',
       buttonText: 'Resume Study',
       buttonIcon: 'arrow_forward',
       buttonClass: 'bg-primary hover:bg-primary/90',
@@ -210,10 +210,10 @@ function RoadmapCard({
         <div className="w-full md:w-56 h-36 rounded-2xl shrink-0 overflow-hidden relative shadow-lg">
           <div className={`absolute inset-0 ${
             status === 'in-progress' 
-              ? 'bg-gradient-to-br from-blue-600/40 via-purple-600/40 to-transparent'
+              ? 'bg-gradient-to-br from-[#b2f1ff]/40 via-[#5555b7]/40 to-transparent'
               : status === 'planned'
-              ? 'bg-gradient-to-tr from-indigo-900/60 to-purple-900/60'
-              : 'bg-gradient-to-br from-cyan-900/60 to-blue-900/60'
+              ? 'bg-gradient-to-tr from-[#03102f]/70 to-[#5555b7]/60'
+              : 'bg-gradient-to-br from-[#0b1a45]/60 to-[#5555b7]/60'
           } z-10`}></div>
           <div className={`absolute inset-0 ${
             status === 'in-progress' 
@@ -403,3 +403,5 @@ export default function StudySessionPage() {
     </div>
   );
 }
+
+

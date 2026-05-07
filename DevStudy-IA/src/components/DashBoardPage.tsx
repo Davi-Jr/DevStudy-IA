@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
@@ -47,13 +47,13 @@ function Sidebar() {
   return (
     <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
       <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-        <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
+          <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
           </svg>
         </div>
         <span className="font-bold text-xl tracking-tight text-white">
-          DevStudy <span className="text-primary">AI</span>
+          DevStudy <span className="brand-gradient-text">AI</span>
         </span>
       </Link>
       <nav className="flex-1 px-4 space-y-1 mt-4">
@@ -74,9 +74,9 @@ function Sidebar() {
         ))}
       </nav>
       <div className="p-4 mt-auto">
-<Link to="/roadmaps" className="relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-3 px-4 cursor-pointer overflow-hidden font-bold bg-[length:200%_100%]">
+<Link to="/roadmaps" className="relative w-full flex items-center justify-center gap-2 brand-gradient-bg text-white rounded-xl py-3 px-4 cursor-pointer overflow-hidden font-bold bg-[length:200%_100%]">
             {/* Onda suave - apenas azul */}
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600 bg-[length:150%_100%] opacity-80 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
+            <span className="absolute inset-0 brand-gradient-bg bg-[length:150%_100%] opacity-80 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
             {/* Borda suave */}
             <span className="absolute inset-0 rounded-xl ring-1 ring-white/10"></span>
             {/* Conteúdo */}
@@ -188,10 +188,10 @@ function EmptyState() {
           <div className="mt-8 pt-6 border-t border-white/10">
             <button
               onClick={() => navigate('/roadmaps')}
-              className="relative w-full bg-gradient-to-r from-primary to-blue-500 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 cursor-pointer overflow-hidden shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow bg-[length:200%_100%]"
+              className="relative w-full brand-gradient-bg text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-3 cursor-pointer overflow-hidden shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow bg-[length:200%_100%]"
             >
               {/* Animacao de gradiente */}
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-primary bg-[length:150%_100%] opacity-60 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
+              <span className="absolute inset-0 brand-gradient-bg bg-[length:150%_100%] opacity-60 animate-[gradient-wave_4s_ease-in-out_infinite]"></span>
               {/* Borda suave */}
               <span className="absolute inset-0 rounded-xl ring-1 ring-white/10"></span>
               <span className="relative z-10 flex items-center gap-2">
@@ -445,7 +445,7 @@ export default function DashBoardPage() {
             <section className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                  {t('dashboard.welcome')} {user?.user_metadata?.full_name?.split(' ')[0] || 'User'}! 👋
+                  {t('dashboard.welcome')} {user?.user_metadata?.full_name?.split(' ')[0] || 'User'}! ðŸ‘‹
                 </h2>
                 <p className="text-slate-400 mt-1">{t('dashboard.welcomeMessage')}</p>
               </div>
@@ -507,3 +507,5 @@ export default function DashBoardPage() {
     </div>
   );
 }
+
+
