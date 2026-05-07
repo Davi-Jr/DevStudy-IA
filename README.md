@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/DevStudy%20AI(3).png" width="80%" alt="DevStudy AI">
+  <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/DevStudy%20AI(3).png" width="100%" alt="DevStudy AI">
 
   <h2> Seu Mentor Digital para Evoluir como Dev 🚀</h2>
 
