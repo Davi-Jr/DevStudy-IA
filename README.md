@@ -140,10 +140,9 @@ npm run dev
 
 <div align="center">
 
-| 📱 Login | 📊 Dashboard | 🗺️ Roadmaps |
-|:---:|:---:|:---:|
-| 🚧 Em breve | 🚧 Em breve | 🚧 Em breve |
-
+| 📱 Login | 📊 Dashboard | 🗺️ Roadmaps | 🏠 Home | ℹ️ Sobre | 📚 Sessão de Estudos |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/Login-IA.png" width="130%" alt="DevStudy AI"> | <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/Dashboard-IA.png" width="130%" alt="DevStudy AI"> | <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/Roadmap-IA.png" width="130%" alt="DevStudy AI"> | <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/Home-IA.png" width="130%" alt="DevStudy AI"> | <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/Sobre-IA.png" width="130%" alt="DevStudy AI"> | Em Breve |
 </div>
 
 ---
