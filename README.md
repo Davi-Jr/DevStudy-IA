@@ -1,7 +1,7 @@
 <div align="center">
 
   <!-- Logo Banner -->
-  <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/DevStudy%20AI.png" width="100%" alt="DevStudy AI">
+  <img src="https://raw.githubusercontent.com/Davi-Jr/DevStudy-IA/main/assets/jpeg/DevStudy%20AI(3).png" width="130%" alt="DevStudy AI">
 
   <!-- Subtítulo Estilizado -->
   <h2>
