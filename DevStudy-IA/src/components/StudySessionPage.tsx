@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
+
+type SessionStatus = 'In Progress' | 'Planned' | 'Paused';
 
 function UserAvatar({ user, size = 'size-10' }: { user: any; size?: string }) {
   const { t } = useLanguage();
@@ -40,7 +40,6 @@ function Sidebar() {
   ];
 
   return (
-
     <aside className="w-64 border-r border-slate-800 flex flex-col bg-[#0b1120] h-full shrink-0">
       <div className="p-6 flex flex-col gap-6 h-full justify-between">
         <div className="flex flex-col gap-8">
@@ -54,6 +53,7 @@ function Sidebar() {
               DevStudy <span className="text-primary">AI</span>
             </span>
           </Link>
+
           <nav className="flex flex-col gap-1.5">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.href;
@@ -62,9 +62,7 @@ function Sidebar() {
                   key={item.id}
                   to={item.href}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors ${
-                    isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                    isActive ? 'bg-primary/10 text-primary' : 'text-slate-400 hover:bg-slate-800 hover:text-white'
                   }`}
                 >
                   <span className="material-symbols-outlined">{item.icon}</span>
@@ -76,21 +74,6 @@ function Sidebar() {
         </div>
 
         <div className="p-2 mt-auto">
-
-    <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
-      <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-        <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
-          <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-          </svg>
-        </div>
-        <span className="font-bold text-xl tracking-tight text-white">
-          DevStudy <span className="brand-gradient-text">AI</span>
-        </span>
-      </Link>
-      <nav className="flex-1 px-4 mt-4 space-y-1">
-        {menuItems.map((item) => (
-
           <Link
             to="/roadmaps"
             className="relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-3 px-4 cursor-pointer overflow-hidden font-bold bg-[length:200%_100%] transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30"
@@ -137,18 +120,32 @@ function TopBar() {
                 </svg>
               </button>
               <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>{t('header.language')}</button>
-                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>{t('header.languageEN')}</button>
+                <button
+                  onClick={() => setLanguage('PT')}
+                  className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}
+                >
+                  {t('header.language')}
+                </button>
+                <button
+                  onClick={() => setLanguage('EN')}
+                  className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}
+                >
+                  {t('header.languageEN')}
+                </button>
               </div>
             </div>
+
             <div className="relative">
               <input
                 className="w-64 bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 text-white placeholder:text-slate-500"
                 placeholder={t('dashboard.searchPlaceholder')}
                 type="text"
               />
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg leading-none">search</span>
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg leading-none">
+                search
+              </span>
             </div>
+
             <div className="relative group">
               <div className="flex items-center gap-3 cursor-pointer">
                 <div className="text-right">
@@ -160,7 +157,10 @@ function TopBar() {
                 </div>
               </div>
               <div className="absolute right-0 top-full mt-2 w-44 glass-effect rounded-twelve overflow-hidden border border-white/5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-xl">
-                <Link to="/profile" className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/20 transition-colors cursor-pointer text-slate-300 hover:text-white">
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/20 transition-colors cursor-pointer text-slate-300 hover:text-white"
+                >
                   <span className="material-symbols-outlined text-lg">settings</span>
                   {t('topbar.accountSettings')}
                 </Link>
@@ -183,107 +183,43 @@ function RoadmapCard({
   action,
   progressLabel,
 }: {
-  status: 'In Progress' | 'Planned' | 'Paused';
+  status: SessionStatus;
   statusLabel: string;
   title: string;
   description: string;
   progress: number;
-
   note: string;
   action: string;
   progressLabel: string;
 }) {
-  const statusClasses = {
+  const statusClasses: Record<SessionStatus, string> = {
     'In Progress': 'bg-green-500/10 text-green-400 border-green-500/20',
     Planned: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     Paused: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-
-  nextTask?: string;
-  timeInfo: string;
-  technologies?: string[];
-}
-
-function RoadmapCard({ 
-  status, 
-  title, 
-  description, 
-  progress, 
-  nextTask, 
-  timeInfo,
-  technologies = []
-}: RoadmapCardProps) {
-  const statusConfig = {
-    'in-progress': {
-      badge: 'In Progress',
-      badgeClass: 'bg-green-500/10 text-green-400 border-green-500/20',
-      progressGradient: 'brand-gradient-bg',
-      buttonText: 'Resume Study',
-      buttonIcon: 'arrow_forward',
-      buttonClass: 'bg-primary hover:bg-primary/90',
-    },
-    'planned': {
-      badge: 'Planned',
-      badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-      progressGradient: 'bg-slate-600',
-      buttonText: 'Start Session',
-      buttonIcon: 'play_arrow',
-      buttonClass: 'bg-slate-700 hover:bg-slate-600',
-    },
-    'paused': {
-      badge: 'Paused',
-      badgeClass: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-      progressGradient: 'bg-primary/40',
-      buttonText: 'Resume Session',
-      buttonIcon: 'replay',
-      buttonClass: 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20',
-    }
-  };
-
-  const config = statusConfig[status];
-
-  const getStatusIcon = () => {
-    switch(status) {
-      case 'in-progress': return 'play_circle';
-      case 'planned': return 'history_edu';
-      case 'paused': return 'pause_circle';
-    }
-
   };
 
   return (
     <div className="glass-effect rounded-3xl overflow-hidden hover:border-primary/50 transition-all group border border-white/5">
       <div className="p-6 flex flex-col md:flex-row gap-6">
-
-        <div className="w-full md:w-56 h-36 rounded-2xl shrink-0 overflow-hidden relative shadow-lg bg-gradient-to-br from-blue-900/60 to-purple-900/60">
+        <div className="w-full md:w-56 h-36 rounded-2xl shrink-0 overflow-hidden relative shadow-lg">
+          <div
+            className={`absolute inset-0 ${
+              status === 'In Progress'
+                ? 'bg-gradient-to-br from-[#b2f1ff]/40 via-[#5555b7]/40 to-transparent'
+                : status === 'Planned'
+                ? 'bg-gradient-to-tr from-[#03102f]/70 to-[#5555b7]/60'
+                : 'bg-gradient-to-br from-[#0b1a45]/60 to-[#5555b7]/60'
+            } z-10`}
+          ></div>
           <img
             className="w-full h-full object-cover grayscale brightness-75 group-hover:scale-105 transition-transform duration-500"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuD89WlZH9Ib30gRZSNs45rCimtVoTsRp4SkAJOkpJ1R3MvPizeP0kocukebyeAnR-fDUXAO7t2DTzM6pGbuC4l54zWtVvY-KUoK43IgS5RngdVEFfQOnoFc0970EBbyn0jl6cDZ7OQGUtszTg_UBheM1MAxwCieTUSmC0AKpjxQL9GhzAXcOWndpxywP4c1v67foj9PwSw_jnv2DZuuD3LS8k7zrDp48V7wG-o-BQ3-LMGxzC5kqKM27DTj7i6gSkTQqT27HTUSWf8"
-
-        {/* Image Section */}
-        <div className="w-full md:w-56 h-36 rounded-2xl shrink-0 overflow-hidden relative shadow-lg">
-          <div className={`absolute inset-0 ${
-            status === 'in-progress' 
-              ? 'bg-gradient-to-br from-[#b2f1ff]/40 via-[#5555b7]/40 to-transparent'
-              : status === 'planned'
-              ? 'bg-gradient-to-tr from-[#03102f]/70 to-[#5555b7]/60'
-              : 'bg-gradient-to-br from-[#0b1a45]/60 to-[#5555b7]/60'
-          } z-10`}></div>
-          <div className={`absolute inset-0 ${
-            status === 'in-progress' 
-              ? "bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 z-10"
-              : ''
-          }`}></div>
-          <img 
-            className="w-full h-full object-cover grayscale brightness-75 group-hover:scale-105 transition-transform duration-500" 
-            data-alt="Tech pattern" 
             src={
-              status === 'in-progress'
+              status === 'In Progress'
                 ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuD89WlZH9Ib30gRZSNs45rCimtVoTsRp4SkAJOkpJ1R3MvPizeP0kocukebyeAnR-fDUXAO7t2DTzM6pGbuC4l54zWtVvY-KUoK43IgS5RngdVEFfQOnoFc0970EBbyn0jl6cDZ7OQGUtszTg_UBheM1MAxwCieTUSmC0AKpjxQL9GhzAXcOWndpxywP4c1v67foj9PwSw_jnv2DZuuD3LS8k7zrDp48V7wG-o-BQ3-LMGxzC5kqKM27DTj7i6gSkTQqT27HTUSWf8'
-                : status === 'planned'
+                : status === 'Planned'
                 ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZDIKO6W460_DxCpvloRhry_f5IcS1JrpWQkrsdCdfcJNSM8D6iSyK5YB3S2KiwtnNjyWUm2H10gxCyER_m-XeR2cxC7NkG6FWdrMdMu8BqFLOjNufXqoNQtznnbFJnSIu745K4obwaSZsgcgzOeaZQDqggbRBU78Yvt4IiXyKcPa7GWpGK5LbonIBxFoMEPHFttmD4wqWdqF4Mcj8dTVDBCK6NTUNQ4Ujll6_r39YlmUFkTddsdGqqw7b0c2_noOEuckvnrBr0fc'
                 : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvyeooO-6ydaV8NkYTHHpwOvoJ8vLZVyL75h3YIu6y3RtdW35l9vvfx50cZByrYaEV3in8gyzFbbDqMfAuPGUBbnMoENyXFUH8dPOJp4yOV-51GbymzieYrRQa_VQLr1mKoX1HGc3KnXTH-ZjNJgzURkguUY6QS8SnpVQHCMbpclirtVdFnyAXimpeTWEiI5uFuePU8wJY6RcGyqzWH4TNoRKhltZ-os-FqXYPjbufF2BW-juhWta94senTfhsq584S9SehFo1U5s'
             }
-
             alt={title}
           />
         </div>
@@ -294,13 +230,13 @@ function RoadmapCard({
               <span className={`px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-full border ${statusClasses[status]}`}>
                 {statusLabel}
               </span>
-              <span className="text-slate-500 text-xs font-medium">â€¢ {note}</span>
+              <span className="text-slate-500 text-xs font-medium">• {note}</span>
             </div>
             <h4 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">{title}</h4>
             <p className="text-slate-400 text-sm max-w-lg leading-relaxed">{description}</p>
           </div>
 
-            <div className="mt-6 flex flex-col gap-3">
+          <div className="mt-6 flex flex-col gap-3">
             <div className="flex justify-between text-xs font-bold uppercase tracking-wider">
               <span className="text-slate-400">{progressLabel}</span>
               <span className="text-primary">{progress}%</span>
@@ -333,11 +269,12 @@ export default function StudySessionPage() {
             <div className="flex justify-between items-end">
               <div className="space-y-1">
                 <h3 className="text-3xl font-black text-white tracking-tight">{t('sidebar.roadmaps')}</h3>
-                <p className="text-slate-400">
-                  {t('code.description')}
-                </p>
+                <p className="text-slate-400">{t('code.description')}</p>
               </div>
-              <Link to="/roadmaps" className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-0.5">
+              <Link
+                to="/roadmaps"
+                className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-0.5"
+              >
                 <span className="material-symbols-outlined">add</span>
                 {t('sidebar.newRoadmap')}
               </Link>
@@ -381,5 +318,3 @@ export default function StudySessionPage() {
     </div>
   );
 }
-
-
