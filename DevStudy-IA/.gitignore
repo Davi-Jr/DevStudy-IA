@@ -32,3 +32,6 @@ yarn.lock
 .yarn.lock
 .pnpm-lock.yaml
 *.tsbuildinfo
+*.package-lock.json
+*.yarn-lock
+*.package.json

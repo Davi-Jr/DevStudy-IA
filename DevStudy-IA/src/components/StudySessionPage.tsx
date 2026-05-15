@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 import { useLanguage } from '@/lib/i18n';
 
@@ -38,6 +40,7 @@ function Sidebar() {
   ];
 
   return (
+
     <aside className="w-64 border-r border-slate-800 flex flex-col bg-[#0b1120] h-full shrink-0">
       <div className="p-6 flex flex-col gap-6 h-full justify-between">
         <div className="flex flex-col gap-8">
@@ -73,6 +76,21 @@ function Sidebar() {
         </div>
 
         <div className="p-2 mt-auto">
+
+    <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
+      <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
+        <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
+          <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
+          </svg>
+        </div>
+        <span className="font-bold text-xl tracking-tight text-white">
+          DevStudy <span className="brand-gradient-text">AI</span>
+        </span>
+      </Link>
+      <nav className="flex-1 px-4 mt-4 space-y-1">
+        {menuItems.map((item) => (
+
           <Link
             to="/roadmaps"
             className="relative w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl py-3 px-4 cursor-pointer overflow-hidden font-bold bg-[length:200%_100%] transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/30"
@@ -170,6 +188,7 @@ function RoadmapCard({
   title: string;
   description: string;
   progress: number;
+
   note: string;
   action: string;
   progressLabel: string;
@@ -178,15 +197,93 @@ function RoadmapCard({
     'In Progress': 'bg-green-500/10 text-green-400 border-green-500/20',
     Planned: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
     Paused: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+
+  nextTask?: string;
+  timeInfo: string;
+  technologies?: string[];
+}
+
+function RoadmapCard({ 
+  status, 
+  title, 
+  description, 
+  progress, 
+  nextTask, 
+  timeInfo,
+  technologies = []
+}: RoadmapCardProps) {
+  const statusConfig = {
+    'in-progress': {
+      badge: 'In Progress',
+      badgeClass: 'bg-green-500/10 text-green-400 border-green-500/20',
+      progressGradient: 'brand-gradient-bg',
+      buttonText: 'Resume Study',
+      buttonIcon: 'arrow_forward',
+      buttonClass: 'bg-primary hover:bg-primary/90',
+    },
+    'planned': {
+      badge: 'Planned',
+      badgeClass: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+      progressGradient: 'bg-slate-600',
+      buttonText: 'Start Session',
+      buttonIcon: 'play_arrow',
+      buttonClass: 'bg-slate-700 hover:bg-slate-600',
+    },
+    'paused': {
+      badge: 'Paused',
+      badgeClass: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
+      progressGradient: 'bg-primary/40',
+      buttonText: 'Resume Session',
+      buttonIcon: 'replay',
+      buttonClass: 'bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20',
+    }
+  };
+
+  const config = statusConfig[status];
+
+  const getStatusIcon = () => {
+    switch(status) {
+      case 'in-progress': return 'play_circle';
+      case 'planned': return 'history_edu';
+      case 'paused': return 'pause_circle';
+    }
+
   };
 
   return (
     <div className="glass-effect rounded-3xl overflow-hidden hover:border-primary/50 transition-all group border border-white/5">
       <div className="p-6 flex flex-col md:flex-row gap-6">
+
         <div className="w-full md:w-56 h-36 rounded-2xl shrink-0 overflow-hidden relative shadow-lg bg-gradient-to-br from-blue-900/60 to-purple-900/60">
           <img
             className="w-full h-full object-cover grayscale brightness-75 group-hover:scale-105 transition-transform duration-500"
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuD89WlZH9Ib30gRZSNs45rCimtVoTsRp4SkAJOkpJ1R3MvPizeP0kocukebyeAnR-fDUXAO7t2DTzM6pGbuC4l54zWtVvY-KUoK43IgS5RngdVEFfQOnoFc0970EBbyn0jl6cDZ7OQGUtszTg_UBheM1MAxwCieTUSmC0AKpjxQL9GhzAXcOWndpxywP4c1v67foj9PwSw_jnv2DZuuD3LS8k7zrDp48V7wG-o-BQ3-LMGxzC5kqKM27DTj7i6gSkTQqT27HTUSWf8"
+
+        {/* Image Section */}
+        <div className="w-full md:w-56 h-36 rounded-2xl shrink-0 overflow-hidden relative shadow-lg">
+          <div className={`absolute inset-0 ${
+            status === 'in-progress' 
+              ? 'bg-gradient-to-br from-[#b2f1ff]/40 via-[#5555b7]/40 to-transparent'
+              : status === 'planned'
+              ? 'bg-gradient-to-tr from-[#03102f]/70 to-[#5555b7]/60'
+              : 'bg-gradient-to-br from-[#0b1a45]/60 to-[#5555b7]/60'
+          } z-10`}></div>
+          <div className={`absolute inset-0 ${
+            status === 'in-progress' 
+              ? "bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 z-10"
+              : ''
+          }`}></div>
+          <img 
+            className="w-full h-full object-cover grayscale brightness-75 group-hover:scale-105 transition-transform duration-500" 
+            data-alt="Tech pattern" 
+            src={
+              status === 'in-progress'
+                ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuD89WlZH9Ib30gRZSNs45rCimtVoTsRp4SkAJOkpJ1R3MvPizeP0kocukebyeAnR-fDUXAO7t2DTzM6pGbuC4l54zWtVvY-KUoK43IgS5RngdVEFfQOnoFc0970EBbyn0jl6cDZ7OQGUtszTg_UBheM1MAxwCieTUSmC0AKpjxQL9GhzAXcOWndpxywP4c1v67foj9PwSw_jnv2DZuuD3LS8k7zrDp48V7wG-o-BQ3-LMGxzC5kqKM27DTj7i6gSkTQqT27HTUSWf8'
+                : status === 'planned'
+                ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZDIKO6W460_DxCpvloRhry_f5IcS1JrpWQkrsdCdfcJNSM8D6iSyK5YB3S2KiwtnNjyWUm2H10gxCyER_m-XeR2cxC7NkG6FWdrMdMu8BqFLOjNufXqoNQtznnbFJnSIu745K4obwaSZsgcgzOeaZQDqggbRBU78Yvt4IiXyKcPa7GWpGK5LbonIBxFoMEPHFttmD4wqWdqF4Mcj8dTVDBCK6NTUNQ4Ujll6_r39YlmUFkTddsdGqqw7b0c2_noOEuckvnrBr0fc'
+                : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvyeooO-6ydaV8NkYTHHpwOvoJ8vLZVyL75h3YIu6y3RtdW35l9vvfx50cZByrYaEV3in8gyzFbbDqMfAuPGUBbnMoENyXFUH8dPOJp4yOV-51GbymzieYrRQa_VQLr1mKoX1HGc3KnXTH-ZjNJgzURkguUY6QS8SnpVQHCMbpclirtVdFnyAXimpeTWEiI5uFuePU8wJY6RcGyqzWH4TNoRKhltZ-os-FqXYPjbufF2BW-juhWta94senTfhsq584S9SehFo1U5s'
+            }
+
             alt={title}
           />
         </div>
@@ -284,3 +381,5 @@ export default function StudySessionPage() {
     </div>
   );
 }
+
+

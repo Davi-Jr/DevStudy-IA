@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+﻿import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
 import { supabase } from '@/lib/supabase';
 import "../index.css";
@@ -53,12 +53,12 @@ function Navigation() {
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-            <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
+              <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
               </svg>
             </div>
-            <span className="font-bold text-xl tracking-tight">{t('header.devStudy')} <span className="text-primary">AI</span></span>
+            <span className="font-bold text-xl tracking-tight">{t('header.devStudy')} <span className="brand-gradient-text">AI</span></span>
           </Link>
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
@@ -85,7 +85,7 @@ function Navigation() {
               <div className="relative group">
                 <Link
                   to="/dashboard"
-                  className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
+                  className="flex items-center justify-center w-10 h-10 rounded-full brand-gradient-bg shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105"
                 >
                   <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
                     <UserAvatar user={user} size="w-full h-full" />
@@ -117,6 +117,22 @@ function Navigation() {
 // Hero Section Component
 function HeroSection() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+  const [redirecting, setRedirecting] = useState(false);
+
+  const handlePrimaryCta = async () => {
+    if (redirecting) return;
+
+    try {
+      setRedirecting(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      navigate(user ? '/dashboard' : '/login');
+    } catch {
+      navigate('/login');
+    } finally {
+      setRedirecting(false);
+    }
+  };
   
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
@@ -128,18 +144,23 @@ function HeroSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 items-center">
         <div className="text-center lg:text-left">
           <h1 className="text-5xl lg:text-7xl font-extrabold leading-tight mb-6">
-            <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">{t('hero.title.pt')}</span> {t('hero.title.end')}
+            <span className="brand-gradient-text bg-clip-text text-transparent">{t('hero.title.pt')}</span> {t('hero.title.end')}
           </h1>
           <p className="text-lg lg:text-xl text-slate-400 mb-10 max-w-xl mx-auto lg:mx-0">
             {t('hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <Link to="/dashboard" className="bg-gradient-to-r from-primary to-blue-600 hover:shadow-lg hover:shadow-primary/25 px-8 py-4 rounded-twelve font-bold text-lg transition-all">
-            {t('hero.cta')}
-            </Link>
-            <button className="glass-effect hover:bg-white/10 px-8 py-4 rounded-twelve font-bold text-lg transition-all">
-               {t('hero.learnMore')}
+            <button
+              onClick={handlePrimaryCta}
+              disabled={redirecting}
+              className="brand-gradient-bg cursor-pointer hover:shadow-lg hover:shadow-primary/25 px-8 py-4 rounded-twelve font-bold text-lg transition-all disabled:opacity-70 disabled:cursor-wait"
+              type="button"
+            >
+              {redirecting ? 'Carregando...' : t('hero.cta')}
             </button>
+            <Link to="/about" className="glass-effect hover:bg-white/10 cursor-pointer px-8 py-4 rounded-twelve font-bold text-lg transition-all inline-flex items-center justify-center">
+               {t('hero.learnMore')}
+            </Link>
           </div>
         </div>
         {/* Abstract Hero Illustration - Terminal Window */}
@@ -446,7 +467,7 @@ function FinalCTASection() {
       <div className="max-w-4xl mx-auto px-4 text-center">
         <h2 className="text-4xl lg:text-5xl font-bold mb-6">{t('cta.title')}</h2>
         <p className="text-lg text-slate-400 mb-10">{t('cta.subtitle')}</p>
-        <button className="bg-primary hover:bg-blue-600 px-10 py-5 rounded-twelve text-xl font-bold shadow-2xl shadow-primary/20 transition-all hover:-translate-y-1">
+        <button className="bg-primary cursor-pointer px-10 py-5 rounded-twelve text-xl font-bold shadow-2xl shadow-primary/20 transition-all hover:-translate-y-1">
           {t('cta.button')}
         </button>
       </div>
@@ -464,8 +485,8 @@ function Footer() {
         <div className="grid md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-2">
             <div className="flex items-center gap-2 mb-6">
-              <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-6 h-6 brand-logo-box rounded flex items-center justify-center">
+                <svg className="w-4 h-4 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                 </svg>
               </div>
@@ -483,12 +504,24 @@ function Footer() {
           <div>
             <h5 className="font-bold mb-6">Social</h5>
             <div className="flex gap-4">
-              <a className="w-10 h-10 glass-effect rounded-full flex items-center justify-center hover:text-primary transition-all" href="#">
+              <a
+                className="w-10 h-10 glass-effect rounded-full flex items-center justify-center hover:text-primary transition-all"
+                href="https://www.linkedin.com/in/davi-brito-junior/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.493-1.1-1.1s.493-1.1 1.1-1.1 1.1.493 1.1 1.1-.493 1.1-1.1 1.1zm9 6.891h-2v-3.86c0-1.124-.816-1.282-1.03-1.282-.53 0-1.173.411-1.173 1.282v3.86h-2v-6h2v.835c.29-.444 1.144-.995 2.162-.995 1.485 0 2.041 1.048 2.041 2.307v3.853z"></path>
                 </svg>
               </a>
-              <a className="w-10 h-10 glass-effect rounded-full flex items-center justify-center hover:text-primary transition-all" href="#">
+              <a
+                className="w-10 h-10 glass-effect rounded-full flex items-center justify-center hover:text-primary transition-all"
+                href="https://github.com/Davi-Jr"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+              >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"></path>
                 </svg>
@@ -523,3 +556,5 @@ function App() {
 }
 
 export default App
+
+

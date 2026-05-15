@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/lib/i18n';
@@ -6,18 +6,18 @@ import { useLanguage } from '@/lib/i18n';
 // ==================== HEADER COMPONENT ====================
 function Header() {
   const { t, setLanguage, language } = useLanguage();
-  
+
   return (
     <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
       <div className="flex items-center justify-between px-6 py-6 md:px-20 lg:px-40">
         <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-          <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
+            <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
             </svg>
           </div>
           <span className="font-bold text-xl tracking-tight text-white">
-            {t('header.devStudy')} <span className="text-primary">AI</span>
+            {t('header.devStudy')} <span className="brand-gradient-text">AI</span>
           </span>
         </Link>
         <div className="flex items-center">
@@ -58,11 +58,11 @@ function FeatureCard({ icon, title }: FeatureCardProps) {
 // ==================== GOOGLE BUTTON COMPONENT ====================
 function GoogleLoginButton({ onClick }: { onClick: () => void }) {
   const { t } = useLanguage();
-  
+
   return (
-    <button 
+    <button
       onClick={onClick}
-      className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-primary to-blue-600 py-4 px-6 rounded-twelve font-bold shadow-sm cursor-pointer transition-transform duration-200 hover:shadow-lg hover:shadow-primary/25 active:scale-[0.97]"
+      className="w-full flex items-center justify-center gap-3 brand-gradient-bg py-4 px-6 rounded-twelve font-bold shadow-sm cursor-pointer transition-transform duration-200 hover:shadow-lg hover:shadow-primary/25 active:scale-[0.97]"
     >
       <svg className="w-5 h-5 bg-white rounded-full p-0.5" viewBox="0 0 24 24">
         <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
@@ -75,6 +75,37 @@ function GoogleLoginButton({ onClick }: { onClick: () => void }) {
   );
 }
 
+function normalizeUrl(url?: string) {
+  return url?.trim().replace(/\/+$/, '');
+}
+
+function resolveAuthCallbackUrl() {
+  const currentOrigin = normalizeUrl(window.location.origin);
+  const devUrl = normalizeUrl(import.meta.env.VITE_DEV_URL);
+  const siteUrl = normalizeUrl(import.meta.env.VITE_SITE_URL);
+  const hostname = window.location.hostname;
+
+  const isLocalhost =
+    import.meta.env.DEV ||
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === '::1' ||
+    hostname === '0.0.0.0';
+
+  // Em ambiente local, sempre usamos a origem atual para evitar cair no deploy.
+  const baseUrl = isLocalhost ? currentOrigin || devUrl : currentOrigin || siteUrl;
+
+  if (!baseUrl) {
+    throw new Error(
+      isLocalhost
+        ? 'Erro de configuracao: defina VITE_DEV_URL no .env'
+        : 'Erro de configuracao: defina VITE_SITE_URL no .env'
+    );
+  }
+
+  return `${baseUrl}/auth/callback`;
+}
+
 // ==================== LOGIN CARD COMPONENT ====================
 function LoginCard() {
   const { t } = useLanguage();
@@ -83,11 +114,12 @@ function LoginCard() {
   const handleGoogleLogin = async () => {
     try {
       setError(null);
-      
+
+      const redirectTo = resolveAuthCallbackUrl();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo,
         },
       });
 
@@ -102,7 +134,7 @@ function LoginCard() {
   return (
     <div className="glass-effect p-8 rounded-[24px] shadow-2xl space-y-8">
       <div className="flex flex-col items-center gap-4 text-center">
-        <div className="relative group flex items-center justify-center w-22 h-22 rounded-full bg-gradient-to-r from-primary to-blue-500 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105">
+        <div className="relative group flex items-center justify-center w-22 h-22 rounded-full brand-gradient-bg shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105">
           <div className="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center border-2 border-white/20 group-hover:border-white/40 transition-all">
             <span className="material-symbols-outlined text-white text-xl ">person</span>
           </div>
@@ -129,7 +161,7 @@ function LoginCard() {
 // ==================== MAIN LOGIN PAGE COMPONENT ====================
 export default function LoginPage() {
   const { t } = useLanguage();
-  
+
   const features = [
     { icon: 'route', title: t('feature.personalized') },
     { icon: 'psychology', title: t('feature.generative') },
@@ -139,31 +171,32 @@ export default function LoginPage() {
   return (
     <div className="bg-darkBg text-slate-100 font-sans min-h-screen">
       <Header />
-      
+
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-39">
-          <div className="max-w-md w-full space-y-10">
-            <div className="text-center space-y-10">
-              <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-                {t('login.welcome')}{' '}
-                <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">
-                  {t('hero.title.pt')}
-                </span>
-              </h1>
-              <p className="text-slate-400 text-lg">
-                {t('login.subtitle')}
-              </p>
-            </div>
-            
-            <LoginCard />
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
-              {features.map((feature, index) => (
-                <FeatureCard key={index} icon={feature.icon} title={feature.title} />
-              ))}
-            </div>
+        <div className="max-w-md w-full space-y-10">
+          <div className="text-center space-y-10">
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+              {t('login.welcome')}{' '}
+              <span className="brand-gradient-text bg-clip-text text-transparent">
+                {t('hero.title.pt')}
+              </span>
+            </h1>
+            <p className="text-slate-400 text-lg">
+              {t('login.subtitle')}
+            </p>
           </div>
-        </main>
+
+          <LoginCard />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
+            {features.map((feature, index) => (
+              <FeatureCard key={index} icon={feature.icon} title={feature.title} />
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
+
 

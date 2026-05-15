@@ -1,8 +1,7 @@
-import { useLanguage } from '@/lib/i18n';
+﻿import { useLanguage } from '@/lib/i18n';
 import { Link } from 'react-router-dom';
 import profilePhoto from '@/assets/jpeg/1740177009224.jpeg';
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
 
 // ==================== SIDEBAR COMPONENT ====================
 function Sidebar() {
@@ -20,13 +19,13 @@ function Sidebar() {
   return (
     <aside className="w-64 border-r border-slate-800 flex flex-col shrink-0 bg-[#0b1120]">
       <Link to="/" className="p-6 flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-        <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-8 h-8 brand-logo-box rounded-twelve flex items-center justify-center">
+          <svg className="w-5 h-5 text-white brand-logo-bolt" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
           </svg>
         </div>
         <span className="font-bold text-xl tracking-tight text-white">
-          DevStudy <span className="text-primary">AI</span>
+          DevStudy <span className="brand-gradient-text">AI</span>
         </span>
       </Link>
       <nav className="flex-1 px-4 space-y-1 mt-4">
@@ -47,43 +46,6 @@ function Sidebar() {
         ))}
       </nav>
     </aside>
-  );
-}
-
-// ==================== HEADER COMPONENT ====================
-function Header() {
-  const { t, language, setLanguage } = useLanguage();
-  
-  return (
-    <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
-      <div className="flex items-center justify-between px-6 py-6 md:px-20 lg:px-40">
-        <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-90 cursor-pointer">
-          <div className="w-8 h-8 bg-primary rounded-twelve flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M13 10V3L4 14h7v7l9-11h-7z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-            </svg>
-          </div>
-          <span className="font-bold text-xl tracking-tight text-white">
-            {t('header.devStudy')} <span className="text-primary">AI</span>
-          </span>
-        </Link>
-        <div className="flex items-center">
-          <div className="relative group">
-            <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
-              <span className="material-symbols-outlined text-lg">language</span>
-              {language === 'PT' ? 'PT-BR' : 'English'}
-              <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
-              </svg>
-            </button>
-            <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-              <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
-              <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
   );
 }
 
@@ -174,7 +136,7 @@ function PurposeSection() {
         </div>
         
         <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter leading-[1.1] text-white">
-          {t('about.purposeTitle')} <span className="bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent">{t('about.purposeHighlight')}</span>
+          {t('about.purposeTitle')} <span className="brand-gradient-text bg-clip-text text-transparent">{t('about.purposeHighlight')}</span>
         </h2>
         
         <p className="text-lg text-slate-400 leading-relaxed max-w-2xl">
@@ -273,7 +235,7 @@ function TechStackSection() {
 
 // ==================== TOP BAR COMPONENT ====================
 function TopBar() {
-  const { t, language, setLanguage } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   
   return (
     <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5 h-16 flex items-center justify-between px-8">
@@ -315,3 +277,5 @@ export default function AboutPage() {
     </div>
   );
 }
+
+

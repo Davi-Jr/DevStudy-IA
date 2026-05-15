@@ -1,8 +1,11 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 /* Custom Theme Configuration */
 @theme {
-  --color-primary: #0657f9;
+  --color-primary: #5555b7;
+  --color-brand-light: #b2f1ff;
+  --color-brand-mid: #5555b7;
+  --color-brand-dark: #03102f;
   --color-darkBg: #0f172a;
   --color-cardBg: rgba(30, 41, 59, 0.7);
   --color-slate-950: #020617;
@@ -31,18 +34,38 @@ body {
 
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, #0657f9 0%, #9333ea 100%);
+  background: linear-gradient(180deg, var(--color-brand-light) 0%, var(--color-brand-mid) 55%, var(--color-brand-dark) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+.brand-gradient-text {
+  background: linear-gradient(180deg, var(--color-brand-light) 0%, var(--color-brand-mid) 55%, var(--color-brand-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.brand-gradient-bg {
+  background: linear-gradient(180deg, var(--color-brand-light) 0%, var(--color-brand-mid) 55%, var(--color-brand-dark) 100%);
+}
+
+.brand-logo-box {
+  background: linear-gradient(180deg, var(--color-brand-light) 0%, var(--color-brand-mid) 55%, var(--color-brand-dark) 100%);
+  box-shadow: 0 8px 24px rgba(3, 16, 47, 0.45);
+}
+
+.brand-logo-bolt {
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.45));
+}
+
 /* Background Gradient Mesh */
 .bg-gradient-mesh {
   background-color: #0f172a;
-  background-image: 
-      radial-gradient(at 0% 0%, rgba(6, 87, 249, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(147, 51, 234, 0.1) 0px, transparent 50%);
+  background-image:
+      radial-gradient(at 0% 0%, rgba(178, 241, 255, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(85, 85, 183, 0.15) 0px, transparent 50%);
 }
 
 /* Custom Animations */
@@ -84,9 +107,9 @@ body {
   to { opacity: 1; transform: translateX(0); }
 }
 
-.node-anim { 
-  opacity: 0; 
-  animation: nodeEntry 0.5s forwards; 
+.node-anim {
+  opacity: 0;
+  animation: nodeEntry 0.5s forwards;
 }
 
 /* Terminal Typewriter Animation */
@@ -139,7 +162,7 @@ body {
 }
 
 .cursor-blink {
-  border-right: 2px solid #0657f9;
+  border-right: 2px solid #5555b7;
   animation: blink 0.8s infinite;
 }
 
@@ -150,7 +173,7 @@ body {
 
 /* Selection Styles */
 ::selection {
-  background-color: rgba(6, 87, 249, 0.3);
+  background-color: rgba(85, 85, 183, 0.3);
 }
 
 /* Scrollbar Styling */
@@ -186,9 +209,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Botões com efeito de onda suave de duas cores */
+/* Botoes com efeito de onda suave de duas cores */
 @keyframes gradient-wave {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
