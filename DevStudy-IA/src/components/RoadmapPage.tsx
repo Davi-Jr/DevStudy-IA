@@ -190,7 +190,7 @@ const parseRoadmapToPhases = (roadmapText: string): ParsedPhase[] => {
   let currentPhase: ParsedPhase | null = null;
 
   const phaseRegex = /^(#+\s*)?((fase|phase)\s*\d+|basico|intermediario|avancado)\b[:\-\s]*/i;
-  const taskRegex = /^([-*â€¢]\s+|\d+[.)]\s+)/;
+  const taskRegex = /^([-*•]\s+|\d+[.)]\s+)/;
 
   for (const rawLine of lines) {
     const line = rawLine.replace(/^`+|`+$/g, '').trim();
