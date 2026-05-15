@@ -37,9 +37,9 @@ function Sidebar() {
   const { t } = useLanguage();
   
   const menuItems = [
-    { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
+    { id: 'dashboard', icon: 'dashboard', label: t('topbar.pages'), href: '/dashboard' },
     { id: 'roadmaps', icon: 'alt_route', label: t('sidebar.roadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '#' },
+    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '/study-sessions' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
@@ -92,7 +92,7 @@ function Sidebar() {
 
 // ==================== TOP BAR COMPONENT ====================
 function TopBar({ user }: { user: any }) {
-  const { language, setLanguage } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   
   return (
     <header className="fixed top-0 w-full z-50 glass-effect border-b border-white/5">
@@ -102,21 +102,21 @@ function TopBar({ user }: { user: any }) {
             <div className="relative group">
               <button className="flex items-center gap-1 hover:text-primary transition-colors text-sm font-medium mr-4 py-2 cursor-pointer">
                 <span className="material-symbols-outlined text-lg">language</span>
-                {language === 'PT' ? 'PT-BR' : 'English'}
+                {language === 'PT' ? t('header.language') : t('header.languageEN')}
                 <svg className="w-4 h-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path d="M19 9l-7 7-7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"></path>
                 </svg>
               </button>
               <div className="absolute right-0 top-full mt-2 w-32 glass-effect rounded-twelve overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>PT-BR</button>
-                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>English (EN)</button>
+                <button onClick={() => setLanguage('PT')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'PT' ? 'text-primary' : ''}`}>{t('header.language')}</button>
+                <button onClick={() => setLanguage('EN')} className={`block w-full text-left px-4 py-2 text-sm hover:bg-primary/20 transition-colors cursor-pointer ${language === 'EN' ? 'text-primary' : ''}`}>{t('header.languageEN')}</button>
               </div>
             </div>
             <div className="h-8 w-px bg-white/10"></div>
             <div className="relative group">
               <div className="flex items-center gap-3 cursor-pointer">
                 <div className="text-right">
-                  <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || 'User'}</p>
+                  <p className="text-sm font-bold text-white leading-none">{user?.user_metadata?.full_name || t('code.userFallback')}</p>
                   <p className="text-xs text-slate-400 mt-1">{user?.email}</p>
                 </div>
                 <div className="size-10 rounded-full border-2 border-primary/20 p-0.5 group-hover:border-primary transition-colors">
@@ -126,7 +126,7 @@ function TopBar({ user }: { user: any }) {
               <div className="absolute right-0 top-full mt-2 w-44 glass-effect rounded-twelve overflow-hidden border border-white/5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 shadow-xl">
                 <Link to="/profile" className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-primary/20 transition-colors cursor-pointer text-slate-300 hover:text-white">
                   <span className="material-symbols-outlined text-lg">settings</span>
-                  Configurações
+                  {t('topbar.accountSettings')}
                 </Link>
               </div>
             </div>
@@ -445,7 +445,7 @@ export default function DashBoardPage() {
             <section className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <h2 className="text-3xl font-extrabold text-white tracking-tight">
-                  {t('dashboard.welcome')} {user?.user_metadata?.full_name?.split(' ')[0] || 'User'}! 👋
+                  {t('dashboard.welcome')} {user?.user_metadata?.full_name?.split(' ')[0] || 'User'}! ðŸ‘‹
                 </h2>
                 <p className="text-slate-400 mt-1">{t('dashboard.welcomeMessage')}</p>
               </div>

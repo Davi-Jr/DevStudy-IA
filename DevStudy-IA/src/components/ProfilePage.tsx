@@ -39,7 +39,7 @@ function Sidebar() {
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
     { id: 'roadmaps', icon: 'alt_route', label: t('sidebar.roadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '#' },
+    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '/study-session' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
@@ -114,7 +114,7 @@ function RoadmapItem({ icon, title, progress, dateLabel, color, borderColor, onD
         </div>
         <div>
           <h5 className="font-bold text-white group-hover:text-primary transition-colors">{title}</h5>
-          <p className="text-sm text-slate-400">{t('profile.progress')}: {progress} • {t('profile.updated')} {dateLabel}</p>
+          <p className="text-sm text-slate-400">{t('profile.progress')}: {progress} â€¢ {t('profile.updated')} {dateLabel}</p>
         </div>
       </div>
       <button onClick={onDelete} className="h-10 w-10 flex items-center justify-center rounded-xl text-slate-500 hover:bg-red-500/20 hover:text-red-500 transition-all cursor-pointer">

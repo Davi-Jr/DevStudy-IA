@@ -11,7 +11,7 @@ function Sidebar() {
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: t('topbar.pages'), href: '/dashboard' },
     { id: 'roadmaps', icon: 'alt_route', label: t('topbar.myRoadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'menu_book', label: t('topbar.studySessions'), href: '#' },
+    { id: 'sessions', icon: 'menu_book', label: t('topbar.studySessions'), href: '/study-session' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
@@ -190,7 +190,7 @@ const parseRoadmapToPhases = (roadmapText: string): ParsedPhase[] => {
   let currentPhase: ParsedPhase | null = null;
 
   const phaseRegex = /^(#+\s*)?((fase|phase)\s*\d+|basico|intermediario|avancado)\b[:\-\s]*/i;
-  const taskRegex = /^([-*•]\s+|\d+[.)]\s+)/;
+  const taskRegex = /^([-*â€¢]\s+|\d+[.)]\s+)/;
 
   for (const rawLine of lines) {
     const line = rawLine.replace(/^`+|`+$/g, '').trim();
@@ -527,7 +527,7 @@ export default function RoadmapPage() {
                           <div className="text-[10px] font-bold uppercase text-slate-500 mb-2">{t('roadmap.selectLevel')}</div>
                           <div className="grid grid-cols-3 gap-2">
                             {levels.map((level, levelIndex) => {
-                              // Cores para cada nível: verde (iniciante), amarelo (intermediário), vermelho (avançado)
+                              // Cores para cada nÃ­vel: verde (iniciante), amarelo (intermediário), vermelho (avançado)
                               const levelColors = [
                                 { active: 'border-emerald-500/50 bg-emerald-500/20 text-emerald-400', hover: 'hover:border-emerald-500/30 hover:bg-emerald-500/10' },
                                 { active: 'border-yellow-500/50 bg-yellow-500/20 text-yellow-400', hover: 'hover:border-yellow-500/30 hover:bg-yellow-500/10' },
