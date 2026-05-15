@@ -167,7 +167,7 @@ const translations: Translations = {
   'topbar.pages': { PT: 'Dashboard', EN: 'Dashboard' },
   'topbar.myRoadmaps': { PT: 'Meus Roadmaps', EN: 'My Roadmaps' },
   'topbar.studySessions': { PT: 'Sessões de Estudo', EN: 'Study Sessions' },
-  'topbar.accountSettings': { PT: 'Configurações da Conta', EN: 'Account Settings' },
+  'topbar.accountSettings': { PT: 'Configurações', EN: 'Account Settings' },
 
   // Roadmap Page
   'roadmap.generateTitle': { PT: 'Gerar Novo', EN: 'Generate New' },
@@ -192,6 +192,39 @@ const translations: Translations = {
   'roadmap.levels.beginner': { PT: 'Iniciante', EN: 'Beginner' },
   'roadmap.levels.intermediate': { PT: 'Intermediário', EN: 'Intermediate' },
   'roadmap.levels.advanced': { PT: 'Avançado', EN: 'Advanced' },
+
+  // Code Page
+  'code.sidebar.dashboard': { PT: 'Painel', EN: 'Dashboard' },
+  'code.description': {
+    PT: 'Acompanhe sua jornada de aprendizado e inicie sessões de estudo aprofundadas com IA.',
+    EN: 'Track your learning journey and launch deep-dive AI study sessions.',
+  },
+  'code.userFallback': { PT: 'Usuário', EN: 'User' },
+  'code.status.inProgress': { PT: 'Em Progresso', EN: 'In Progress' },
+  'code.status.planned': { PT: 'Planejado', EN: 'Planned' },
+  'code.status.paused': { PT: 'Pausado', EN: 'Paused' },
+  'code.overallProgress': { PT: 'Progresso Geral', EN: 'Overall Progress' },
+  'code.card1.title': { PT: 'Engenheiro React Fullstack', EN: 'Fullstack React Engineer' },
+  'code.card1.description': {
+    PT: 'Dominando arquitetura moderna de frontend, integração com backend Node.js e estratégias escaláveis de deploy.',
+    EN: 'Mastering modern frontend architecture, Node.js backend integration, and scalable deployment strategies.',
+  },
+  'code.card1.note': { PT: 'Ativo há 2h', EN: 'Last active 2h ago' },
+  'code.card1.action': { PT: 'Retomar Estudo', EN: 'Resume Study' },
+  'code.card2.title': { PT: 'Arquitetura de IA com LLMs', EN: 'AI Architecture with LLMs' },
+  'code.card2.description': {
+    PT: 'Engenharia de prompt avançada, pipelines RAG e fine-tuning de modelos open-source para apps corporativos.',
+    EN: 'Advanced prompt engineering, RAG pipelines, and fine-tuning open-source models for enterprise apps.',
+  },
+  'code.card2.note': { PT: 'Criado há 3 dias', EN: 'Created 3 days ago' },
+  'code.card2.action': { PT: 'Iniciar Sessão', EN: 'Start Session' },
+  'code.card3.title': { PT: 'Cloud Native & DevOps', EN: 'Cloud Native & DevOps' },
+  'code.card3.description': {
+    PT: 'Containers, orquestração com Kubernetes e pipelines de CI/CD com GitHub Actions.',
+    EN: 'Containers, Kubernetes orchestration, and CI/CD pipelines with GitHub Actions.',
+  },
+  'code.card3.note': { PT: 'Ativo há 2 semanas', EN: 'Last active 2 weeks ago' },
+  'code.card3.action': { PT: 'Retomar Sessão', EN: 'Resume Session' },
 
   // Profile Page
   'profile.preferences': { PT: 'Preferências', EN: 'Preferences' },
