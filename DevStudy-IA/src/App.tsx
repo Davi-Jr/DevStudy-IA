@@ -21,6 +21,7 @@ function App() {
           <Route path="/roadmaps" element={<RoadmapPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/study-session" element={<StudySessionPage />} />
+          <Route path="/study-sessions" element={<StudySessionPage />} />
           <Route path="/about" element={<AboutPage />} />
         </Routes>
       </Router>

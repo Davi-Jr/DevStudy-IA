@@ -39,7 +39,7 @@ function Sidebar() {
   const menuItems = [
     { id: 'dashboard', icon: 'dashboard', label: 'Dashboard', href: '/dashboard' },
     { id: 'roadmaps', icon: 'alt_route', label: t('sidebar.roadmaps'), href: '/roadmaps' },
-    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '#' },
+    { id: 'sessions', icon: 'menu_book', label: t('sidebar.studySessions'), href: '/study-session' },
     { id: 'about', icon: 'info', label: t('sidebar.about'), href: '/about' },
     { id: 'settings', icon: 'settings', label: t('sidebar.settings'), href: '/profile' },
   ];
