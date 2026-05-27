@@ -230,7 +230,10 @@ function RoadmapCard({
               <span className={`px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-full border ${statusClasses[status]}`}>
                 {statusLabel}
               </span>
-              <span className="text-slate-500 text-xs font-medium">� {note}</span>
+
+              <span className="text-slate-500 text-xs font-medium">ï¿½ {note}</span>
+              <span className="text-slate-500 text-xs font-medium"> {note}</span>
+
             </div>
             <h4 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">{title}</h4>
             <p className="text-slate-400 text-sm max-w-lg leading-relaxed">{description}</p>
@@ -298,6 +301,7 @@ export default function StudySessionPage() {
         <TopBar />
         <main className="flex-1 overflow-y-auto p-8 bg-gradient-to-br from-[#0f172a] to-[#0b1120]">
           <div className="max-w-6xl mx-auto space-y-8">
+
             {selectedRoadmap ? (
               // Tela de Detalhes do Roadmap
               <div className="space-y-6">
@@ -378,7 +382,7 @@ export default function StudySessionPage() {
                           </div>
                         ))
                       ) : (
-                        <p className="text-slate-400 col-span-2">Nenhuma etapa disponível</p>
+                        <p className="text-slate-400 col-span-2">Nenhuma etapa disponÃ­vel</p>
                       )}
                     </div>
                   </div>
@@ -400,6 +404,21 @@ export default function StudySessionPage() {
                     {t('sidebar.newRoadmap')}
                   </Link>
                 </div>
+
+            <div className="flex justify-between items-end">
+              <div className="space-y-1">
+                <h3 className="text-3xl font-black text-white tracking-tight">{t('sidebar.roadmaps')}</h3>
+                <p className="text-slate-400">{t('code.description')}</p>
+              </div>
+              <Link
+                to="/roadmaps"
+                className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-0.5"
+              >
+                <span className="material-symbols-outlined">add</span>
+                {t('sidebar.newRoadmap')}
+              </Link>
+            </div>
+
 
                 <div className="grid grid-cols-1 gap-6">
                   {loading ? (
