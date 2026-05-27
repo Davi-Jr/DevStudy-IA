@@ -1,7 +1,8 @@
 ﻿import { useState, useEffect } from 'react';
 import { analyzeRepository } from '@/lib/gitingest';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import type { User } from '@supabase/supabase-js';
 import { useLanguage } from '@/lib/i18n';
 import { getTechSvg } from './TechIcons';
 
@@ -52,7 +53,7 @@ function Sidebar() {
 }
 
 // ==================== AVATAR COMPONENT ====================
-function UserAvatar({ user, size = "size-10" }: { user: any; size?: string }) {
+function UserAvatar({ user, size = "size-10" }: { user: User | null; size?: string }) {
   const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
   const fullName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User';
   const initials = fullName
@@ -82,7 +83,7 @@ function UserAvatar({ user, size = "size-10" }: { user: any; size?: string }) {
 // ==================== TOP BAR COMPONENT ====================
 function TopBar() {
   const { t, language, setLanguage } = useLanguage();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     async function getUser() {
@@ -157,6 +158,18 @@ interface RoadmapSummary {
   expectedResults: string[];
 }
 
+type SaveStatus = {
+  type: 'success' | 'error';
+  message: string;
+} | null;
+
+type DatabaseErrorLike = {
+  message?: string;
+  details?: string;
+  hint?: string;
+  code?: string;
+};
+
 const PHASE_STYLES = [
   { color: 'text-primary', bgColor: 'bg-primary/20' },
   { color: 'text-purple-400', bgColor: 'bg-purple-500/20' },
@@ -184,6 +197,40 @@ const getTaskLevelStyle = (content: string) => {
     levelColor: 'text-emerald-400',
     levelBg: 'border-emerald-500/30 bg-emerald-500/10',
   };
+};
+
+const getTaskStyle = (content: string, phaseIndex: number): TaskItemProps => {
+  const levelInfo = getTaskLevelStyle(content);
+  const phaseStyle = PHASE_STYLES[phaseIndex % PHASE_STYLES.length];
+
+  return {
+    color: phaseStyle.color,
+    bgColor: phaseStyle.bgColor,
+    level: levelInfo.level,
+    levelColor: levelInfo.levelColor,
+    levelBg: levelInfo.levelBg,
+    content,
+  };
+};
+
+const normalizeGeneratedTitle = (title: string) =>
+  title
+    .replace(/^#+\s*/, '')
+    .replace(/^\*\*(.*?)\*\*$/, '$1')
+    .replace(/^t[ií]tulo\s+do\s+roadmap\s*[:-]\s*/i, '')
+    .trim()
+    .slice(0, 80);
+
+const getReadableErrorMessage = (error: unknown) => {
+  if (error instanceof Error) return error.message;
+  if (error && typeof error === 'object') {
+    const dbError = error as DatabaseErrorLike;
+    return [dbError.message, dbError.details, dbError.hint, dbError.code ? `Codigo: ${dbError.code}` : '']
+      .filter(Boolean)
+      .join(' ');
+  }
+
+  return 'Nao foi possivel salvar o roadmap.';
 };
 
 const parseRoadmapToPhases = (roadmapText: string): ParsedPhase[] => {
@@ -221,15 +268,7 @@ const parseRoadmapToPhases = (roadmapText: string): ParsedPhase[] => {
 
     if (taskRegex.test(line) || line.length > 15) {
       const cleaned = line.replace(taskRegex, '').trim();
-      const levelInfo = getTaskLevelStyle(cleaned);
-      currentPhase.tasks.push({
-        color: PHASE_STYLES[(phases.length % PHASE_STYLES.length)].color,
-        bgColor: PHASE_STYLES[(phases.length % PHASE_STYLES.length)].bgColor,
-        level: levelInfo.level,
-        levelColor: levelInfo.levelColor,
-        levelBg: levelInfo.levelBg,
-        content: cleaned,
-      });
+      currentPhase.tasks.push(getTaskStyle(cleaned, phases.length));
     }
   }
 
@@ -240,15 +279,7 @@ const parseRoadmapToPhases = (roadmapText: string): ParsedPhase[] => {
   if (phases.length === 0) {
     const fallbackTasks = lines.slice(0, 6).map((line) => {
       const cleaned = line.replace(taskRegex, '').trim();
-      const levelInfo = getTaskLevelStyle(cleaned);
-      return {
-        color: PHASE_STYLES[0].color,
-        bgColor: PHASE_STYLES[0].bgColor,
-        level: levelInfo.level,
-        levelColor: levelInfo.levelColor,
-        levelBg: levelInfo.levelBg,
-        content: cleaned,
-      };
+      return getTaskStyle(cleaned, 0);
     });
 
     return fallbackTasks.length > 0
@@ -322,6 +353,8 @@ function TaskItem({
   isRemoving,
   isRecentlyMoved,
   isDragging,
+  onContentChange,
+  onLevelChange,
 }: TaskItemProps & {
   onDelete: () => void;
   onDragStart: () => void;
@@ -331,6 +364,8 @@ function TaskItem({
   isRemoving: boolean;
   isRecentlyMoved: boolean;
   isDragging: boolean;
+  onContentChange: (content: string) => void;
+  onLevelChange: (level: string) => void;
 }) {
   return (
     <div
@@ -351,12 +386,18 @@ function TaskItem({
       >
         <span className="material-symbols-outlined text-sm">drag_indicator</span>
       </button>
-      <p className="flex-1 text-sm text-slate-200" contentEditable={true}>
-        {content}
-      </p>
-      <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${levelBg} ${levelColor} cursor-pointer hover:opacity-80`} contentEditable={true}>
-        {level}
-      </span>
+      <textarea
+        className="flex-1 min-h-10 resize-y bg-transparent text-sm text-slate-200 outline-none focus:bg-white/5 rounded-lg px-2 py-1 leading-5"
+        value={content}
+        onChange={(event) => onContentChange(event.target.value)}
+        rows={2}
+      />
+      <input
+        className={`w-24 px-2 py-1 rounded-full text-[9px] font-bold border ${levelBg} ${levelColor} bg-transparent outline-none text-center focus:bg-white/5`}
+        value={level}
+        onChange={(event) => onLevelChange(event.target.value)}
+        aria-label="Nivel da etapa"
+      />
       <button className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 transition-all" onClick={onDelete} type="button">
         <span className="material-symbols-outlined text-sm">close</span>
       </button>
@@ -370,6 +411,10 @@ function PhaseModule({
   tasks,
   onDeleteSection,
   onDeleteTask,
+  onAddTask,
+  onTitleChange,
+  onTaskContentChange,
+  onTaskLevelChange,
   onTaskDragStart,
   onTaskDrop,
   removingTaskIndex,
@@ -382,6 +427,10 @@ function PhaseModule({
   tasks: TaskItemProps[];
   onDeleteSection: () => void;
   onDeleteTask: (taskIndex: number) => void;
+  onAddTask: () => void;
+  onTitleChange: (title: string) => void;
+  onTaskContentChange: (taskIndex: number, content: string) => void;
+  onTaskLevelChange: (taskIndex: number, level: string) => void;
   onTaskDragStart: (taskIndex: number) => void;
   onTaskDrop: (targetTaskIndex: number) => void;
   removingTaskIndex: number | null;
@@ -392,11 +441,14 @@ function PhaseModule({
   return (
     <div className="border-b border-white/5 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h4 className={`${color} font-bold text-sm uppercase tracking-wider`} contentEditable={true}>
-          {title}
-        </h4>
+        <input
+          className={`${color} w-full max-w-xl bg-transparent font-bold text-sm uppercase tracking-wider outline-none focus:bg-white/5 rounded-lg px-2 py-1`}
+          value={title}
+          onChange={(event) => onTitleChange(event.target.value)}
+          aria-label="Titulo da fase"
+        />
         <div className="flex gap-2">
-          <button className="p-1 text-slate-500 hover:text-white transition-colors" title="Add task">
+          <button className="p-1 text-slate-500 hover:text-white transition-colors" title="Add task" onClick={onAddTask} type="button">
             <span className="material-symbols-outlined text-lg">add_circle</span>
           </button>
           <button className="p-1 text-slate-500 hover:text-red-400 transition-colors" title="Delete section" onClick={onDeleteSection} type="button">
@@ -417,6 +469,8 @@ function PhaseModule({
             isRemoving={removingTaskIndex === index}
             isRecentlyMoved={recentlyMovedTaskIndex === index}
             isDragging={draggedTaskIndex === index}
+            onContentChange={(content) => onTaskContentChange(index, content)}
+            onLevelChange={(level) => onTaskLevelChange(index, level)}
           />
         ))}
       </div>
@@ -439,6 +493,7 @@ async function generateRoadmapWithSelectedProvider(payload: {
 // ==================== MAIN ROADMAP PAGE ====================
 export default function RoadmapPage() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
   const [loading, setLoading] = useState(false);
@@ -462,6 +517,8 @@ export default function RoadmapPage() {
   const [removingTaskLocation, setRemovingTaskLocation] = useState<{ phaseIndex: number; taskIndex: number } | null>(null);
   const [recentlyMovedPhaseIndex, setRecentlyMovedPhaseIndex] = useState<number | null>(null);
   const [recentlyMovedTaskLocation, setRecentlyMovedTaskLocation] = useState<{ phaseIndex: number; taskIndex: number } | null>(null);
+  const [savingRoadmap, setSavingRoadmap] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
@@ -554,7 +611,7 @@ export default function RoadmapPage() {
           .split('\n')
           .map((line: string) => line.trim())
           .find((line: string) => line.length > 0 && !line.startsWith('-') && !line.startsWith('*')) || '';
-      const safeTitle = firstNonEmptyLine.replace(/^#+\s*/, '').slice(0, 80);
+      const safeTitle = normalizeGeneratedTitle(firstNonEmptyLine);
 
       setGeneratedTitle(safeTitle || `Roadmap de ${technologies.map((t) => t.name).join(', ')}`);
       setRoadmap(result);
@@ -618,6 +675,70 @@ export default function RoadmapPage() {
     }, 180);
   };
 
+  const handleAddPhase = () => {
+    setGeneratedPhases((prev) => [
+      ...prev,
+      {
+        title: `Fase ${prev.length + 1}: Nova Fase`,
+        tasks: [getTaskStyle('Descreva a nova etapa do roadmap.', prev.length)],
+      },
+    ]);
+    setSaveStatus(null);
+  };
+
+  const handleUpdatePhaseTitle = (phaseIndex: number, title: string) => {
+    setGeneratedPhases((prev) =>
+      prev.map((phase, index) => (index === phaseIndex ? { ...phase, title } : phase))
+    );
+    setSaveStatus(null);
+  };
+
+  const handleAddTask = (phaseIndex: number) => {
+    setGeneratedPhases((prev) =>
+      prev.map((phase, index) =>
+        index === phaseIndex
+          ? {
+              ...phase,
+              tasks: [...phase.tasks, getTaskStyle('Digite a nova etapa aqui.', phaseIndex)],
+            }
+          : phase
+      )
+    );
+    setSaveStatus(null);
+  };
+
+  const handleUpdateTaskContent = (phaseIndex: number, taskIndex: number, content: string) => {
+    setGeneratedPhases((prev) =>
+      prev.map((phase, index) =>
+        index === phaseIndex
+          ? {
+              ...phase,
+              tasks: phase.tasks.map((task, taskCurrentIndex) =>
+                taskCurrentIndex === taskIndex ? { ...task, content } : task
+              ),
+            }
+          : phase
+      )
+    );
+    setSaveStatus(null);
+  };
+
+  const handleUpdateTaskLevel = (phaseIndex: number, taskIndex: number, level: string) => {
+    setGeneratedPhases((prev) =>
+      prev.map((phase, index) =>
+        index === phaseIndex
+          ? {
+              ...phase,
+              tasks: phase.tasks.map((task, taskCurrentIndex) =>
+                taskCurrentIndex === taskIndex ? { ...task, level } : task
+              ),
+            }
+          : phase
+      )
+    );
+    setSaveStatus(null);
+  };
+
   const handleDeleteTask = (phaseIndex: number, taskIndex: number) => {
     setRemovingTaskLocation({ phaseIndex, taskIndex });
     setTimeout(() => {
@@ -651,6 +772,84 @@ export default function RoadmapPage() {
     setRecentlyMovedTaskLocation({ phaseIndex: targetPhaseIndex, taskIndex: targetTaskIndex });
     setTimeout(() => setRecentlyMovedTaskLocation(null), 250);
     setDraggedTaskLocation(null);
+  };
+
+  const handleSaveRoadmap = async () => {
+    setSaveStatus(null);
+
+    const cleanedTitle = generatedTitle.trim() || 'Meu Roadmap';
+    const cleanedPhases = generatedPhases
+      .map((phase) => ({
+        ...phase,
+        title: phase.title.trim(),
+        tasks: phase.tasks
+          .map((task) => ({
+            ...task,
+            content: task.content.trim(),
+            level: task.level.trim() || 'Iniciante',
+          }))
+          .filter((task) => task.content.length > 0),
+      }))
+      .filter((phase) => phase.title.length > 0 && phase.tasks.length > 0);
+
+    if (cleanedPhases.length === 0) {
+      setSaveStatus({ type: 'error', message: 'Adicione pelo menos uma fase com uma etapa antes de salvar.' });
+      return;
+    }
+
+    setSavingRoadmap(true);
+    try {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError) throw userError;
+      if (!user) throw new Error('Faca login para salvar seu roadmap no perfil.');
+
+      const items = cleanedPhases.flatMap((phase, phaseIndex) =>
+        phase.tasks.map((task, taskIndex) => ({
+          icon: 'code',
+          title: task.content,
+          name: task.content,
+          level: task.level,
+          locked: phaseIndex > 0,
+          completed: false,
+          estimated_time: '2 horas',
+          phase_title: phase.title,
+          phase_index: phaseIndex,
+          order: taskIndex,
+        }))
+      );
+
+      const roadmapPayload = {
+        user_id: user.id,
+        title: cleanedTitle,
+        description: generatedSummary?.objective || projectDescription || 'Roadmap criado com IA.',
+        status: 'in_progress',
+        progress: 0,
+        items,
+      };
+
+      const { error } = await supabase.from('roadmaps').insert(roadmapPayload).select().single();
+      if (error) throw error;
+
+      setGeneratedTitle(cleanedTitle);
+      setGeneratedPhases(cleanedPhases);
+      setSaveStatus({ type: 'success', message: 'Roadmap salvo no seu perfil com sucesso.' });
+
+      setTimeout(() => {
+        navigate('/study-session');
+      }, 1500);
+    } catch (error) {
+      console.error('Erro ao salvar roadmap:', error);
+      setSaveStatus({
+        type: 'error',
+        message: getReadableErrorMessage(error),
+      });
+    } finally {
+      setSavingRoadmap(false);
+    }
   };
 
   return (
@@ -892,7 +1091,7 @@ export default function RoadmapPage() {
                         <p className="text-primary/90 font-bold mb-1">O que voce vai aprender:</p>
                         <ul className="list-disc pl-5 space-y-1">
                           {generatedSummary.learningPoints.map((item, index) => (
-                            <li key={`${item}-${index}`}>{item}</li>
+                            <li key={index}>{item}</li>
                           ))}
                         </ul>
                       </div>
@@ -900,7 +1099,7 @@ export default function RoadmapPage() {
                         <p className="text-primary/90 font-bold mb-1">Resultados esperados:</p>
                         <ul className="list-disc pl-5 space-y-1">
                           {generatedSummary.expectedResults.map((item, index) => (
-                            <li key={`${item}-${index}`}>{item}</li>
+                            <li key={index}>{item}</li>
                           ))}
                         </ul>
                       </div>
@@ -912,13 +1111,19 @@ export default function RoadmapPage() {
                 <div className="mb-4">
                   <label className="block text-[10px] font-bold text-primary mb-1 uppercase tracking-widest">{t('roadmap.roadmapName')}</label>
                   <div className="flex items-center justify-between gap-3 group">
-                    <div className="flex items-center gap-3">
-                      <span className="material-symbols-outlined text-primary">edit_note</span>
-                      <h3 className="text-3xl font-extrabold tracking-tight outline-none focus:bg-white/5 px-2 py-1 rounded-lg transition-all" contentEditable={true}>
-                        {generatedTitle || 'Meu Roadmap'}
-                      </h3>
+                    <div className="flex min-w-0 flex-1 items-center gap-3">
+                      <span className="material-symbols-outlined shrink-0 text-primary">edit_note</span>
+                      <input
+                        className="min-w-0 flex-1 bg-transparent px-2 py-1 text-3xl font-extrabold tracking-tight text-white outline-none transition-all focus:bg-white/5 rounded-lg"
+                        value={generatedTitle}
+                        onChange={(event) => {
+                          setGeneratedTitle(event.target.value);
+                          setSaveStatus(null);
+                        }}
+                        placeholder="Meu Roadmap"
+                      />
                     </div>
-                    <span className="px-3 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30 uppercase tracking-widest">
+                    <span className="shrink-0 px-3 py-1 bg-primary/20 text-primary text-[10px] font-bold rounded-full border border-primary/30 uppercase tracking-widest">
                       {t('roadmap.preview')}
                     </span>
                   </div>
@@ -943,6 +1148,10 @@ export default function RoadmapPage() {
                           tasks={phase.tasks}
                           onDeleteSection={() => handleDeletePhase(index)}
                           onDeleteTask={(taskIndex) => handleDeleteTask(index, taskIndex)}
+                          onAddTask={() => handleAddTask(index)}
+                          onTitleChange={(title) => handleUpdatePhaseTitle(index, title)}
+                          onTaskContentChange={(taskIndex, content) => handleUpdateTaskContent(index, taskIndex, content)}
+                          onTaskLevelChange={(taskIndex, level) => handleUpdateTaskLevel(index, taskIndex, level)}
                           onTaskDragStart={(taskIndex) => setDraggedTaskLocation({ phaseIndex: index, taskIndex })}
                           onTaskDrop={(targetTaskIndex) => handleTaskDrop(index, targetTaskIndex)}
                           onTaskDragEnd={() => setDraggedTaskLocation(null)}
@@ -960,7 +1169,11 @@ export default function RoadmapPage() {
                     );
                   })}
                   <div className="p-6 bg-white/5">
-                    <button className="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors mx-auto">
+                    <button
+                      className="flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors mx-auto"
+                      onClick={handleAddPhase}
+                      type="button"
+                    >
                       <span className="material-symbols-outlined">add_circle</span>
                       {t('roadmap.addNewPhase')}
                     </button>
@@ -968,11 +1181,21 @@ export default function RoadmapPage() {
                 </div>
 
                 {/* Final Action */}
-                <div className="flex justify-center pt-4 pb-12">
-                  <button className="group relative px-12 py-4 bg-primary text-white rounded-2xl font-bold shadow-[0_0_30px_rgba(6,87,249,0.3)] hover:shadow-[0_0_50px_rgba(6,87,249,0.5)] transition-all overflow-hidden">
+                <div className="flex flex-col items-center gap-3 pt-4 pb-12">
+                  {saveStatus && (
+                    <p className={`text-sm font-semibold ${saveStatus.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>
+                      {saveStatus.message}
+                    </p>
+                  )}
+                  <button
+                    className="group relative px-12 py-4 bg-primary text-white rounded-2xl font-bold shadow-[0_0_30px_rgba(6,87,249,0.3)] hover:shadow-[0_0_50px_rgba(6,87,249,0.5)] transition-all overflow-hidden disabled:opacity-60 disabled:cursor-wait"
+                    onClick={handleSaveRoadmap}
+                    disabled={savingRoadmap}
+                    type="button"
+                  >
                     <span className="relative z-10 flex items-center gap-2">
                       <span className="material-symbols-outlined">save</span>
-                      {t('roadmap.saveRoadmap')}
+                      {savingRoadmap ? 'Salvando...' : t('roadmap.saveRoadmap')}
                     </span>
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   </button>
