@@ -230,7 +230,10 @@ function RoadmapCard({
               <span className={`px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-full border ${statusClasses[status]}`}>
                 {statusLabel}
               </span>
-              <span className="text-slate-500 text-xs font-medium">� {note}</span>
+
+              <span className="text-slate-500 text-xs font-medium">ï¿½ {note}</span>
+              <span className="text-slate-500 text-xs font-medium"> {note}</span>
+
             </div>
             <h4 className="text-2xl font-extrabold text-white mb-1.5 tracking-tight">{title}</h4>
             <p className="text-slate-400 text-sm max-w-lg leading-relaxed">{description}</p>
@@ -258,6 +261,38 @@ function RoadmapCard({
 
 export default function StudySessionPage() {
   const { t } = useLanguage();
+  const [roadmaps, setRoadmaps] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedRoadmap, setSelectedRoadmap] = useState<any | null>(null);
+
+  useEffect(() => {
+    async function loadUserAndRoadmaps() {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) {
+          setLoading(false);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from('roadmaps')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (!error && data) {
+          setRoadmaps(data);
+        }
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadUserAndRoadmaps();
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#0f172a]">
@@ -266,6 +301,110 @@ export default function StudySessionPage() {
         <TopBar />
         <main className="flex-1 overflow-y-auto p-8 bg-gradient-to-br from-[#0f172a] to-[#0b1120]">
           <div className="max-w-6xl mx-auto space-y-8">
+
+            {selectedRoadmap ? (
+              // Tela de Detalhes do Roadmap
+              <div className="space-y-6">
+                <div className="flex items-center gap-4 mb-6">
+                  <button
+                    onClick={() => setSelectedRoadmap(null)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+                  >
+                    <span className="material-symbols-outlined">arrow_back</span>
+                    Voltar
+                  </button>
+                </div>
+
+                <div className="glass-card rounded-3xl p-8 border border-white/5">
+                  <div className="flex items-start justify-between mb-6">
+                    <div>
+                      <h2 className="text-4xl font-bold text-white mb-2">{selectedRoadmap.title}</h2>
+                      <p className="text-slate-400">{selectedRoadmap.description}</p>
+                    </div>
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/30">
+                      <span className="w-2 h-2 rounded-full bg-primary"></span>
+                      <span className="text-sm font-semibold text-primary capitalize">{selectedRoadmap.status}</span>
+                    </div>
+                  </div>
+
+                  <div className="mb-6">
+                    <div className="flex justify-between text-sm font-semibold mb-2">
+                      <span className="text-slate-400">Progresso Geral</span>
+                      <span className="text-primary">{selectedRoadmap.progress || 0}%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-slate-800 overflow-hidden">
+                      <div
+                        className="h-full bg-gradient-to-r from-primary to-purple-500 transition-all"
+                        style={{ width: `${selectedRoadmap.progress || 0}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-bold text-white">Etapas ({selectedRoadmap.items?.length || 0})</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {selectedRoadmap.items && selectedRoadmap.items.length > 0 ? (
+                        selectedRoadmap.items.map((item: any, index: number) => (
+                          <div
+                            key={index}
+                            className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all group"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="flex-shrink-0">
+                                <input
+                                  type="checkbox"
+                                  checked={item.completed || false}
+                                  readOnly
+                                  className="w-5 h-5 rounded border-primary/30 text-primary cursor-pointer"
+                                />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold text-white mb-1 line-clamp-2">{item.title || item.name}</h4>
+                                <div className="flex items-center gap-2 text-xs">
+                                  <span className="px-2 py-1 rounded-full bg-primary/20 text-primary font-semibold">
+                                    {item.level}
+                                  </span>
+                                  {item.phase_title && (
+                                    <span className="text-slate-400">{item.phase_title}</span>
+                                  )}
+                                </div>
+                                {item.estimated_time && (
+                                  <div className="flex items-center gap-1 mt-2 text-xs text-slate-400">
+                                    <span className="material-symbols-outlined text-sm">schedule</span>
+                                    {item.estimated_time}
+                                  </div>
+                                )}
+                              </div>
+                              {item.locked && (
+                                <span className="material-symbols-outlined text-slate-500 text-lg shrink-0">lock</span>
+                              )}
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-slate-400 col-span-2">Nenhuma etapa disponÃ­vel</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              // Tela de Lista de Roadmaps
+              <>
+                <div className="flex justify-between items-end">
+                  <div className="space-y-1">
+                    <h3 className="text-3xl font-black text-white tracking-tight">{t('sidebar.roadmaps')}</h3>
+                    <p className="text-slate-400">{t('code.description')}</p>
+                  </div>
+                  <Link
+                    to="/roadmaps"
+                    className="bg-gradient-to-r from-primary to-purple-600 hover:opacity-90 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all shadow-xl shadow-primary/30 transform hover:-translate-y-0.5"
+                  >
+                    <span className="material-symbols-outlined">add</span>
+                    {t('sidebar.newRoadmap')}
+                  </Link>
+                </div>
+
             <div className="flex justify-between items-end">
               <div className="space-y-1">
                 <h3 className="text-3xl font-black text-white tracking-tight">{t('sidebar.roadmaps')}</h3>
@@ -280,38 +419,49 @@ export default function StudySessionPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 gap-6">
-              <RoadmapCard
-                status="In Progress"
-                statusLabel={t('code.status.inProgress')}
-                title={t('code.card1.title')}
-                description={t('code.card1.description')}
-                progress={68}
-                note={t('code.card1.note')}
-                action={t('code.card1.action')}
-                progressLabel={t('code.overallProgress')}
-              />
-              <RoadmapCard
-                status="Planned"
-                statusLabel={t('code.status.planned')}
-                title={t('code.card2.title')}
-                description={t('code.card2.description')}
-                progress={2}
-                note={t('code.card2.note')}
-                action={t('code.card2.action')}
-                progressLabel={t('code.overallProgress')}
-              />
-              <RoadmapCard
-                status="Paused"
-                statusLabel={t('code.status.paused')}
-                title={t('code.card3.title')}
-                description={t('code.card3.description')}
-                progress={32}
-                note={t('code.card3.note')}
-                action={t('code.card3.action')}
-                progressLabel={t('code.overallProgress')}
-              />
-            </div>
+
+                <div className="grid grid-cols-1 gap-6">
+                  {loading ? (
+                    <div className="flex justify-center py-12">
+                      <div className="text-slate-400">{t('dashboard.loading')}</div>
+                    </div>
+                  ) : roadmaps.length === 0 ? (
+                    <div className="flex justify-center py-12">
+                      <div className="text-slate-400">Nenhum roadmap criado ainda.</div>
+                    </div>
+                  ) : (
+                    roadmaps.map((roadmap) => {
+                      const statusMap: Record<string, string> = {
+                        in_progress: 'inProgress',
+                        planned: 'planned',
+                        paused: 'paused',
+                      };
+                      const mappedStatus = statusMap[roadmap.status] || roadmap.status;
+                      const statusTypeMap: Record<string, 'In Progress' | 'Planned' | 'Paused'> = {
+                        in_progress: 'In Progress',
+                        planned: 'Planned',
+                        paused: 'Paused',
+                      };
+
+                      return (
+                        <RoadmapCard
+                          key={roadmap.id}
+                          status={statusTypeMap[roadmap.status] || 'Planned'}
+                          statusLabel={t(`code.status.${mappedStatus}`)}
+                          title={roadmap.title}
+                          description={roadmap.description}
+                          progress={roadmap.progress || 0}
+                          note={`${roadmap.items?.length || 0} etapas`}
+                          action="Continuar"
+                          progressLabel={t('code.overallProgress')}
+                          onContinue={() => setSelectedRoadmap(roadmap)}
+                        />
+                      );
+                    })
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </main>
       </div>
